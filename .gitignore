@@ -9,6 +9,7 @@
 #### ***** PDVP ***** #####
 analytics/
 app/
+Migrations/
 # database/
 # services/
 web/
