@@ -9,7 +9,7 @@
 #### ***** PDVP ***** #####
 analytics/
 app/
-database/
+# database/
 # services/
 web/
 

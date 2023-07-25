@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "U6YdOFRWUTBtzLQ2GBs3rxKUO2tZnqVQREFmrMr/oKxH9vgyH5nOD0bGcOlnrm2vHdkAd7X/672jVyg6riW2eg==",
+  "dgSpecHash": "NsQS+x3aixabv0gKDb174zRtfKelTaFjy0QXju/cnp3ame1AdRS1fDtIej3c9A+gywgjt8n06rUJTgGEjqS4/w==",
   "success": true,
-  "projectFilePath": "C:\\API_ClayTrack\\API_ClayTrack\\API_ClayTrack.csproj",
+  "projectFilePath": "C:\\Clay-track\\services\\API_ClayTrack\\API_ClayTrack.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Paula Valencia\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Paula Valencia\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
