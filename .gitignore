@@ -14,11 +14,11 @@
 # web/
 
 ##### ***** LAHS ***** #####
-# # analytics/
-# app/
-# database/
-# services/
-# # web/
+# analytics/
+app/
+database/
+services/
+# web/
 
 ##### ***** NAPB ***** #####
 # analytics/
