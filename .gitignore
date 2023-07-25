@@ -6,12 +6,12 @@
 # services/
 # web/
 
-##### ***** PDVP ***** #####
-# analytics/
-# app/
-# database/
-# # services/
-# web/
+#### ***** PDVP ***** #####
+analytics/
+app/
+database/
+# services/
+web/
 
 ##### ***** LAHS ***** #####
 # # analytics/
