@@ -72,7 +72,7 @@ EXEC procedureInsertUnitMeasure 'Metro';
 EXEC procedureInsertUnitMeasure 'Metro cuadrado';
 EXEC procedureInsertUnitMeasure 'Gramo';
 EXEC procedureInsertUnitMeasure 'Pedazo';
-EXEC procedureInsertUnitMeasure 'Litro';
+EXEC procedureInsertUnitMeasure 'Mililitro';
 EXEC procedureInsertUnitMeasure 'Onza';
 EXEC procedureInsertUnitMeasure 'Libra';
 EXEC procedureInsertUnitMeasure 'Pulgada';
@@ -270,10 +270,112 @@ EXEC procedureInsertSupplier 'Gertrudis','Miranda','Herranz','+514772207314','37
 EXEC procedureInsertSupplier 'Nelson','Herranz','Moyano','+514776066123','37438','464',null,'Calle Los Cimientos','Industrial San Jorge', 'NELSON_no825@gmail.com';
 GO
 
+
+CREATE PROCEDURE procedureInsertRawMaterial (
+  @name VARCHAR(255),
+  @quantityWarehouse INT,
+  @fkCatUnitMeasure INT
+)
+AS
+BEGIN
+  INSERT INTO CatRawMaterial (name, quantityWarehouse, fkCatUnitMeasure) VALUES (@name, @quantityWarehouse, @fkCatUnitMeasure);
+END;
+GO
+
+
+EXEC procedureInsertRawMaterial 'Talco', 20, 3;
+EXEC procedureInsertRawMaterial 'Alúmina', 10, 3;
+EXEC procedureInsertRawMaterial 'Circonia', 5, 3;
+EXEC procedureInsertRawMaterial 'Frita', 50, 3;
+EXEC procedureInsertRawMaterial 'Celulosa', 5, 3;
+EXEC procedureInsertRawMaterial 'Arcilla de loza', 350, 3;
+EXEC procedureInsertRawMaterial 'Arcilla de gres', 350, 3;
+EXEC procedureInsertRawMaterial 'Arcilla de porcelana', 350, 3;
+EXEC procedureInsertRawMaterial 'Arcilla refractaria', 350, 3;
+EXEC procedureInsertRawMaterial 'Arcilla de papel', 350, 3;
+EXEC procedureInsertRawMaterial 'Arcilla chamotada', 350, 3;
+EXEC procedureInsertRawMaterial 'Arcilla de modelado', 350, 3;
+EXEC procedureInsertRawMaterial 'Feldespato potásico (ortoclasa o microclina)', 100, 3;
+EXEC procedureInsertRawMaterial 'Feldespato sódico (albita o oligoclasa)', 100, 3;
+EXEC procedureInsertRawMaterial 'Feldespato cálcico (anortita)', 100, 3;
+EXEC procedureInsertRawMaterial 'Sílice de cuarzo (cristalino)', 50, 3;
+EXEC procedureInsertRawMaterial 'Sílice amorfa', 50, 3;
+EXEC procedureInsertRawMaterial 'Sílice coloidal', 50, 3;
+EXEC procedureInsertRawMaterial 'Almidón de maíz (almidón de maíz ceroso)', 10, 3;
+EXEC procedureInsertRawMaterial 'Almidón de papa', 10, 3;
+EXEC procedureInsertRawMaterial 'Almidón de trigo', 10, 3;
+EXEC procedureInsertRawMaterial 'Almidón de tapioca', 10, 3;
+EXEC procedureInsertRawMaterial 'Almidón de arroz', 10, 3;
+EXEC procedureInsertRawMaterial 'Almidón de patata dulce', 10, 3;
+EXEC procedureInsertRawMaterial 'Almidón de yuca', 10, 3;
+EXEC procedureInsertRawMaterial 'Almidón de plátano', 10, 3;
+EXEC procedureInsertRawMaterial 'Almidón de mandioca', 10, 3;
+EXEC procedureInsertRawMaterial 'Almidón de sorgo', 10, 3;
+EXEC procedureInsertRawMaterial 'Caolín', 50, 3;
+EXEC procedureInsertRawMaterial 'Óxido de estaño', 10, 3;
+EXEC procedureInsertRawMaterial 'Óxido de hierro amarillo', 10, 3;
+EXEC procedureInsertRawMaterial 'Óxido de manganeso', 10, 3;
+EXEC procedureInsertRawMaterial 'Óxido de hierro rojo', 10, 3;
+EXEC procedureInsertRawMaterial 'Óxido de cobalto', 10, 3;
+EXEC procedureInsertRawMaterial 'Carbonato de cobalto', 10, 3;
+EXEC procedureInsertRawMaterial 'Óxido de hierro negro', 10, 3;
+EXEC procedureInsertRawMaterial 'Óxido de cobre', 10, 3;
+EXEC procedureInsertRawMaterial 'Óxido de titanio', 10, 3;
+EXEC procedureInsertRawMaterial 'Óxido de cromo', 10, 3;
+EXEC procedureInsertRawMaterial 'Ocre', 5, 3;
+EXEC procedureInsertRawMaterial 'Dióxido de titanio (Rutilo)', 5, 3;
+EXEC procedureInsertRawMaterial 'Carbonato de cobre', 10, 3;
+EXEC procedureInsertRawMaterial 'Óxido de níquel', 10, 3;
+EXEC procedureInsertRawMaterial 'Esmalte transparentes', 100, 5;
+EXEC procedureInsertRawMaterial 'Esmalte opacos', 100, 5;
+EXEC procedureInsertRawMaterial 'Esmalte satinados o mates', 100, 5;
+EXEC procedureInsertRawMaterial 'Esmalte craquelados', 100, 5;
+EXEC procedureInsertRawMaterial 'Esmalte cristalinos', 100, 5;
+EXEC procedureInsertRawMaterial 'Esmalte de alta temperatura', 100, 5;
+EXEC procedureInsertRawMaterial 'Esmalte de baja temperatura', 100, 5;
+EXEC procedureInsertRawMaterial 'Esmalte de raku', 100, 5;
+EXEC procedureInsertRawMaterial 'Esmalte de engobe', 100, 5;
+EXEC procedureInsertRawMaterial 'Tierra de Siena', 5, 3;
+GO
+
+
+CREATE PROCEDURE procedureInsertDetailRawMaterial (
+  @idCatalog INT,
+  @json NVARCHAR(MAX)
+)
+AS
+BEGIN
+  DECLARE @jsonTable TABLE (
+    quantity INT,
+    fkCatRawMaterial INT
+  )
+  INSERT INTO @jsonTable (quantity, fkCatRawMaterial)
+    SELECT 
+        JSON_VALUE(Value, '$.quantity') as quantity,
+        JSON_VALUE(Value, '$.fkCatRawMaterial') as fkCatRawMaterial
+    FROM OPENJSON(@json)
+  DECLARE @quantity INT
+  DECLARE @fkCatRawMaterial INT
+  DECLARE jsonCursor CURSOR FOR
+    SELECT quantity, fkCatRawMaterial FROM @jsonTable
+  OPEN jsonCursor
+  FETCH NEXT FROM jsonCursor INTO @quantity, @fkCatRawMaterial
+  WHILE @@FETCH_STATUS = 0
+    BEGIN
+      INSERT INTO DetailRecipeRawMaterial (fkCatRecipe, quantity, fkCatRawMaterial)
+      VALUES (@idCatalog, @quantity, @fkCatRawMaterial);
+      FETCH NEXT FROM jsonCursor INTO @quantity, @fkCatRawMaterial
+    END
+  CLOSE jsonCursor
+  DEALLOCATE jsonCursor
+END;
+GO
+
+
 CREATE PROCEDURE procedureInsertDetailColors (
   @type VARCHAR(255),
   @idCatalog INT,
-  @jsonRoles NVARCHAR(MAX)
+  @json NVARCHAR(MAX)
 )
 AS
 BEGIN
@@ -282,7 +384,7 @@ BEGIN
   )
   INSERT INTO @jsonTable (idJson)
     SELECT Value
-    FROM OPENJSON(@jsonRoles)
+    FROM OPENJSON(@json)
   DECLARE @idJson INT
   DECLARE jsonCursor CURSOR FOR
   SELECT idJson FROM @jsonTable
@@ -312,20 +414,310 @@ END;
 GO
 
 
+
+
 CREATE PROCEDURE procedureInsertRecipe (
   @name VARCHAR(255),
   @price FLOAT,
   @imagePath VARCHAR(255),
   @fkCatSize INT,
-  @jsonRoles NVARCHAR(MAX)
+  @jsonColors NVARCHAR(MAX),
+  @jsonRawMaterial NVARCHAR(MAX)
 )
 AS
 BEGIN
   DECLARE @idCatRecipe INT;
   INSERT INTO CatRecipe (name, price, imagePath, fkCatSize) VALUES (@name, @price, @imagePath, @fkCatSize);
   SET @idCatRecipe = SCOPE_IDENTITY();
-  EXEC procedureInsertDetailColors 'DetailRecipe', @idCatRecipe, @jsonRoles;
+  EXEC procedureInsertDetailColors 'DetailRecipe', @idCatRecipe, @jsonColors;
+  EXEC procedureInsertDetailRawMaterial @idCatRecipe, @jsonRawMaterial;
 END;
 GO
 
-EXEC procedureInsertRecipe 'algo', 0, 1, '[1,2,3]';
+
+CREATE FUNCTION dbo.MergeJsonWithIdsAndData (
+  @jsonIdRawMaterial NVARCHAR(MAX),
+  @jsonData NVARCHAR(MAX)
+)
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+  DECLARE @jsonIdRawMaterialTable TABLE (fkCatRawMaterial INT);
+  INSERT INTO @jsonIdRawMaterialTable (fkCatRawMaterial)
+  SELECT value FROM OPENJSON(@jsonIdRawMaterial);
+  DECLARE @mergedJson NVARCHAR(MAX);
+  SELECT @mergedJson = (
+    SELECT CONCAT(
+      '[',
+      STRING_AGG(
+        CONCAT('{"quantity":1,"fkCatRawMaterial":', fkCatRawMaterial, '}'),
+        ','
+      ),
+      ',',
+      REPLACE(REPLACE(@jsonData, ']', ''), '[', ''),
+      ']'
+    )
+    FROM @jsonIdRawMaterialTable
+  );
+  RETURN @mergedJson;
+END;
+GO
+
+
+CREATE PROCEDURE procedureFillingInsertRecipe (
+  @name VARCHAR(255),
+  @jsonIdRawMaterial NVARCHAR(MAX)
+)
+AS
+BEGIN
+  DECLARE @jsonDetailRawMaterial NVARCHAR(MAX);
+  DECLARE @jsonData NVARCHAR(MAX);
+  DECLARE @mergedJson NVARCHAR(MAX);
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[1]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[1]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":29},{"quantity":3,"fkCatRawMaterial":30}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[1]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":31},{"quantity":1,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[2]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":31},{"quantity":2,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[2]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":31},{"quantity":3,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[2]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[3]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":32},{"quantity":2,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[3]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":32},{"quantity":3,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[3]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[4]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":33},{"quantity":2,"fkCatRawMaterial":32},{"quantity":2,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[4]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":33},{"quantity":3,"fkCatRawMaterial":32},{"quantity":3,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[4]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":34},{"quantity":1,"fkCatRawMaterial":35},{"quantity":1,"fkCatRawMaterial":36}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[5]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":34},{"quantity":2,"fkCatRawMaterial":35},{"quantity":2,"fkCatRawMaterial":36}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[5]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":34},{"quantity":3,"fkCatRawMaterial":35},{"quantity":3,"fkCatRawMaterial":36}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[5]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":37},{"quantity":1,"fkCatRawMaterial":36},{"quantity":1,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[6]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":37},{"quantity":2,"fkCatRawMaterial":36},{"quantity":2,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[6]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":37},{"quantity":3,"fkCatRawMaterial":36},{"quantity":3,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[6]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[7]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":33},{"quantity":2,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[7]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":33},{"quantity":3,"fkCatRawMaterial":29}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[7]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":36},{"quantity":1,"fkCatRawMaterial":32}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[8]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":36},{"quantity":2,"fkCatRawMaterial":32}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[8]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":36},{"quantity":3,"fkCatRawMaterial":32}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[8]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":38},{"quantity":1,"fkCatRawMaterial":39}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[9]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":38},{"quantity":2,"fkCatRawMaterial":39}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[9]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":38},{"quantity":3,"fkCatRawMaterial":39}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[9]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":38}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[10]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":33},{"quantity":2,"fkCatRawMaterial":38}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[10]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":33},{"quantity":3,"fkCatRawMaterial":38}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[10]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":31},{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":38}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[2,4,9]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":6,"fkCatRawMaterial":29},{"quantity":2,"fkCatRawMaterial":31},{"quantity":2,"fkCatRawMaterial":32},{"quantity":2,"fkCatRawMaterial":33},{"quantity":2,"fkCatRawMaterial":38}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[2,4,9]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":9,"fkCatRawMaterial":29},{"quantity":3,"fkCatRawMaterial":31},{"quantity":3,"fkCatRawMaterial":32},{"quantity":3,"fkCatRawMaterial":33},{"quantity":3,"fkCatRawMaterial":38}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[2,4,9]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30},{"quantity":2,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":36}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[1,3,8]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":4,"fkCatRawMaterial":29},{"quantity":2,"fkCatRawMaterial":30},{"quantity":4,"fkCatRawMaterial":32},{"quantity":2,"fkCatRawMaterial":36}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[1,3,8]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":6,"fkCatRawMaterial":29},{"quantity":3,"fkCatRawMaterial":30},{"quantity":6,"fkCatRawMaterial":32},{"quantity":3,"fkCatRawMaterial":36}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[1,3,8]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30},{"quantity":1,"fkCatRawMaterial":34},{"quantity":1,"fkCatRawMaterial":35},{"quantity":2,"fkCatRawMaterial":36},{"quantity":1,"fkCatRawMaterial":37}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[5,6,1]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":4,"fkCatRawMaterial":29},{"quantity":2,"fkCatRawMaterial":30},{"quantity":2,"fkCatRawMaterial":34},{"quantity":2,"fkCatRawMaterial":35},{"quantity":4,"fkCatRawMaterial":36},{"quantity":2,"fkCatRawMaterial":37}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[5,6,1]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":6,"fkCatRawMaterial":29},{"quantity":3,"fkCatRawMaterial":30},{"quantity":3,"fkCatRawMaterial":34},{"quantity":3,"fkCatRawMaterial":35},{"quantity":6,"fkCatRawMaterial":36},{"quantity":3,"fkCatRawMaterial":37}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[5,6,1]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":32},{"quantity":2,"fkCatRawMaterial":33},{"quantity":2,"fkCatRawMaterial":38}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 1, '[10,4,9]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":4,"fkCatRawMaterial":29},{"quantity":2,"fkCatRawMaterial":32},{"quantity":4,"fkCatRawMaterial":33},{"quantity":4,"fkCatRawMaterial":38}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 2, '[10,4,9]', @mergedJson;
+
+  SET @jsonData = '[{"quantity":6,"fkCatRawMaterial":29},{"quantity":3,"fkCatRawMaterial":32},{"quantity":6,"fkCatRawMaterial":33},{"quantity":6,"fkCatRawMaterial":38}]';
+  SET @mergedJson = dbo.MergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
+  EXEC procedureInsertRecipe @name, 0.0, null, 3, '[10,4,9]', @mergedJson;
+
+  END;
+GO
+
+
+EXEC procedureFillingInsertRecipe 'Azulejo color solido', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Azulejo colores', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Bidé color solido', '[8,14,17,20,44]';
+EXEC procedureFillingInsertRecipe 'Bidé colores', '[8,14,17,20,44]';
+EXEC procedureFillingInsertRecipe 'Cacerola color solido', '[9,15,18,22,45]';
+EXEC procedureFillingInsertRecipe 'Cacerola colores', '[9,15,18,22,45]';
+EXEC procedureFillingInsertRecipe 'Candelabro color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Candelabro colores', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Cuenco color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Cuenco colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Ensaladera color solido', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Ensaladera colores', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Florero color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Florero colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Fregadero color solido', '[9,15,18,19,45]';
+EXEC procedureFillingInsertRecipe 'Fregadero colores', '[9,15,18,19,45]';
+EXEC procedureFillingInsertRecipe 'Inodoro color solido', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Inodoro colores', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Jarra color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Jarra colores', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Jarrón color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Jarrón colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Ladrillo color solido', '[9,18,22]';
+EXEC procedureFillingInsertRecipe 'Ladrillo colores', '[9,18,22]';
+EXEC procedureFillingInsertRecipe 'Lavabo color solido', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Lavabo colores', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Maceta color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Maceta colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Mosaico color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Mosaico colores', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Pimentero color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Pimentero colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Platillo color solido', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Platillo colores', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Plato color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Plato colores', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Salero color solido', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Salero colores', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Taza color solido', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Taza colores', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Tazón color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Tazón colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Tetera color solido', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Tetera colores', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Vaso color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Vaso colores', '[7,15,18]';
+GO
+
+
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*2 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Azulejo%');
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*100 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Bidé%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*6 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Cacerola%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*6 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Candelabro%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*2 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Cuenco%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*4 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Ensaladera%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*6 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Florero%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*40 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Fregadero%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*100 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Inodoro%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*4 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Jarra%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*6 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Jarrón%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*6 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Ladrillo%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*40 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Lavabo%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*10 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Maceta%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*1 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Mosaico%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*1 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Pimentero%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*1 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Platillo%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*2 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Plato%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*1 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Salero%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*1 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Taza%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*2 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Tazón%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*4 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Tetera%')
+UPDATE DetailRecipeRawMaterial SET quantity = quantity*1 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE name LIKE '%Vaso%')
+GO
+
+

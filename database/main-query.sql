@@ -31,7 +31,7 @@ GO
 CREATE TABLE CatRawMaterial (
   idCatRawMaterial INT IDENTITY(1,1) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  quantityWarehouse INT NOT NULL,
+  quantityWarehouse INT DEFAULT 0 NOT NULL,
   status BIT DEFAULT 1 NOT NULL,
   creationDate DATETIME NOT NULL DEFAULT GETDATE(),
   updateDate DATETIME NOT NULL DEFAULT GETDATE(),
@@ -213,5 +213,6 @@ ALTER TABLE DetailRawMaterialColor ADD CONSTRAINT FK_DetailRawMaterialColor_CatR
 ALTER TABLE DetailRawMaterialColor ADD CONSTRAINT FK_DetailRawMaterialColor_CatColor FOREIGN KEY (fkCatColor) REFERENCES CatColor(idCatColor);
 ALTER TABLE DetailRecipeColor ADD CONSTRAINT FK_DetailRecipeColor_CatRecipe FOREIGN KEY (fkCatRecipe) REFERENCES CatRecipe(idCatRecipe);
 ALTER TABLE DetailRecipeColor ADD CONSTRAINT FK_DetailRecipeColor_CatColor FOREIGN KEY (fkCatColor) REFERENCES CatColor(idCatColor);
+GO
 
 
