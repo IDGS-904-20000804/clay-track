@@ -9,6 +9,38 @@ namespace API_ClayTrack.DataBase
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Rol
+            var AdminRoleId = "c309fa92-2123-47be-b397-a1c77adb502c";
+            var ClientRoleId = "a71a55d6-99d7-4123-b4e0-1218ecb90e3e";
+            var EmployeeRoleId = "c309fa92-2123-47be-b397-adfdgdfg3344";
+
+            var roles = new List<IdentityRole>
+            {
+                new IdentityRole
+                {
+                    Id = AdminRoleId,
+                    ConcurrencyStamp = AdminRoleId,
+                    Name = "Admin",
+                    NormalizedName = "Admin".ToUpper()
+                },
+                new IdentityRole
+                {
+                    Id = ClientRoleId,
+                    ConcurrencyStamp = ClientRoleId,
+                    Name = "Client",
+                    NormalizedName = "Client".ToUpper()
+                },
+                new IdentityRole
+                {
+                    Id = EmployeeRoleId,
+                    ConcurrencyStamp = EmployeeRoleId,
+                    Name = "Employee",
+                    NormalizedName = "Employee".ToUpper()
+                }
+            };
+
+            modelBuilder.Entity<IdentityRole>().HasData(roles);
+
             //CatPurchase fkCatSupplier and fkCatEmployee
             modelBuilder.Entity<CatPurchase>()
                 .HasOne(p => p.Supplier)

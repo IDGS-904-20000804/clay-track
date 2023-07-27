@@ -2,6 +2,7 @@
 using API_ClayTrack.DataBase;
 using API_ClayTrack.DTOs;
 using API_ClayTrack.Models;
+using javax.management.relation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +16,7 @@ namespace API_ClayTrack.Controllers
     // https://localhost:7106/api/Client
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Employee")]
     public class ClientController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -34,6 +35,7 @@ namespace API_ClayTrack.Controllers
             return await dbContext.CatClient
                 .Include(c => c.Person)
                 .Include(c => c.User)
+                .Include(c => c.Role)
                 .ToListAsync();
         }
 
@@ -41,9 +43,17 @@ namespace API_ClayTrack.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> AddClient([FromBody] CatClient client)
         {
+            IdentityRole clientRole = dbContext.Roles.FirstOrDefault(r => r.Name == "Client");
+
+            if (clientRole == null)
+            {
+                return BadRequest("Role does not exist");
+            }
+            client.Role = clientRole;
 
             dbContext.Add(client);
             await dbContext.SaveChangesAsync();
+
             return Ok();
         }
 

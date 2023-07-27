@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_ClayTrack.Migrations
 {
     [DbContext(typeof(ClayTrackDbContext))]
-    [Migration("20230727011716_modificacionTablas")]
-    partial class modificacionTablas
+    [Migration("20230727024635_Star")]
+    partial class Star
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,10 @@ namespace API_ClayTrack.Migrations
                     b.Property<int>("fkCatPerson")
                         .HasColumnType("int");
 
+                    b.Property<string>("fkRol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("fkUser")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -43,6 +47,8 @@ namespace API_ClayTrack.Migrations
                     b.HasKey("idCatClient");
 
                     b.HasIndex("fkCatPerson");
+
+                    b.HasIndex("fkRol");
 
                     b.HasIndex("fkUser");
 
@@ -592,6 +598,29 @@ namespace API_ClayTrack.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c309fa92-2123-47be-b397-a1c77adb502c",
+                            ConcurrencyStamp = "c309fa92-2123-47be-b397-a1c77adb502c",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "a71a55d6-99d7-4123-b4e0-1218ecb90e3e",
+                            ConcurrencyStamp = "a71a55d6-99d7-4123-b4e0-1218ecb90e3e",
+                            Name = "Client",
+                            NormalizedName = "CLIENT"
+                        },
+                        new
+                        {
+                            Id = "c309fa92-2123-47be-b397-adfdgdfg3344",
+                            ConcurrencyStamp = "c309fa92-2123-47be-b397-adfdgdfg3344",
+                            Name = "Employe",
+                            NormalizedName = "EMPLOYE"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -773,6 +802,12 @@ namespace API_ClayTrack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("fkRol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("fkUser")
@@ -780,6 +815,8 @@ namespace API_ClayTrack.Migrations
                         .IsRequired();
 
                     b.Navigation("Person");
+
+                    b.Navigation("Role");
 
                     b.Navigation("User");
                 });

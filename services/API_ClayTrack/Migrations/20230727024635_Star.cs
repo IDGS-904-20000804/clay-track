@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace API_ClayTrack.Migrations
 {
     /// <inheritdoc />
-    public partial class s : Migration
+    public partial class Star : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,6 +53,18 @@ namespace API_ClayTrack.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CatColor",
+                columns: table => new
+                {
+                    idCatColor = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CatColor", x => x.idCatColor);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CatPerson",
                 columns: table => new
                 {
@@ -75,21 +89,15 @@ namespace API_ClayTrack.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CatRecipe",
+                name: "CatSize",
                 columns: table => new
                 {
-                    idCatRecipe = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    price = table.Column<float>(type: "real", nullable: false),
-                    imagePath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    creationDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    updateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                    idCatSize = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CatRecipe", x => x.idCatRecipe);
+                    table.PrimaryKey("PK_CatSize", x => x.idCatSize);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,6 +114,30 @@ namespace API_ClayTrack.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CatUnitMeasure", x => x.idCatUnitMeasure);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DetailRawMaterialColor",
+                columns: table => new
+                {
+                    idDetailRawMaterialColor = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetailRawMaterialColor", x => x.idDetailRawMaterialColor);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DetailRecipeColor",
+                columns: table => new
+                {
+                    idDetailRecipeColor = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetailRecipeColor", x => x.idDetailRecipeColor);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,11 +253,18 @@ namespace API_ClayTrack.Migrations
                     idCatClient = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     fkCatPerson = table.Column<int>(type: "int", nullable: false),
-                    fkUser = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    fkUser = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    fkRol = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CatClient", x => x.idCatClient);
+                    table.ForeignKey(
+                        name: "FK_CatClient_AspNetRoles_fkRol",
+                        column: x => x.fkRol,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CatClient_AspNetUsers_fkUser",
                         column: x => x.fkUser,
@@ -287,26 +326,27 @@ namespace API_ClayTrack.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CatStock",
+                name: "CatRecipe",
                 columns: table => new
                 {
-                    idCatStock = table.Column<int>(type: "int", nullable: false)
+                    idCatRecipe = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    quantity = table.Column<int>(type: "int", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     price = table.Column<float>(type: "real", nullable: false),
+                    imagePath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     creationDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     updateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    fkCatRecipe = table.Column<int>(type: "int", nullable: false)
+                    fkCatSize = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CatStock", x => x.idCatStock);
+                    table.PrimaryKey("PK_CatRecipe", x => x.idCatRecipe);
                     table.ForeignKey(
-                        name: "FK_CatStock_CatRecipe_fkCatRecipe",
-                        column: x => x.fkCatRecipe,
-                        principalTable: "CatRecipe",
-                        principalColumn: "idCatRecipe",
+                        name: "FK_CatRecipe_CatSize_fkCatSize",
+                        column: x => x.fkCatSize,
+                        principalTable: "CatSize",
+                        principalColumn: "idCatSize",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -317,7 +357,7 @@ namespace API_ClayTrack.Migrations
                     idCatRawMaterial = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    quantityWarehouse = table.Column<int>(type: "int", nullable: false),
+                    quantityWarehouse = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     creationDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     updateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
@@ -384,25 +424,26 @@ namespace API_ClayTrack.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CatWarehouse",
+                name: "CatStock",
                 columns: table => new
                 {
-                    idCatWarehouse = table.Column<int>(type: "int", nullable: false)
+                    idCatStock = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     quantity = table.Column<int>(type: "int", nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false),
-                    creationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    fkCatRawMaterial = table.Column<int>(type: "int", nullable: false)
+                    price = table.Column<float>(type: "real", nullable: false),
+                    status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    creationDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    updateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    fkCatRecipe = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CatWarehouse", x => x.idCatWarehouse);
+                    table.PrimaryKey("PK_CatStock", x => x.idCatStock);
                     table.ForeignKey(
-                        name: "FK_CatWarehouse_CatRawMaterial_fkCatRawMaterial",
-                        column: x => x.fkCatRawMaterial,
-                        principalTable: "CatRawMaterial",
-                        principalColumn: "idCatRawMaterial",
+                        name: "FK_CatStock_CatRecipe_fkCatRecipe",
+                        column: x => x.fkCatRecipe,
+                        principalTable: "CatRecipe",
+                        principalColumn: "idCatRecipe",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -461,6 +502,34 @@ namespace API_ClayTrack.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DetailPurchase",
+                columns: table => new
+                {
+                    idDetailPurchase = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    quantity = table.Column<float>(type: "real", nullable: false),
+                    price = table.Column<float>(type: "real", nullable: false),
+                    fkCatRawMaterial = table.Column<int>(type: "int", nullable: false),
+                    fkCatPurchase = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetailPurchase", x => x.idDetailPurchase);
+                    table.ForeignKey(
+                        name: "FK_DetailPurchase_CatPurchase_fkCatPurchase",
+                        column: x => x.fkCatPurchase,
+                        principalTable: "CatPurchase",
+                        principalColumn: "idCatPurchase",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DetailPurchase_CatRawMaterial_fkCatRawMaterial",
+                        column: x => x.fkCatRawMaterial,
+                        principalTable: "CatRawMaterial",
+                        principalColumn: "idCatRawMaterial",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DetailSale",
                 columns: table => new
                 {
@@ -488,32 +557,14 @@ namespace API_ClayTrack.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "DetailPurchase",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
                 {
-                    idDetailPurchase = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    quantity = table.Column<float>(type: "real", nullable: false),
-                    price = table.Column<float>(type: "real", nullable: false),
-                    fkCatWarehouse = table.Column<int>(type: "int", nullable: false),
-                    fkCatPurchase = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DetailPurchase", x => x.idDetailPurchase);
-                    table.ForeignKey(
-                        name: "FK_DetailPurchase_CatPurchase_fkCatPurchase",
-                        column: x => x.fkCatPurchase,
-                        principalTable: "CatPurchase",
-                        principalColumn: "idCatPurchase",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DetailPurchase_CatWarehouse_fkCatWarehouse",
-                        column: x => x.fkCatWarehouse,
-                        principalTable: "CatWarehouse",
-                        principalColumn: "idCatWarehouse",
-                        onDelete: ReferentialAction.Cascade);
+                    { "a71a55d6-99d7-4123-b4e0-1218ecb90e3e", "a71a55d6-99d7-4123-b4e0-1218ecb90e3e", "Client", "CLIENT" },
+                    { "c309fa92-2123-47be-b397-a1c77adb502c", "c309fa92-2123-47be-b397-a1c77adb502c", "Admin", "ADMIN" },
+                    { "c309fa92-2123-47be-b397-adfdgdfg3344", "c309fa92-2123-47be-b397-adfdgdfg3344", "Employe", "EMPLOYE" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -561,6 +612,11 @@ namespace API_ClayTrack.Migrations
                 column: "fkCatPerson");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CatClient_fkRol",
+                table: "CatClient",
+                column: "fkRol");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CatClient_fkUser",
                 table: "CatClient",
                 column: "fkUser");
@@ -591,6 +647,11 @@ namespace API_ClayTrack.Migrations
                 column: "fkCatUnitMeasure");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CatRecipe_fkCatSize",
+                table: "CatRecipe",
+                column: "fkCatSize");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CatSale_fkCatClient",
                 table: "CatSale",
                 column: "fkCatClient");
@@ -616,19 +677,14 @@ namespace API_ClayTrack.Migrations
                 column: "fkCatPerson");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CatWarehouse_fkCatRawMaterial",
-                table: "CatWarehouse",
-                column: "fkCatRawMaterial");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DetailPurchase_fkCatPurchase",
                 table: "DetailPurchase",
                 column: "fkCatPurchase");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DetailPurchase_fkCatWarehouse",
+                name: "IX_DetailPurchase_fkCatRawMaterial",
                 table: "DetailPurchase",
-                column: "fkCatWarehouse");
+                column: "fkCatRawMaterial");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DetailRecipeRawMaterial_fkCatRawMaterial",
@@ -670,10 +726,19 @@ namespace API_ClayTrack.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CatColor");
+
+            migrationBuilder.DropTable(
                 name: "CatShipment");
 
             migrationBuilder.DropTable(
                 name: "DetailPurchase");
+
+            migrationBuilder.DropTable(
+                name: "DetailRawMaterialColor");
+
+            migrationBuilder.DropTable(
+                name: "DetailRecipeColor");
 
             migrationBuilder.DropTable(
                 name: "DetailRecipeRawMaterial");
@@ -682,13 +747,10 @@ namespace API_ClayTrack.Migrations
                 name: "DetailSale");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
                 name: "CatPurchase");
 
             migrationBuilder.DropTable(
-                name: "CatWarehouse");
+                name: "CatRawMaterial");
 
             migrationBuilder.DropTable(
                 name: "CatSale");
@@ -703,7 +765,7 @@ namespace API_ClayTrack.Migrations
                 name: "CatSupplier");
 
             migrationBuilder.DropTable(
-                name: "CatRawMaterial");
+                name: "CatUnitMeasure");
 
             migrationBuilder.DropTable(
                 name: "CatClient");
@@ -712,13 +774,16 @@ namespace API_ClayTrack.Migrations
                 name: "CatRecipe");
 
             migrationBuilder.DropTable(
-                name: "CatUnitMeasure");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "CatPerson");
+
+            migrationBuilder.DropTable(
+                name: "CatSize");
         }
     }
 }

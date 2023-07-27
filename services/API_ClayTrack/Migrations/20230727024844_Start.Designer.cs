@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_ClayTrack.Migrations
 {
     [DbContext(typeof(ClayTrackDbContext))]
-    [Migration("20230726035622_s")]
-    partial class s
+    [Migration("20230727024844_Start")]
+    partial class Start
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,10 @@ namespace API_ClayTrack.Migrations
                     b.Property<int>("fkCatPerson")
                         .HasColumnType("int");
 
+                    b.Property<string>("fkRol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("fkUser")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -44,9 +48,24 @@ namespace API_ClayTrack.Migrations
 
                     b.HasIndex("fkCatPerson");
 
+                    b.HasIndex("fkRol");
+
                     b.HasIndex("fkUser");
 
                     b.ToTable("CatClient");
+                });
+
+            modelBuilder.Entity("API_ClayTrack.Models.CatColor", b =>
+                {
+                    b.Property<int>("idCatColor")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idCatColor"));
+
+                    b.HasKey("idCatColor");
+
+                    b.ToTable("CatColor");
                 });
 
             modelBuilder.Entity("API_ClayTrack.Models.CatEmployee", b =>
@@ -200,7 +219,9 @@ namespace API_ClayTrack.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("quantityWarehouse")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<bool>("status")
                         .ValueGeneratedOnAdd()
@@ -232,6 +253,9 @@ namespace API_ClayTrack.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int>("fkCatSize")
+                        .HasColumnType("int");
+
                     b.Property<string>("imagePath")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -256,6 +280,8 @@ namespace API_ClayTrack.Migrations
                         .HasDefaultValueSql("GETDATE()");
 
                     b.HasKey("idCatRecipe");
+
+                    b.HasIndex("fkCatSize");
 
                     b.ToTable("CatRecipe");
                 });
@@ -327,6 +353,19 @@ namespace API_ClayTrack.Migrations
                     b.HasIndex("fkCatSale");
 
                     b.ToTable("CatShipment");
+                });
+
+            modelBuilder.Entity("API_ClayTrack.Models.CatSize", b =>
+                {
+                    b.Property<int>("idCatSize")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idCatSize"));
+
+                    b.HasKey("idCatSize");
+
+                    b.ToTable("CatSize");
                 });
 
             modelBuilder.Entity("API_ClayTrack.Models.CatStock", b =>
@@ -424,36 +463,6 @@ namespace API_ClayTrack.Migrations
                     b.ToTable("CatUnitMeasure");
                 });
 
-            modelBuilder.Entity("API_ClayTrack.Models.CatWarehouse", b =>
-                {
-                    b.Property<int>("idCatWarehouse")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idCatWarehouse"));
-
-                    b.Property<DateTime>("creationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("fkCatRawMaterial")
-                        .HasColumnType("int");
-
-                    b.Property<int>("quantity")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("status")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("updateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("idCatWarehouse");
-
-                    b.HasIndex("fkCatRawMaterial");
-
-                    b.ToTable("CatWarehouse");
-                });
-
             modelBuilder.Entity("API_ClayTrack.Models.DetailPurchase", b =>
                 {
                     b.Property<int>("idDetailPurchase")
@@ -465,7 +474,7 @@ namespace API_ClayTrack.Migrations
                     b.Property<int>("fkCatPurchase")
                         .HasColumnType("int");
 
-                    b.Property<int>("fkCatWarehouse")
+                    b.Property<int>("fkCatRawMaterial")
                         .HasColumnType("int");
 
                     b.Property<float>("price")
@@ -478,9 +487,35 @@ namespace API_ClayTrack.Migrations
 
                     b.HasIndex("fkCatPurchase");
 
-                    b.HasIndex("fkCatWarehouse");
+                    b.HasIndex("fkCatRawMaterial");
 
                     b.ToTable("DetailPurchase");
+                });
+
+            modelBuilder.Entity("API_ClayTrack.Models.DetailRawMaterialColor", b =>
+                {
+                    b.Property<int>("idDetailRawMaterialColor")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idDetailRawMaterialColor"));
+
+                    b.HasKey("idDetailRawMaterialColor");
+
+                    b.ToTable("DetailRawMaterialColor");
+                });
+
+            modelBuilder.Entity("API_ClayTrack.Models.DetailRecipeColor", b =>
+                {
+                    b.Property<int>("idDetailRecipeColor")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idDetailRecipeColor"));
+
+                    b.HasKey("idDetailRecipeColor");
+
+                    b.ToTable("DetailRecipeColor");
                 });
 
             modelBuilder.Entity("API_ClayTrack.Models.DetailRecipeRawMaterial", b =>
@@ -563,6 +598,29 @@ namespace API_ClayTrack.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c309fa92-2123-47be-b397-a1c77adb502c",
+                            ConcurrencyStamp = "c309fa92-2123-47be-b397-a1c77adb502c",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "a71a55d6-99d7-4123-b4e0-1218ecb90e3e",
+                            ConcurrencyStamp = "a71a55d6-99d7-4123-b4e0-1218ecb90e3e",
+                            Name = "Client",
+                            NormalizedName = "CLIENT"
+                        },
+                        new
+                        {
+                            Id = "c309fa92-2123-47be-b397-adfdgdfg3344",
+                            ConcurrencyStamp = "c309fa92-2123-47be-b397-adfdgdfg3344",
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -744,6 +802,12 @@ namespace API_ClayTrack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("fkRol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("fkUser")
@@ -751,6 +815,8 @@ namespace API_ClayTrack.Migrations
                         .IsRequired();
 
                     b.Navigation("Person");
+
+                    b.Navigation("Role");
 
                     b.Navigation("User");
                 });
@@ -802,6 +868,17 @@ namespace API_ClayTrack.Migrations
                         .IsRequired();
 
                     b.Navigation("UnitMeasure");
+                });
+
+            modelBuilder.Entity("API_ClayTrack.Models.CatRecipe", b =>
+                {
+                    b.HasOne("API_ClayTrack.Models.CatSize", "Size")
+                        .WithMany()
+                        .HasForeignKey("fkCatSize")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("API_ClayTrack.Models.CatSale", b =>
@@ -856,17 +933,6 @@ namespace API_ClayTrack.Migrations
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("API_ClayTrack.Models.CatWarehouse", b =>
-                {
-                    b.HasOne("API_ClayTrack.Models.CatRawMaterial", "RawMaterial")
-                        .WithMany()
-                        .HasForeignKey("fkCatRawMaterial")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RawMaterial");
-                });
-
             modelBuilder.Entity("API_ClayTrack.Models.DetailPurchase", b =>
                 {
                     b.HasOne("API_ClayTrack.Models.CatPurchase", "Purchase")
@@ -875,15 +941,15 @@ namespace API_ClayTrack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API_ClayTrack.Models.CatWarehouse", "Warehouse")
+                    b.HasOne("API_ClayTrack.Models.CatRawMaterial", "RawMaterial")
                         .WithMany()
-                        .HasForeignKey("fkCatWarehouse")
+                        .HasForeignKey("fkCatRawMaterial")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Purchase");
 
-                    b.Navigation("Warehouse");
+                    b.Navigation("RawMaterial");
                 });
 
             modelBuilder.Entity("API_ClayTrack.Models.DetailRecipeRawMaterial", b =>

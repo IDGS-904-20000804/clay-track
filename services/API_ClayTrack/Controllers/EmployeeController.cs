@@ -1,8 +1,10 @@
 ﻿using API_ClayTrack.DataBase;
 using API_ClayTrack.Models;
+using com.sun.security.ntlm;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +12,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Employee")]
     public class EmployeeController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -32,9 +34,17 @@ namespace API_ClayTrack.Controllers
         [HttpPost]
         public async Task<ActionResult> AddEmployee([FromBody] CatEmployee employee)
         {
+            IdentityRole employeeRole = dbContext.Roles.FirstOrDefault(r => r.Name == "Employee");
+
+            if (employeeRole == null)
+            {
+                return BadRequest("Role does not exist");
+            }
+            employee.Role = employeeRole;
 
             dbContext.Add(employee);
             await dbContext.SaveChangesAsync();
+
             return Ok();
         }
 
