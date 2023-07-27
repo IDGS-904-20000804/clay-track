@@ -83,19 +83,6 @@ namespace API_ClayTrack.DataBase
                 .Property(c => c.updateDate)
                 .HasDefaultValueSql("GETDATE()");
 
-            //CatRole status, creationDate and updateDate
-            modelBuilder.Entity<CatRole>()
-                .Property(b => b.status)
-                .HasDefaultValue(true);
-
-            modelBuilder.Entity<CatRole>()
-                .Property(c => c.creationDate)
-                .HasDefaultValueSql("GETDATE()");
-
-            modelBuilder.Entity<CatRole>()
-                .Property(c => c.updateDate)
-                .HasDefaultValueSql("GETDATE()");
-
             //CatSale status, creationDate and updateDate
             modelBuilder.Entity<CatSale>()
                 .Property(c => c.creationDate)
@@ -144,18 +131,10 @@ namespace API_ClayTrack.DataBase
                 .Property(c => c.updateDate)
                 .HasDefaultValueSql("GETDATE()");
 
-            //CatUser status, creationDate and updateDate
-            modelBuilder.Entity<CatUser>()
-                .Property(b => b.status)
-                .HasDefaultValue(true);
-
-            modelBuilder.Entity<CatUser>()
-                .Property(c => c.creationDate)
-                .HasDefaultValueSql("GETDATE()");
-
-            modelBuilder.Entity<CatUser>()
-                .Property(c => c.updateDate)
-                .HasDefaultValueSql("GETDATE()");
+            //CatRawMaterial campo quantityWarehouse defaul 0
+            modelBuilder.Entity<CatRawMaterial>()
+            .Property(p => p.quantityWarehouse)
+            .HasDefaultValue(0);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -169,19 +148,19 @@ namespace API_ClayTrack.DataBase
         public DbSet<CatPerson> CatPerson { get; set; }
         public DbSet<CatRawMaterial> CatRawMaterial { get; set; }
         public DbSet<CatRecipe> CatRecipe { get; set; }
-        public DbSet<CatRole> CatRole { get; set; }
         public DbSet<CatSale> CatSale { get; set; }
         public DbSet<CatShipment> CatShipment { get; set; }
         public DbSet<CatStock> CatStock { get; set; }
         public DbSet<CatSupplier> CatSupplier { get; set; }
         public DbSet<CatUnitMeasure> CatUnitMeasure { get; set; }
-        public DbSet<CatUser> CatUser { get; set; }
-        public DbSet<CatWarehouse> CatWarehouse { get; set; }
+        public DbSet<CatSize> CatSize { get; set; }
         public DbSet<DetailPurchase> DetailPurchase { get; set; }
         public DbSet<DetailRecipeRawMaterial> DetailRecipeRawMaterial { get; set; }
-        public DbSet<DetailRoleUser> DetailRoleUser { get; set; }
         public DbSet<DetailSale> DetailSale { get; set; }
         public DbSet<CatPurchase> CatPurchase { get; set; }
+        public DbSet<CatColor> CatColor { get; set; }
+        public DbSet<DetailRawMaterialColor> DetailRawMaterialColor { get; set; }
+        public DbSet<DetailRecipeColor> DetailRecipeColor { get; set; }
 
     }
 }

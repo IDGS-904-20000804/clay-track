@@ -1,24 +1,31 @@
-﻿using API_ClayTrack.DataBase;
+﻿using System.Security.Claims;
+using API_ClayTrack.DataBase;
+using API_ClayTrack.DTOs;
 using API_ClayTrack.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using sun.security.krb5.@internal;
 
 namespace API_ClayTrack.Controllers
 {
     // https://localhost:7106/api/Client
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Admin")]
     public class ClientController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public ClientController(ClayTrackDbContext dbContext)
+        public ClientController(ClayTrackDbContext dbContext,
+            UserManager<IdentityUser> userManager)
         {
             this.dbContext = dbContext;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -31,8 +38,10 @@ namespace API_ClayTrack.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult> AddClient([FromBody] CatClient client)
         {
+
             dbContext.Add(client);
             await dbContext.SaveChangesAsync();
             return Ok();

@@ -2,9 +2,12 @@
 using System.Security.Claims;
 using System.Text;
 using API_ClayTrack.DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using static com.sun.tools.@internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 namespace API_ClayTrack.Controllers
 {
@@ -37,7 +40,7 @@ namespace API_ClayTrack.Controllers
 
             if (result.Succeeded)
             {
-                return ContructorToken(userCredentials);
+                return await ContructorToken(userCredentials);
             }
             else
             {
@@ -54,7 +57,7 @@ namespace API_ClayTrack.Controllers
 
             if (result.Succeeded)
             {
-                return ContructorToken(userCredentials);
+                return await ContructorToken(userCredentials);
             }
             else
             {
@@ -62,19 +65,37 @@ namespace API_ClayTrack.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Renew Token")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<AuthenticationResponse>> Renew()
+        {
+            var emailClaim = HttpContext.User.Claims.Where(claim => claim.Type == "email").FirstOrDefault();
+            var email = emailClaim.Value;
+            var userCredentials = new UserCredentials()
+            {
+                Email = email
+            };
 
-        private AuthenticationResponse ContructorToken(UserCredentials userCredentials) 
+            return await ContructorToken(userCredentials);
+        }
+
+        private async Task<AuthenticationResponse> ContructorToken(UserCredentials userCredentials) 
         {
             var claims = new List<Claim>()
             {
-                new Claim("email", userCredentials.Email),
-                new Claim("", "")
+                new Claim("email", userCredentials.Email)
             };
+
+            var user = await userManager.FindByEmailAsync(userCredentials.Email);
+            var claimsDB = await userManager.GetClaimsAsync(user);
+
+            claims.AddRange(claimsDB);
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["keyjwt"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expirate = DateTime.UtcNow.AddMinutes(60);
+            var expirate = DateTime.UtcNow.AddMinutes(120);
 
             var securityToken = new JwtSecurityToken(issuer: null, audience: null, claims: claims,
                 expires: expirate, signingCredentials: creds);
@@ -86,6 +107,57 @@ namespace API_ClayTrack.Controllers
                 Expiration = expirate
             };
 
+        }
+
+        [HttpPost]
+        [Route("CreateAdmin")]
+        public async Task<ActionResult> CreateAdmin(EditRolDTO editRolDTO)
+        {
+            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
+            await userManager.AddClaimAsync(user, new Claim("Admin", "1"));
+            return NoContent();
+        }
+
+        [HttpPost("RemoveAdmin")]
+        public async Task<ActionResult> RemoveAdmin(EditRolDTO editRolDTO)
+        {
+            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
+            await userManager.RemoveClaimAsync(user, new Claim("Admin", "1"));
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("CreateEmployee")]
+        public async Task<ActionResult> CreateEmployee(EditRolDTO editRolDTO)
+        {
+            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
+            await userManager.AddClaimAsync(user, new Claim("Employee", "2"));
+            return NoContent();
+        }
+
+        [HttpPost("RemoveEmployee")]
+        public async Task<ActionResult> RemoveEmployee(EditRolDTO editRolDTO)
+        {
+            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
+            await userManager.RemoveClaimAsync(user, new Claim("Employee", "2"));
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("CreateClient")]
+        public async Task<ActionResult> CreateClient(EditRolDTO editRolDTO)
+        {
+            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
+            await userManager.AddClaimAsync(user, new Claim("Client", "3"));
+            return NoContent();
+        }
+
+        [HttpPost("RemoveClient")]
+        public async Task<ActionResult> RemoveClient(EditRolDTO editRolDTO)
+        {
+            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
+            await userManager.RemoveClaimAsync(user, new Claim("Client", "3"));
+            return NoContent();
         }
     }
 }

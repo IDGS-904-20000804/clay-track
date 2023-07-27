@@ -30,8 +30,8 @@ namespace API_ClayTrack
     {
         public Startup(IConfiguration configuration)
         {
-            /*JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            */Configuration = configuration;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -91,6 +91,12 @@ namespace API_ClayTrack
                 .AddEntityFrameworkStores<ClayTrackDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
+                option.AddPolicy("Employee", policy => policy.RequireClaim("Employee"));
+                option.AddPolicy("Client", policy => policy.RequireClaim("Client"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

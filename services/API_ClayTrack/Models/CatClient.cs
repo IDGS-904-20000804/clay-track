@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace API_ClayTrack.Models
 {
@@ -15,11 +16,11 @@ namespace API_ClayTrack.Models
 
         [Required]
         [ForeignKey("User")]
-        public int fkCatUser { get; set; }
+        public string fkUser { get; set; }
 
         // Relaciones de llave foránea
         public CatPerson Person { get; set; }
-        public CatUser User { get; set; }
+        public IdentityUser User { get; set; }
         
     }
 }

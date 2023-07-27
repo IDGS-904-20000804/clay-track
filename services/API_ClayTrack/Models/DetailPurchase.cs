@@ -16,15 +16,15 @@ namespace API_ClayTrack.Models
         public float price { get; set; }
 
         [Required]
-        [ForeignKey("Warehouse")]
-        public int fkCatWarehouse { get; set; }
+        [ForeignKey("RawMaterial")]
+        public int fkCatRawMaterial { get; set; }
 
         [Required]
         [ForeignKey("Purchase")]
         public int fkCatPurchase { get; set; }
 
         // Relaciones de llave foránea
-        public CatWarehouse Warehouse { get; set; }
+        public CatRawMaterial RawMaterial { get; set; }
         public CatPurchase Purchase { get; set; }
     }
 }

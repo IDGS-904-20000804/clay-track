@@ -16,7 +16,6 @@ namespace API_ClayTrack.Models
         [Required]
         public float price { get; set; }
 
-        [Required]
         [StringLength(255)]
         public string imagePath { get; set; }
 
@@ -28,5 +27,12 @@ namespace API_ClayTrack.Models
 
         [Required]
         public DateTime updateDate { get; set; }
+
+        [Required]
+        [ForeignKey("Size")]
+        public int fkCatSize { get; set; }
+
+        // Relaciones de llave foránea
+        public CatSize Size { get; set; }
     }
 }
