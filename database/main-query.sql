@@ -32,6 +32,7 @@ CREATE TABLE CatRawMaterial (
   idCatRawMaterial INT IDENTITY(1,1) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   quantityWarehouse INT DEFAULT 0 NOT NULL,
+  quantityPackage INT NOT NULL,
   status BIT DEFAULT 1 NOT NULL,
   creationDate DATETIME NOT NULL DEFAULT GETDATE(),
   updateDate DATETIME NOT NULL DEFAULT GETDATE(),
@@ -106,7 +107,7 @@ CREATE TABLE CatPurchase (
 GO
 CREATE TABLE DetailPurchase (
   idDetailPurchase INT IDENTITY(1,1) PRIMARY KEY,
-  quantity FLOAT NOT NULL,
+  quantity INT NOT NULL,
   price FLOAT NOT NULL,
   fkCatRawMaterial INT NOT NULL,
   fkCatPurchase INT NOT NULL
@@ -116,6 +117,7 @@ CREATE TABLE CatRecipe (
   idCatRecipe INT IDENTITY(1,1) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   price FLOAT NOT NULL,
+  quantityStock INT NOT NULL DEFAULT 0,
   imagePath VARCHAR(255),
   status BIT DEFAULT 1 NOT NULL,
   creationDate DATETIME NOT NULL DEFAULT GETDATE(),
@@ -126,18 +128,8 @@ GO
 CREATE TABLE DetailRecipeRawMaterial (
   idDetailRecipeRawMaterial INT IDENTITY(1,1) PRIMARY KEY,
   fkCatRecipe INT NOT NULL,
-  quantity FLOAT NOT NULL,
-  fkCatRawMaterial INT NOT NULL
-);
-GO
-CREATE TABLE CatStock (
-  idCatStock INT IDENTITY(1,1) PRIMARY KEY,
   quantity INT NOT NULL,
-  price FLOAT NOT NULL,
-  status BIT DEFAULT 1 NOT NULL,
-  creationDate DATETIME NOT NULL DEFAULT GETDATE(),
-  updateDate DATETIME NOT NULL DEFAULT GETDATE(),
-  fkCatRecipe INT NOT NULL
+  fkCatRawMaterial INT NOT NULL
 );
 GO
 CREATE TABLE CatSale (
@@ -150,9 +142,9 @@ CREATE TABLE CatSale (
 GO
 CREATE TABLE DetailSale (
   idDetailSale INT IDENTITY(1,1) PRIMARY KEY,
-  quantity FLOAT NOT NULL,
+  quantity INT NOT NULL,
   price FLOAT NOT NULL,
-  fkCatStock INT NOT NULL,
+  fkCatRecipe INT NOT NULL,
   fkCatSale INT NOT NULL
 );
 GO
@@ -163,12 +155,6 @@ CREATE TABLE CatShipment (
   updateDate DATETIME NOT NULL DEFAULT GETDATE(),
   fkCatSale INT NOT NULL,
   fkCatEmployee INT
-);
-GO
-CREATE TABLE DetailRawMaterialColor (
-  idDetailRawMaterialColor INT IDENTITY(1,1) PRIMARY KEY,
-  fkCatRawMaterial INT NOT NULL,
-  fkCatColor INT NOT NULL
 );
 GO
 CREATE TABLE DetailRecipeColor (
@@ -202,15 +188,12 @@ ALTER TABLE DetailPurchase ADD CONSTRAINT FK_DetailPurchase_CatRawMaterial FOREI
 ALTER TABLE DetailPurchase ADD CONSTRAINT FK_DetailPurchase_CatPurchase FOREIGN KEY (fkCatPurchase) REFERENCES CatPurchase(idCatPurchase);
 ALTER TABLE DetailRecipeRawMaterial ADD CONSTRAINT FK_DetailRecipeRawMaterial_CatRecipe FOREIGN KEY (fkCatRecipe) REFERENCES CatRecipe(idCatRecipe);
 ALTER TABLE DetailRecipeRawMaterial ADD CONSTRAINT FK_DetailRecipeRawMaterial_CatRawMaterial FOREIGN KEY (fkCatRawMaterial) REFERENCES CatRawMaterial(idCatRawMaterial);
-ALTER TABLE CatStock ADD CONSTRAINT FK_CatStock_CatRecipe FOREIGN KEY (fkCatRecipe) REFERENCES CatRecipe(idCatRecipe);
-ALTER TABLE DetailSale ADD CONSTRAINT FK_DetailSale_CatStock FOREIGN KEY (fkCatStock) REFERENCES CatStock(idCatStock);
+ALTER TABLE DetailSale ADD CONSTRAINT FK_DetailSale_CatRecipe FOREIGN KEY (fkCatRecipe) REFERENCES CatRecipe(idCatRecipe);
 ALTER TABLE DetailSale ADD CONSTRAINT FK_DetailSale_CatSale FOREIGN KEY (fkCatSale) REFERENCES CatSale(idCatSale);
 ALTER TABLE CatSale ADD CONSTRAINT FK_CatSale_CatClient FOREIGN KEY (fkCatClient) REFERENCES CatClient(idCatClient);
 ALTER TABLE CatShipment ADD CONSTRAINT FK_CatShipment_CatSale FOREIGN KEY (fkCatSale) REFERENCES CatSale(idCatSale);
 ALTER TABLE CatShipment ADD CONSTRAINT FK_CatShipment_CatEmployee FOREIGN KEY (fkCatEmployee) REFERENCES CatEmployee(idCatEmployee);
 ALTER TABLE CatRecipe ADD CONSTRAINT FK_CatRecipe_CatSize FOREIGN KEY (fkCatSize) REFERENCES CatSize(idCatSize);
-ALTER TABLE DetailRawMaterialColor ADD CONSTRAINT FK_DetailRawMaterialColor_CatRawMaterial FOREIGN KEY (fkCatRawMaterial) REFERENCES CatRawMaterial(idCatRawMaterial);
-ALTER TABLE DetailRawMaterialColor ADD CONSTRAINT FK_DetailRawMaterialColor_CatColor FOREIGN KEY (fkCatColor) REFERENCES CatColor(idCatColor);
 ALTER TABLE DetailRecipeColor ADD CONSTRAINT FK_DetailRecipeColor_CatRecipe FOREIGN KEY (fkCatRecipe) REFERENCES CatRecipe(idCatRecipe);
 ALTER TABLE DetailRecipeColor ADD CONSTRAINT FK_DetailRecipeColor_CatColor FOREIGN KEY (fkCatColor) REFERENCES CatColor(idCatColor);
 GO

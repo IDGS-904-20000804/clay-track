@@ -30,6 +30,33 @@ fkCatRawMaterial INT NOT NULL
 
 9. CatRecipe imagePath puede ser nulo
 
+10. Se eliminó DetailRawMaterialColor
 
+11. Se agregó este campo
+quantityPackage INT NOT NULL
+a la tabla
+CatRawMaterial
 
+12. Se actualizó el campo de la tabla DetailPurchase
+de
+  quantity FLOAT NOT NULL
+a
+  quantity INT NOT NULL
 
+13. Se actualizó el campo de la tabla DetailRecipeRawMaterial
+de
+  quantity FLOAT NOT NULL
+a
+  quantity INT NOT NULL
+
+14. Se actualizó el campo de la tabla DetailSale
+de
+  quantity FLOAT NOT NULL
+a
+  quantity INT NOT NULL
+
+15. Se eliminó price de CatRecipe
+
+16. Se removio el siguiente campo a CatStock
+  price FLOAT NOT NULL,
+y se agregó a 
