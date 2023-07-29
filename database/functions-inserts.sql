@@ -450,15 +450,17 @@ GO
 
 
 CREATE PROCEDURE procedureFillingInsertRecipe (
-  @name VARCHAR(255),
+  @nameProduct VARCHAR(255),
   @jsonIdRawMaterial NVARCHAR(MAX)
 )
 AS
 BEGIN
+  DECLARE @name VARCHAR(255);
   DECLARE @jsonDetailRawMaterial NVARCHAR(MAX);
   DECLARE @jsonData NVARCHAR(MAX);
   DECLARE @mergedJson NVARCHAR(MAX);
 
+  SET @name = CONCAT(@nameProduct, ' color sólido');
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
   EXEC procedureInsertRecipe @name, 0, null, 1, '[1]', @mergedJson;
@@ -539,6 +541,7 @@ BEGIN
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
   EXEC procedureInsertRecipe @name, 0, null, 3, '[10]', @mergedJson;
 
+  SET @name = CONCAT(@nameProduct, ' colores');
   SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":31},{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":38}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
   EXEC procedureInsertRecipe @name, 0, null, 1, '[2,4,9]', @mergedJson;
@@ -570,57 +573,33 @@ BEGIN
   EXEC procedureInsertRecipe @name, 0, null, 2, '[10,4,9]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
   EXEC procedureInsertRecipe @name, 0, null, 3, '[10,4,9]', @mergedJson;
-
   END;
 GO
 
 
-EXEC procedureFillingInsertRecipe 'Azulejo color solido', '[6,13,16,19,44]';
-EXEC procedureFillingInsertRecipe 'Azulejo colores', '[6,13,16,19,44]';
-EXEC procedureFillingInsertRecipe 'Bidé color solido', '[8,14,17,20,44]';
-EXEC procedureFillingInsertRecipe 'Bidé colores', '[8,14,17,20,44]';
-EXEC procedureFillingInsertRecipe 'Cacerola color solido', '[9,15,18,22,45]';
-EXEC procedureFillingInsertRecipe 'Cacerola colores', '[9,15,18,22,45]';
-EXEC procedureFillingInsertRecipe 'Candelabro color solido', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Candelabro colores', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Cuenco color solido', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Cuenco colores', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Ensaladera color solido', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Ensaladera colores', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Florero color solido', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Florero colores', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Fregadero color solido', '[9,15,18,19,45]';
-EXEC procedureFillingInsertRecipe 'Fregadero colores', '[9,15,18,19,45]';
-EXEC procedureFillingInsertRecipe 'Inodoro color solido', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Inodoro colores', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Jarra color solido', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Jarra colores', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Jarrón color solido', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Jarrón colores', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Ladrillo color solido', '[9,18,22]';
-EXEC procedureFillingInsertRecipe 'Ladrillo colores', '[9,18,22]';
-EXEC procedureFillingInsertRecipe 'Lavabo color solido', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Lavabo colores', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Maceta color solido', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Maceta colores', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Mosaico color solido', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Mosaico colores', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Pimentero color solido', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Pimentero colores', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Platillo color solido', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Platillo colores', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Plato color solido', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Plato colores', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Salero color solido', '[6,13,16,19,44]';
-EXEC procedureFillingInsertRecipe 'Salero colores', '[6,13,16,19,44]';
-EXEC procedureFillingInsertRecipe 'Taza color solido', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Taza colores', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Tazón color solido', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Tazón colores', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Tetera color solido', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Tetera colores', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Vaso color solido', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Vaso colores', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Azulejo', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Bidé', '[8,14,17,20,44]';
+EXEC procedureFillingInsertRecipe 'Cacerola', '[9,15,18,22,45]';
+EXEC procedureFillingInsertRecipe 'Candelabro', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Cuenco', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Ensaladera', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Florero', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Fregadero', '[9,15,18,19,45]';
+EXEC procedureFillingInsertRecipe 'Inodoro', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Jarra', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Jarrón', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Ladrillo', '[9,18,22]';
+EXEC procedureFillingInsertRecipe 'Lavabo', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Maceta', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Mosaico', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Pimentero', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Platillo', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Plato', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Salero', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Taza', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Tazón', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Tetera', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Vaso', '[7,15,18]';
 GO
 
 
@@ -859,106 +838,106 @@ END;
 GO
 
 
-EXEC procedureInsertStock 27, 32;
-EXEC procedureInsertStock 29, 27;
-EXEC procedureInsertStock 31, 45;
-EXEC procedureInsertStock 35, 29;
-EXEC procedureInsertStock 56, 23;
-EXEC procedureInsertStock 91, 27;
-EXEC procedureInsertStock 99, 92;
-EXEC procedureInsertStock 126, 35;
-EXEC procedureInsertStock 164, 74;
-EXEC procedureInsertStock 182, 53;
-EXEC procedureInsertStock 188, 69;
-EXEC procedureInsertStock 192, 76;
-EXEC procedureInsertStock 202, 81;
-EXEC procedureInsertStock 209, 45;
-EXEC procedureInsertStock 258, 93;
-EXEC procedureInsertStock 269, 31;
-EXEC procedureInsertStock 288, 59;
-EXEC procedureInsertStock 292, 83;
-EXEC procedureInsertStock 312, 85;
-EXEC procedureInsertStock 358, 83;
-EXEC procedureInsertStock 368, 70;
-EXEC procedureInsertStock 454, 63;
-EXEC procedureInsertStock 467, 88;
-EXEC procedureInsertStock 484, 79;
-EXEC procedureInsertStock 515, 43;
-EXEC procedureInsertStock 532, 65;
-EXEC procedureInsertStock 584, 49;
-EXEC procedureInsertStock 587, 79;
-EXEC procedureInsertStock 593, 89;
-EXEC procedureInsertStock 620, 49;
-EXEC procedureInsertStock 622, 55;
-EXEC procedureInsertStock 682, 90;
-EXEC procedureInsertStock 697, 62;
-EXEC procedureInsertStock 736, 51;
-EXEC procedureInsertStock 759, 89;
-EXEC procedureInsertStock 768, 78;
-EXEC procedureInsertStock 795, 39;
-EXEC procedureInsertStock 800, 61;
-EXEC procedureInsertStock 806, 34;
-EXEC procedureInsertStock 815, 65;
-EXEC procedureInsertStock 820, 47;
-EXEC procedureInsertStock 830, 82;
-EXEC procedureInsertStock 849, 32;
-EXEC procedureInsertStock 853, 72;
-EXEC procedureInsertStock 912, 83;
-EXEC procedureInsertStock 922, 26;
-EXEC procedureInsertStock 933, 100;
-EXEC procedureInsertStock 990, 45;
-EXEC procedureInsertStock 1008, 87;
-EXEC procedureInsertStock 1021, 34;
-EXEC procedureInsertStock 1045, 95;
-EXEC procedureInsertStock 1046, 77;
-EXEC procedureInsertStock 1061, 81;
-EXEC procedureInsertStock 1138, 28;
-EXEC procedureInsertStock 1140, 21;
-EXEC procedureInsertStock 1144, 54;
-EXEC procedureInsertStock 1145, 80;
-EXEC procedureInsertStock 1150, 66;
-EXEC procedureInsertStock 1163, 39;
-EXEC procedureInsertStock 1172, 71;
-EXEC procedureInsertStock 1210, 86;
-EXEC procedureInsertStock 1211, 22;
-EXEC procedureInsertStock 1213, 20;
-EXEC procedureInsertStock 1237, 71;
-EXEC procedureInsertStock 1294, 86;
-EXEC procedureInsertStock 1305, 92;
-EXEC procedureInsertStock 1309, 48;
-EXEC procedureInsertStock 1351, 26;
-EXEC procedureInsertStock 1368, 57;
-EXEC procedureInsertStock 1402, 51;
-EXEC procedureInsertStock 1417, 21;
-EXEC procedureInsertStock 1448, 73;
-EXEC procedureInsertStock 1449, 40;
-EXEC procedureInsertStock 1466, 68;
-EXEC procedureInsertStock 1472, 37;
-EXEC procedureInsertStock 1515, 58;
-EXEC procedureInsertStock 1516, 76;
-EXEC procedureInsertStock 1581, 53;
-EXEC procedureInsertStock 1586, 33;
-EXEC procedureInsertStock 1589, 55;
-EXEC procedureInsertStock 1593, 66;
-EXEC procedureInsertStock 1607, 30;
-EXEC procedureInsertStock 1635, 39;
-EXEC procedureInsertStock 1650, 39;
-EXEC procedureInsertStock 1691, 98;
-EXEC procedureInsertStock 1699, 45;
-EXEC procedureInsertStock 1708, 34;
-EXEC procedureInsertStock 1737, 78;
-EXEC procedureInsertStock 1756, 24;
-EXEC procedureInsertStock 1774, 75;
-EXEC procedureInsertStock 1788, 84;
-EXEC procedureInsertStock 1789, 57;
-EXEC procedureInsertStock 1793, 48;
-EXEC procedureInsertStock 1798, 84;
-EXEC procedureInsertStock 1827, 82;
-EXEC procedureInsertStock 1849, 77;
-EXEC procedureInsertStock 1873, 99;
-EXEC procedureInsertStock 1904, 34;
-EXEC procedureInsertStock 1925, 23;
-EXEC procedureInsertStock 1929, 70;
+EXEC procedureInsertStock 27, 160;
+EXEC procedureInsertStock 29, 135;
+EXEC procedureInsertStock 31, 225;
+EXEC procedureInsertStock 35, 145;
+EXEC procedureInsertStock 56, 115;
+EXEC procedureInsertStock 91, 135;
+EXEC procedureInsertStock 99, 460;
+EXEC procedureInsertStock 126, 175;
+EXEC procedureInsertStock 164, 370;
+EXEC procedureInsertStock 182, 265;
+EXEC procedureInsertStock 188, 345;
+EXEC procedureInsertStock 192, 380;
+EXEC procedureInsertStock 202, 405;
+EXEC procedureInsertStock 209, 225;
+EXEC procedureInsertStock 258, 465;
+EXEC procedureInsertStock 269, 155;
+EXEC procedureInsertStock 288, 295;
+EXEC procedureInsertStock 292, 415;
+EXEC procedureInsertStock 312, 425;
+EXEC procedureInsertStock 358, 415;
+EXEC procedureInsertStock 368, 350;
+EXEC procedureInsertStock 454, 315;
+EXEC procedureInsertStock 467, 440;
+EXEC procedureInsertStock 484, 395;
+EXEC procedureInsertStock 515, 215;
+EXEC procedureInsertStock 532, 325;
+EXEC procedureInsertStock 584, 245;
+EXEC procedureInsertStock 587, 395;
+EXEC procedureInsertStock 593, 445;
+EXEC procedureInsertStock 620, 245;
+EXEC procedureInsertStock 622, 275;
+EXEC procedureInsertStock 682, 450;
+EXEC procedureInsertStock 697, 310;
+EXEC procedureInsertStock 736, 255;
+EXEC procedureInsertStock 759, 445;
+EXEC procedureInsertStock 768, 390;
+EXEC procedureInsertStock 795, 195;
+EXEC procedureInsertStock 800, 305;
+EXEC procedureInsertStock 806, 170;
+EXEC procedureInsertStock 815, 325;
+EXEC procedureInsertStock 820, 235;
+EXEC procedureInsertStock 830, 410;
+EXEC procedureInsertStock 849, 160;
+EXEC procedureInsertStock 853, 360;
+EXEC procedureInsertStock 912, 415;
+EXEC procedureInsertStock 922, 130;
+EXEC procedureInsertStock 933, 500;
+EXEC procedureInsertStock 990, 225;
+EXEC procedureInsertStock 1008, 435;
+EXEC procedureInsertStock 1021, 170;
+EXEC procedureInsertStock 1045, 475;
+EXEC procedureInsertStock 1046, 385;
+EXEC procedureInsertStock 1061, 405;
+EXEC procedureInsertStock 1138, 140;
+EXEC procedureInsertStock 1140, 105;
+EXEC procedureInsertStock 1144, 270;
+EXEC procedureInsertStock 1145, 400;
+EXEC procedureInsertStock 1150, 330;
+EXEC procedureInsertStock 1163, 195;
+EXEC procedureInsertStock 1172, 355;
+EXEC procedureInsertStock 1210, 430;
+EXEC procedureInsertStock 1211, 110;
+EXEC procedureInsertStock 1213, 100;
+EXEC procedureInsertStock 1237, 355;
+EXEC procedureInsertStock 1294, 430;
+EXEC procedureInsertStock 1305, 460;
+EXEC procedureInsertStock 1309, 240;
+EXEC procedureInsertStock 1351, 130;
+EXEC procedureInsertStock 1368, 285;
+EXEC procedureInsertStock 1402, 255;
+EXEC procedureInsertStock 1417, 105;
+EXEC procedureInsertStock 1448, 365;
+EXEC procedureInsertStock 1449, 200;
+EXEC procedureInsertStock 1466, 340;
+EXEC procedureInsertStock 1472, 185;
+EXEC procedureInsertStock 1515, 290;
+EXEC procedureInsertStock 1516, 380;
+EXEC procedureInsertStock 1581, 265;
+EXEC procedureInsertStock 1586, 165;
+EXEC procedureInsertStock 1589, 275;
+EXEC procedureInsertStock 1593, 330;
+EXEC procedureInsertStock 1607, 150;
+EXEC procedureInsertStock 1635, 195;
+EXEC procedureInsertStock 1650, 195;
+EXEC procedureInsertStock 1691, 490;
+EXEC procedureInsertStock 1699, 225;
+EXEC procedureInsertStock 1708, 170;
+EXEC procedureInsertStock 1737, 390;
+EXEC procedureInsertStock 1756, 120;
+EXEC procedureInsertStock 1774, 375;
+EXEC procedureInsertStock 1788, 420;
+EXEC procedureInsertStock 1789, 285;
+EXEC procedureInsertStock 1793, 240;
+EXEC procedureInsertStock 1798, 420;
+EXEC procedureInsertStock 1827, 410;
+EXEC procedureInsertStock 1849, 385;
+EXEC procedureInsertStock 1873, 495;
+EXEC procedureInsertStock 1904, 170;
+EXEC procedureInsertStock 1925, 115;
+EXEC procedureInsertStock 1929, 350;
 GO
 
 
@@ -990,54 +969,76 @@ FROM CatRecipe cr;
 GO
 
 
+DROP PROCEDURE IF EXISTS procedureFillingInsertSales;
+GO
 CREATE PROCEDURE procedureFillingInsertSales (
-  @total INT,
   @fkCatClient INT,
   @totalSales INT
 )
 AS
   BEGIN
-    DECLARE @subtractValue INT;
-    DECLARE @tempTotalRecipes INT;
+    DECLARE @totalDetailRecipes INT;
+    DECLARE @totalRecipes INT;
     DECLARE @idCatSale INT;
     DECLARE @idCatRecipe INT;
     DECLARE @priceRecipe FLOAT;
-    DECLARE @counter INT = 1;
-    WHILE @counter <= @totalSales
-    BEGIN    
-      SET @tempTotalRecipes = 1 + CAST(RAND() * 100 AS INT);
-      SET @idCatRecipe = (SELECT TOP 1 idCatRecipe FROM CatRecipe WHERE quantityStock >= @tempTotalRecipes ORDER BY NEWID())
-      IF @idCatRecipe > 0
-        BEGIN
-          INSERT INTO CatSale (total, fkCatClient) VALUES (@total, @fkCatClient);
-          SET @idCatSale = SCOPE_IDENTITY();
-          SET @priceRecipe = (SELECT price FROM CatRecipe WHERE idCatRecipe = @idCatRecipe);
-          INSERT INTO DetailSale (quantity, price, fkCatRecipe, fkCatSale) VALUES (@tempTotalRecipes, (@priceRecipe * @tempTotalRecipes), @idCatRecipe, @idCatSale);
-          UPDATE CatRecipe SET quantityStock = (quantityStock - @tempTotalRecipes) WHERE idCatRecipe = @idCatRecipe;
-          INSERT INTO CatShipment (delivered, fkCatSale, fkCatEmployee) VALUES ((ABS(CHECKSUM(NEWID())) % 2), @idCatSale, 8);
-        END
-      SET @counter = @counter + 1;
-    END
+    DECLARE @counterSales INT = 1;
+    DECLARE @counterRecipes INT = 1;
+    WHILE @counterSales <= @totalSales
+      BEGIN
+        INSERT INTO CatSale (total, fkCatClient) VALUES (1, @fkCatClient);
+        SET @idCatSale = SCOPE_IDENTITY();
+        SET @totalDetailRecipes = FLOOR(RAND() * 5) + 1;
+        WHILE @counterRecipes <= @totalDetailRecipes
+          BEGIN
+            SET @totalRecipes = FLOOR(RAND() * 3) + 1;
+            SET @idCatRecipe = (SELECT TOP 1 idCatRecipe FROM CatRecipe WHERE quantityStock >= @totalRecipes AND quantityStock > 0 ORDER BY NEWID());
+            IF @idCatRecipe > 0
+              BEGIN
+                SET @priceRecipe = (SELECT price FROM CatRecipe WHERE idCatRecipe = @idCatRecipe);
+                IF (SELECT COUNT(*) FROM DetailSale WHERE fkCatRecipe = @idCatRecipe AND fkCatSale = @idCatSale) > 0
+                  BEGIN
+                    UPDATE DetailSale
+                      SET quantity = quantity + @totalRecipes,
+                          price = price + (@priceRecipe * @totalRecipes)
+                      WHERE fkCatRecipe = @idCatRecipe AND fkCatSale = @idCatSale;
+                  END
+                ELSE
+                  BEGIN
+                    INSERT INTO DetailSale (quantity, price, fkCatRecipe, fkCatSale) VALUES (@totalRecipes, (@priceRecipe * @totalRecipes), @idCatRecipe, @idCatSale);
+                  END
+                UPDATE CatRecipe SET quantityStock = (quantityStock - @totalRecipes) WHERE idCatRecipe = @idCatRecipe;
+                INSERT INTO CatShipment (delivered, fkCatSale, fkCatEmployee) VALUES ((ABS(CHECKSUM(NEWID())) % 2), @idCatSale, 8);
+              END
+            SET @counterRecipes = @counterRecipes + 1;
+          END
+        IF (SELECT COUNT(*) FROM DetailSale WHERE fkCatSale = @idCatSale) = 0
+          BEGIN
+            DELETE FROM CatSale WHERE idCatSale = @idCatSale;
+          END
+        SET @counterRecipes = 1;
+        SET @counterSales = @counterSales + 1;
+      END
   END;
 GO
 
 
-EXEC procedureFillingInsertSales 1, 1, 10;
-EXEC procedureFillingInsertSales 1, 2, 29;
-EXEC procedureFillingInsertSales 1, 3, 37;
-EXEC procedureFillingInsertSales 1, 4, 41;
-EXEC procedureFillingInsertSales 1, 5, 31;
-EXEC procedureFillingInsertSales 1, 6, 34;
-EXEC procedureFillingInsertSales 1, 7, 35;
-EXEC procedureFillingInsertSales 1, 8, 39;
-EXEC procedureFillingInsertSales 1, 9, 40;
-EXEC procedureFillingInsertSales 1, 10, 43;
-EXEC procedureFillingInsertSales 1, 11, 46;
-EXEC procedureFillingInsertSales 1, 12, 71;
-EXEC procedureFillingInsertSales 1, 13, 78;
-EXEC procedureFillingInsertSales 1, 14, 82;
-EXEC procedureFillingInsertSales 1, 15, 83;
-EXEC procedureFillingInsertSales 1, 16, 94;
+EXEC procedureFillingInsertSales 1, 10;
+EXEC procedureFillingInsertSales 2, 29;
+EXEC procedureFillingInsertSales 3, 37;
+EXEC procedureFillingInsertSales 4, 41;
+EXEC procedureFillingInsertSales 5, 31;
+EXEC procedureFillingInsertSales 6, 34;
+EXEC procedureFillingInsertSales 7, 35;
+EXEC procedureFillingInsertSales 8, 39;
+EXEC procedureFillingInsertSales 9, 40;
+EXEC procedureFillingInsertSales 10, 43;
+EXEC procedureFillingInsertSales 11, 46;
+EXEC procedureFillingInsertSales 12, 71;
+EXEC procedureFillingInsertSales 13, 78;
+EXEC procedureFillingInsertSales 14, 82;
+EXEC procedureFillingInsertSales 15, 83;
+EXEC procedureFillingInsertSales 16, 94;
 GO
 
 
