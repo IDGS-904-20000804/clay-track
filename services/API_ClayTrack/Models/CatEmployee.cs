@@ -26,6 +26,6 @@ namespace API_ClayTrack.Models
         public CatPerson Person { get; set; }
         public IdentityUser User { get; set; }
         public IdentityRole Role { get; set; }
-
     }
+
 }

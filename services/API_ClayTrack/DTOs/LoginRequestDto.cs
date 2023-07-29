@@ -2,13 +2,15 @@
 
 namespace API_ClayTrack.DTOs
 {
-    public class UserCredentials
+    public class LoginRequestDto
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set;}
+        [DataType(DataType.EmailAddress)]
+        public string Username { get; set; }
+
 
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

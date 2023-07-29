@@ -10,7 +10,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Employee")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
     public class SupplierController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -22,6 +22,16 @@ namespace API_ClayTrack.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<CatSupplier>>> GetAllSupplier()
+        {
+            return await dbContext.CatSupplier
+                .Include(s => s.Person)
+                .ToListAsync();
+        }
+
+        [HttpGet]
+        [Route("GetOne{id:int}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<CatSupplier>>> GetSupplier(int id)
         {
             return await dbContext.CatSupplier
                 .Include(s => s.Person)
@@ -58,17 +68,22 @@ namespace API_ClayTrack.Controllers
             return Ok();
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
+
+        [HttpPut]
+        [Route("Delete{id:int}")]
         public async Task<ActionResult> DeleteSupplier(int id)
         {
-            var exist = await dbContext.CatSupplier.AnyAsync(x => x.idCatSupplier == id);
-            if (!exist)
+            var supplier = await dbContext.CatSupplier.Include(s => s.Person).FirstOrDefaultAsync(s => s.idCatSupplier == id);
+
+            if (supplier == null)
             {
                 return NotFound();
             }
 
-            dbContext.Remove(new CatSupplier() { idCatSupplier = id });
+            dbContext.Remove(supplier);
+
+            supplier.Person.status = false;
+
             await dbContext.SaveChangesAsync();
             return Ok();
         }

@@ -17,6 +17,9 @@ namespace API_ClayTrack.Models
         public int quantityWarehouse { get; set; }
 
         [Required]
+        public int quantityPackage { get; set; }
+
+        [Required]
         public bool status { get; set; }
 
         [Required]

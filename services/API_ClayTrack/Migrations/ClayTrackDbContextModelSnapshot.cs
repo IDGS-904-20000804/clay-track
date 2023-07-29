@@ -60,6 +60,31 @@ namespace API_ClayTrack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idCatColor"));
 
+                    b.Property<DateTime>("creationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("hexadecimal")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("updateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
                     b.HasKey("idCatColor");
 
                     b.ToTable("CatColor");
@@ -221,6 +246,9 @@ namespace API_ClayTrack.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int>("quantityPackage")
+                        .HasColumnType("int");
+
                     b.Property<int>("quantityWarehouse")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -268,9 +296,6 @@ namespace API_ClayTrack.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<float>("price")
-                        .HasColumnType("real");
 
                     b.Property<bool>("status")
                         .ValueGeneratedOnAdd()
@@ -366,6 +391,31 @@ namespace API_ClayTrack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idCatSize"));
 
+                    b.Property<string>("abbreviation")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("creationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("updateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
                     b.HasKey("idCatSize");
 
                     b.ToTable("CatSize");
@@ -386,9 +436,6 @@ namespace API_ClayTrack.Migrations
 
                     b.Property<int>("fkCatRecipe")
                         .HasColumnType("int");
-
-                    b.Property<float>("price")
-                        .HasColumnType("real");
 
                     b.Property<int>("quantity")
                         .HasColumnType("int");
@@ -483,8 +530,8 @@ namespace API_ClayTrack.Migrations
                     b.Property<float>("price")
                         .HasColumnType("real");
 
-                    b.Property<float>("quantity")
-                        .HasColumnType("real");
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("idDetailPurchase");
 
@@ -495,19 +542,6 @@ namespace API_ClayTrack.Migrations
                     b.ToTable("DetailPurchase");
                 });
 
-            modelBuilder.Entity("API_ClayTrack.Models.DetailRawMaterialColor", b =>
-                {
-                    b.Property<int>("idDetailRawMaterialColor")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idDetailRawMaterialColor"));
-
-                    b.HasKey("idDetailRawMaterialColor");
-
-                    b.ToTable("DetailRawMaterialColor");
-                });
-
             modelBuilder.Entity("API_ClayTrack.Models.DetailRecipeColor", b =>
                 {
                     b.Property<int>("idDetailRecipeColor")
@@ -516,7 +550,17 @@ namespace API_ClayTrack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idDetailRecipeColor"));
 
+                    b.Property<int>("fkCatColor")
+                        .HasColumnType("int");
+
+                    b.Property<int>("fkCatRecipe")
+                        .HasColumnType("int");
+
                     b.HasKey("idDetailRecipeColor");
+
+                    b.HasIndex("fkCatColor");
+
+                    b.HasIndex("fkCatRecipe");
 
                     b.ToTable("DetailRecipeColor");
                 });
@@ -535,8 +579,8 @@ namespace API_ClayTrack.Migrations
                     b.Property<int>("fkCatRecipe")
                         .HasColumnType("int");
 
-                    b.Property<float>("quantity")
-                        .HasColumnType("real");
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("idDetailRecipeRawMaterial");
 
@@ -564,8 +608,8 @@ namespace API_ClayTrack.Migrations
                     b.Property<float>("price")
                         .HasColumnType("real");
 
-                    b.Property<float>("quantity")
-                        .HasColumnType("real");
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("idDetailSale");
 
@@ -961,6 +1005,25 @@ namespace API_ClayTrack.Migrations
                     b.Navigation("Purchase");
 
                     b.Navigation("RawMaterial");
+                });
+
+            modelBuilder.Entity("API_ClayTrack.Models.DetailRecipeColor", b =>
+                {
+                    b.HasOne("API_ClayTrack.Models.CatColor", "Color")
+                        .WithMany()
+                        .HasForeignKey("fkCatColor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API_ClayTrack.Models.CatRecipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("fkCatRecipe")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("API_ClayTrack.Models.DetailRecipeRawMaterial", b =>

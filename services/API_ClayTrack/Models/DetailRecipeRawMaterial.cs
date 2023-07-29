@@ -10,7 +10,7 @@ namespace API_ClayTrack.Models
         public int idDetailRecipeRawMaterial { get; set; }
 
         [Required]
-        public float quantity { get; set; }
+        public int quantity { get; set; }
 
         [Required]
         [ForeignKey("Recipe")]

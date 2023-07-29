@@ -13,9 +13,6 @@ namespace API_ClayTrack.Models
         public int quantity { get; set; }
 
         [Required]
-        public float price { get; set; }
-
-        [Required]
         public bool status { get; set; }
 
         [Required]

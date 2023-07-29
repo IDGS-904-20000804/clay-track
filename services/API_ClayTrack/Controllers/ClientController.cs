@@ -16,7 +16,7 @@ namespace API_ClayTrack.Controllers
     // https://localhost:7106/api/Client
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Employee")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin,Employee")]
     public class ClientController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -30,36 +30,70 @@ namespace API_ClayTrack.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CatClient>>> GetAllClients()
+        [Route("GetAll")]
+        public async Task<ActionResult<List<CatClient>>> GetAllClient()
         {
             return await dbContext.CatClient
                 .Include(c => c.Person)
                 .Include(c => c.User)
-                .Include(c => c.Role)
+                .ToListAsync();
+        }
+        [HttpGet]
+        [Route("GetOne{id:int}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<CatClient>>> GetClient(int id)
+        {
+            return await dbContext.CatClient
+                .Include(c => c.Person)
+                .Include(c => c.User)
                 .ToListAsync();
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Route("AddClient")]
         public async Task<ActionResult> AddClient([FromBody] CatClient client)
         {
-            IdentityRole clientRole = dbContext.Roles.FirstOrDefault(r => r.Name == "Client");
-
-            if (clientRole == null)
+            try
             {
-                return BadRequest("Role does not exist");
+                IdentityRole clientRole = dbContext.Roles.FirstOrDefault(r => r.Name == "Client");
+
+                if (clientRole == null)
+                {
+                    return BadRequest("Role does not exist");
+                }
+                client.Role = clientRole;
+
+                var user = new IdentityUser
+                {
+                    UserName = client.User.Email,
+                    Email = client.User.Email
+                };
+
+                var password = client.User.PasswordHash;
+                var identityResult = await userManager.CreateAsync(user, password);
+
+                if (!identityResult.Succeeded)
+                {
+                    var errorMessage = string.Join(", ", identityResult.Errors.Select(c => c.Description));
+                    return BadRequest(errorMessage);
+                }
+
+                client.User = user;
+                dbContext.Add(client);
+                await dbContext.SaveChangesAsync();
+                await userManager.AddToRoleAsync(user, client.Role.Name);
+
+                return Ok("Client was added successfully.");
             }
-            client.Role = clientRole;
-
-            dbContext.Add(client);
-            await dbContext.SaveChangesAsync();
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("Update{id:int}")]
         public async Task<ActionResult> UpdateClient(CatClient client, int id)
         {
             if (client.idCatClient != id)
@@ -78,20 +112,23 @@ namespace API_ClayTrack.Controllers
             return Ok();
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
+        [HttpPut]
+        [Route("Delete{id:int}")]
         public async Task<ActionResult> DeleteClient(int id)
         {
-            var exist = await dbContext.CatClient.AnyAsync(x => x.idCatClient == id);
-            if (!exist)
+            var client = await dbContext.CatClient.Include(c => c.Person).FirstOrDefaultAsync(c => c.idCatClient == id);
+
+            if (client == null)
             {
                 return NotFound();
             }
-            
-            dbContext.Remove(new CatClient() { idCatClient = id});
+
+            dbContext.Remove(client);
+
+            client.Person.status = false;
+
             await dbContext.SaveChangesAsync();
             return Ok();
         }
-
     }
 }

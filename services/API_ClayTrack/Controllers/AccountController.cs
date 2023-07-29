@@ -2,11 +2,13 @@
 using System.Security.Claims;
 using System.Text;
 using API_ClayTrack.DTOs;
+using API_ClayTrack.Repositories.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using static API_ClayTrack.Controllers.AccountController;
 using static com.sun.tools.@internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 namespace API_ClayTrack.Controllers
@@ -16,148 +18,79 @@ namespace API_ClayTrack.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
-        private readonly IConfiguration configuration;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly ITokenRepository tokenRepository;
 
-        public AccountController(UserManager<IdentityUser> userManager, IConfiguration configuration,
-            SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
         {
             this.userManager = userManager;
-            this.configuration = configuration;
-            this.signInManager = signInManager;
+            this.tokenRepository = tokenRepository;
         }
 
+
+        // POST: /api/Auth/Register
         [HttpPost]
-        [Route("register")]
-        public async Task<ActionResult<AuthenticationResponse>> Register(UserCredentials userCredentials)
+        [Route("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
         {
-            var user = new IdentityUser
+            var identityUser = new IdentityUser
             {
-                UserName = userCredentials.Email,
-                Email = userCredentials.Email
-            };
-            var result = await userManager.CreateAsync(user, userCredentials.Password);
-
-            if (result.Succeeded)
-            {
-                return await ContructorToken(userCredentials);
-            }
-            else
-            {
-                return BadRequest(result.Errors);
-            }
-        }
-
-        [HttpPost]
-        [Route("login")]
-        public async Task<ActionResult<AuthenticationResponse>> Login(UserCredentials userCredentials) 
-        {
-            var result = await signInManager.PasswordSignInAsync(userCredentials.Email,
-                userCredentials.Password, isPersistent: false, lockoutOnFailure: false);
-
-            if (result.Succeeded)
-            {
-                return await ContructorToken(userCredentials);
-            }
-            else
-            {
-                return BadRequest("Incorrect login");
-            }
-        }
-
-        [HttpGet]
-        [Route("Renew Token")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<AuthenticationResponse>> Renew()
-        {
-            var emailClaim = HttpContext.User.Claims.Where(claim => claim.Type == "email").FirstOrDefault();
-            var email = emailClaim.Value;
-            var userCredentials = new UserCredentials()
-            {
-                Email = email
+                UserName = registerRequestDto.Username,
+                Email = registerRequestDto.Username
             };
 
-            return await ContructorToken(userCredentials);
-        }
+            var identityResult = await userManager.CreateAsync(identityUser, registerRequestDto.Password);
 
-        private async Task<AuthenticationResponse> ContructorToken(UserCredentials userCredentials) 
-        {
-            var claims = new List<Claim>()
+            if (identityResult.Succeeded)
             {
-                new Claim("email", userCredentials.Email)
-            };
+                // Add roles to this User
+                if (registerRequestDto.Roles != null && registerRequestDto.Roles.Any())
+                {
+                    identityResult = await userManager.AddToRolesAsync(identityUser, registerRequestDto.Roles);
 
-            var user = await userManager.FindByEmailAsync(userCredentials.Email);
-            var claimsDB = await userManager.GetClaimsAsync(user);
+                    if (identityResult.Succeeded)
+                    {
+                        return Ok("User was registered! Please login.");
+                    }
+                }
+            }
 
-            claims.AddRange(claimsDB);
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["keyjwt"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var expirate = DateTime.UtcNow.AddMinutes(120);
-
-            var securityToken = new JwtSecurityToken(issuer: null, audience: null, claims: claims,
-                expires: expirate, signingCredentials: creds);
+            return BadRequest("Something went wrong");
+        }
 
 
-            return new AuthenticationResponse()
+        // POST: /api/Auth/Login
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
+        {
+            var user = await userManager.FindByEmailAsync(loginRequestDto.Username);
+
+            if (user != null)
             {
-                Token = new JwtSecurityTokenHandler().WriteToken(securityToken),
-                Expiration = expirate
-            };
+                var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginRequestDto.Password);
 
-        }
+                if (checkPasswordResult)
+                {
+                    // Get Roles for this user
+                    var roles = await userManager.GetRolesAsync(user);
 
-        [HttpPost]
-        [Route("CreateAdmin")]
-        public async Task<ActionResult> CreateAdmin(EditRolDTO editRolDTO)
-        {
-            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
-            await userManager.AddClaimAsync(user, new Claim("Admin", "1"));
-            return NoContent();
-        }
+                    if (roles != null)
+                    {
+                        // Create Token
 
-        [HttpPost("RemoveAdmin")]
-        public async Task<ActionResult> RemoveAdmin(EditRolDTO editRolDTO)
-        {
-            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
-            await userManager.RemoveClaimAsync(user, new Claim("Admin", "1"));
-            return NoContent();
-        }
+                        var jwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
 
-        [HttpPost]
-        [Route("CreateEmployee")]
-        public async Task<ActionResult> CreateEmployee(EditRolDTO editRolDTO)
-        {
-            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
-            await userManager.AddClaimAsync(user, new Claim("Employee", "2"));
-            return NoContent();
-        }
+                        var response = new LoginResponseDto
+                        {
+                            JwtToken = jwtToken
+                        };
 
-        [HttpPost("RemoveEmployee")]
-        public async Task<ActionResult> RemoveEmployee(EditRolDTO editRolDTO)
-        {
-            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
-            await userManager.RemoveClaimAsync(user, new Claim("Employee", "2"));
-            return NoContent();
-        }
+                        return Ok(response);
+                    }
+                }
+            }
 
-        [HttpPost]
-        [Route("CreateClient")]
-        public async Task<ActionResult> CreateClient(EditRolDTO editRolDTO)
-        {
-            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
-            await userManager.AddClaimAsync(user, new Claim("Client", "3"));
-            return NoContent();
-        }
-
-        [HttpPost("RemoveClient")]
-        public async Task<ActionResult> RemoveClient(EditRolDTO editRolDTO)
-        {
-            var user = await userManager.FindByEmailAsync(editRolDTO.Email);
-            await userManager.RemoveClaimAsync(user, new Claim("Client", "3"));
-            return NoContent();
+            return BadRequest("Username or password incorrect");
         }
     }
 }

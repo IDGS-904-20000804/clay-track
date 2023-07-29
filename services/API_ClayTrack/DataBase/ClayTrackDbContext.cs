@@ -67,6 +67,32 @@ namespace API_ClayTrack.DataBase
                 .HasForeignKey(p => p.fkCatEmployee)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            //CatSize status, creationDate and updateDate
+            modelBuilder.Entity<CatSize>()
+                .Property(s => s.status)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<CatSize>()
+                .Property(s => s.creationDate)
+                .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<CatSize>()
+                .Property(s => s.updateDate)
+                .HasDefaultValueSql("GETDATE()");
+
+            //CatColor status, creationDate and updateDate
+            modelBuilder.Entity<CatColor>()
+                .Property(b => b.status)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<CatColor>()
+                .Property(c => c.creationDate)
+                .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<CatColor>()
+                .Property(c => c.updateDate)
+                .HasDefaultValueSql("GETDATE()");
+
             //CatPerson status, creationDate and updateDate
             modelBuilder.Entity<CatPerson>()
                 .Property(b => b.status)
@@ -191,7 +217,6 @@ namespace API_ClayTrack.DataBase
         public DbSet<DetailSale> DetailSale { get; set; }
         public DbSet<CatPurchase> CatPurchase { get; set; }
         public DbSet<CatColor> CatColor { get; set; }
-        public DbSet<DetailRawMaterialColor> DetailRawMaterialColor { get; set; }
         public DbSet<DetailRecipeColor> DetailRecipeColor { get; set; }
 
     }
