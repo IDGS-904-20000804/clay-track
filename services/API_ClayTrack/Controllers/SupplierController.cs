@@ -1,5 +1,6 @@
 ﻿using API_ClayTrack.DataBase;
 using API_ClayTrack.Models;
+using java.util.function;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -31,12 +32,20 @@ namespace API_ClayTrack.Controllers
         [HttpGet]
         [Route("GetOne{id:int}")]
         [AllowAnonymous]
-        public async Task<ActionResult<List<CatSupplier>>> GetSupplier(int id)
+        public async Task<ActionResult<CatSupplier>> GetSupplier(int id)
         {
-            return await dbContext.CatSupplier
+            var supplier = await dbContext.CatSupplier
                 .Include(s => s.Person)
-                .ToListAsync();
+                .FirstOrDefaultAsync(s => s.idCatSupplier == id);
+
+            if (supplier == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(supplier);
         }
+
 
         [HttpPost]
         public async Task<ActionResult> AddSupplier([FromBody] CatSupplier supplier)
@@ -57,7 +66,9 @@ namespace API_ClayTrack.Controllers
                 return BadRequest("Supplier id different from URL id");
             }
 
-            var exist = await dbContext.CatSupplier.AnyAsync(x => x.idCatSupplier == id);
+            var exist = await dbContext.CatSupplier
+                .Include(s => s.Person)
+                .AnyAsync(x => x.idCatSupplier == id);
             if (!exist)
             {
                 return NotFound();
@@ -73,14 +84,14 @@ namespace API_ClayTrack.Controllers
         [Route("Delete{id:int}")]
         public async Task<ActionResult> DeleteSupplier(int id)
         {
-            var supplier = await dbContext.CatSupplier.Include(s => s.Person).FirstOrDefaultAsync(s => s.idCatSupplier == id);
+            var supplier = await dbContext.CatSupplier
+                .Include(e => e.Person)
+                .FirstOrDefaultAsync(e => e.idCatSupplier == id);
 
             if (supplier == null)
             {
                 return NotFound();
             }
-
-            dbContext.Remove(supplier);
 
             supplier.Person.status = false;
 

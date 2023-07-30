@@ -57,8 +57,6 @@ namespace API_ClayTrack.Controllers
             return BadRequest("Something went wrong");
         }
 
-
-        // POST: /api/Auth/Login
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)

@@ -38,19 +38,28 @@ namespace API_ClayTrack.Controllers
                 .Include(c => c.User)
                 .ToListAsync();
         }
+
         [HttpGet]
         [Route("GetOne{id:int}")]
-        [AllowAnonymous]
-        public async Task<ActionResult<List<CatClient>>> GetClient(int id)
+        public async Task<ActionResult<CatClient>> GetClient(int id)
         {
-            return await dbContext.CatClient
+            var client = await dbContext.CatClient
                 .Include(c => c.Person)
                 .Include(c => c.User)
-                .ToListAsync();
+                .FirstOrDefaultAsync(c => c.idCatClient == id);
+
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(client);
         }
+
 
         [HttpPost]
         [Route("AddClient")]
+        [AllowAnonymous]
         public async Task<ActionResult> AddClient([FromBody] CatClient client)
         {
             try
@@ -101,7 +110,10 @@ namespace API_ClayTrack.Controllers
                 return BadRequest("Client id different from URL id");
             }
 
-            var exist = await dbContext.CatClient.AnyAsync(x => x.idCatClient == id);
+            var exist = await dbContext.CatClient
+                .Include(c => c.Person)
+                .Include(c => c.User)
+                .AnyAsync(x => x.idCatClient == id);
             if (!exist)
             {
                 return NotFound();
@@ -116,16 +128,29 @@ namespace API_ClayTrack.Controllers
         [Route("Delete{id:int}")]
         public async Task<ActionResult> DeleteClient(int id)
         {
-            var client = await dbContext.CatClient.Include(c => c.Person).FirstOrDefaultAsync(c => c.idCatClient == id);
+            var client = await dbContext.CatClient
+                .Include(c => c.Person)
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.idCatClient == id);
 
             if (client == null)
             {
                 return NotFound();
             }
 
-            dbContext.Remove(client);
+            var user = await userManager.FindByIdAsync(client.fkUser);
+            if (user != null)
+            {
+                var result = await userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                {
+                    var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+                    return BadRequest(errorMessage);
+                }
+            }
 
-            client.Person.status = false;
+            dbContext.Remove(client.Person); 
+            dbContext.Remove(client);
 
             await dbContext.SaveChangesAsync();
             return Ok();

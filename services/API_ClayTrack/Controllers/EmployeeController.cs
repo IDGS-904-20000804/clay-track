@@ -19,7 +19,7 @@ namespace API_ClayTrack.Controllers
         private readonly ClayTrackDbContext dbContext;
         private readonly UserManager<IdentityUser> userManager;
 
-        public EmployeeController(ClayTrackDbContext dbContext, 
+        public EmployeeController(ClayTrackDbContext dbContext,
             UserManager<IdentityUser> userManager)
         {
             this.dbContext = dbContext;
@@ -38,13 +38,19 @@ namespace API_ClayTrack.Controllers
 
         [HttpGet]
         [Route("GetOne{id:int}")]
-        [AllowAnonymous]
-        public async Task<ActionResult<List<CatEmployee>>> GetEmployee(int id)
+        public async Task<ActionResult<CatEmployee>> GetEmployee(int id)
         {
-            return await dbContext.CatEmployee
+            var employee = await dbContext.CatClient
                 .Include(e => e.Person)
                 .Include(e => e.User)
-                .ToListAsync();
+                .FirstOrDefaultAsync(e => e.idCatClient == id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(employee);
         }
 
         [HttpPost]
@@ -100,7 +106,10 @@ namespace API_ClayTrack.Controllers
                 return BadRequest("Employee id different from URL id");
             }
 
-            var exist = await dbContext.CatEmployee.AnyAsync(x => x.idCatEmployee == id);
+            var exist = await dbContext.CatEmployee
+                .Include(e => e.Person)
+                .Include(e => e.User)
+                .AnyAsync(x => x.idCatEmployee == id);
             if (!exist)
             {
                 return NotFound();
@@ -115,16 +124,28 @@ namespace API_ClayTrack.Controllers
         [Route("Delete{id:int}")]
         public async Task<ActionResult> DeleteEmployee(int id)
         {
-            var employee = await dbContext.CatEmployee.Include(e => e.Person).FirstOrDefaultAsync(e => e.idCatEmployee == id);
+            var employee = await dbContext.CatEmployee
+                .Include(c => c.Person)
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.idCatEmployee == id);
 
             if (employee == null)
             {
                 return NotFound();
             }
 
-            dbContext.Remove(employee);
-
             employee.Person.status = false;
+
+            var user = await userManager.FindByIdAsync(employee.fkUser);
+            if (user != null)
+            {
+                var result = await userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                {
+                    var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+                    return BadRequest(errorMessage);
+                }
+            }
 
             await dbContext.SaveChangesAsync();
             return Ok();
