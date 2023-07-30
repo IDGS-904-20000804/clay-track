@@ -13,6 +13,12 @@ namespace API_ClayTrack.Models
         [StringLength(255)]
         public string name { get; set; }
 
+        [Required]
+        public float price { get; set; }
+
+        [Required]
+        public int quantityStock { get; set; }
+
         [StringLength(255)]
         public string imagePath { get; set; }
 

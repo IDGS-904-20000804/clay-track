@@ -109,6 +109,7 @@ namespace API_ClayTrack.Controllers
             var exist = await dbContext.CatEmployee
                 .Include(e => e.Person)
                 .Include(e => e.User)
+                .Include(e => e.Role)
                 .AnyAsync(x => x.idCatEmployee == id);
             if (!exist)
             {
@@ -125,8 +126,8 @@ namespace API_ClayTrack.Controllers
         public async Task<ActionResult> DeleteEmployee(int id)
         {
             var employee = await dbContext.CatEmployee
-                .Include(c => c.Person)
-                .Include(c => c.User)
+                .Include(e => e.Person)
+                .Include(e => e.User)
                 .FirstOrDefaultAsync(c => c.idCatEmployee == id);
 
             if (employee == null)

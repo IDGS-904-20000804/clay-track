@@ -10,7 +10,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
     public class ShipmentController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -20,23 +20,25 @@ namespace API_ClayTrack.Controllers
             this.dbContext = dbContext;
         }
 
-        
-    }
-}
-/*[HttpGet]
+        [HttpGet]
         [Route("GetAll")]
         public async Task<ActionResult<List<CatShipment>>> GetAll()
         {
-            var rawMaterials = await dbContext.CatRawMaterial
-                .Include(rm => rm.UnitMeasure)
+            var shipment = await dbContext.CatShipment
+                .Include(s => s.Sale)
+                .Include(s => s.Employee)
+                .Where(s => s.delivered == true)
                 .ToListAsync();
 
-            var rawMaterialsDto = rawMaterials.Select(rm => new CatRawMaterialDto
-            {
-                Name = rm.name,
-                QuantityWarehouse = rm.quantityWarehouse,
-                UnitMeasure = rm.UnitMeasure
-            }).ToList();
+            return shipment;
+        }
 
-            return rawMaterials;
-        }*/
+        [HttpPost]
+        public async Task<ActionResult> AddSupplier([FromBody] CatShipment shipment)
+        {
+            dbContext.Add(shipment);
+            await dbContext.SaveChangesAsync();
+            return Ok();
+        }
+    }
+}

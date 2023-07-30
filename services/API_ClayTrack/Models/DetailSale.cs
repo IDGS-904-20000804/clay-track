@@ -24,7 +24,7 @@ namespace API_ClayTrack.Models
         public int fkCatSale { get; set; }
 
         // Relaciones de llave foránea
-        public CatStock Stock { get; set; }
+        public CatRecipe Stock { get; set; }
         public CatSale Sale { get; set; }
     }
 }

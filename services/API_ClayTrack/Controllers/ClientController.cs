@@ -103,6 +103,7 @@ namespace API_ClayTrack.Controllers
 
         [HttpPut]
         [Route("Update{id:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult> UpdateClient(CatClient client, int id)
         {
             if (client.idCatClient != id)
@@ -113,6 +114,7 @@ namespace API_ClayTrack.Controllers
             var exist = await dbContext.CatClient
                 .Include(c => c.Person)
                 .Include(c => c.User)
+                .Include(c => c.Role)
                 .AnyAsync(x => x.idCatClient == id);
             if (!exist)
             {

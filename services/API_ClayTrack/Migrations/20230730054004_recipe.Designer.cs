@@ -4,6 +4,7 @@ using API_ClayTrack.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_ClayTrack.Migrations
 {
     [DbContext(typeof(ClayTrackDbContext))]
-    partial class ClayTrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230730054004_recipe")]
+    partial class recipe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -425,6 +428,42 @@ namespace API_ClayTrack.Migrations
                     b.HasKey("idCatSize");
 
                     b.ToTable("CatSize");
+                });
+
+            modelBuilder.Entity("API_ClayTrack.Models.CatStock", b =>
+                {
+                    b.Property<int>("idCatStock")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idCatStock"));
+
+                    b.Property<DateTime>("creationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("fkCatRecipe")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("updateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("idCatStock");
+
+                    b.HasIndex("fkCatRecipe");
+
+                    b.ToTable("CatStock");
                 });
 
             modelBuilder.Entity("API_ClayTrack.Models.CatSupplier", b =>
@@ -936,6 +975,17 @@ namespace API_ClayTrack.Migrations
                     b.Navigation("Sale");
                 });
 
+            modelBuilder.Entity("API_ClayTrack.Models.CatStock", b =>
+                {
+                    b.HasOne("API_ClayTrack.Models.CatRecipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("fkCatRecipe")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+                });
+
             modelBuilder.Entity("API_ClayTrack.Models.CatSupplier", b =>
                 {
                     b.HasOne("API_ClayTrack.Models.CatPerson", "Person")
@@ -1012,7 +1062,7 @@ namespace API_ClayTrack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API_ClayTrack.Models.CatRecipe", "Stock")
+                    b.HasOne("API_ClayTrack.Models.CatStock", "Stock")
                         .WithMany()
                         .HasForeignKey("fkCatStock")
                         .OnDelete(DeleteBehavior.Cascade)
