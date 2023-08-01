@@ -36,6 +36,7 @@ namespace API_ClayTrack.Controllers
             return await dbContext.CatClient
                 .Include(c => c.Person)
                 .Include(c => c.User)
+                .Include(c => c.Role)
                 .ToListAsync();
         }
 
@@ -46,6 +47,7 @@ namespace API_ClayTrack.Controllers
             var client = await dbContext.CatClient
                 .Include(c => c.Person)
                 .Include(c => c.User)
+                .Include(c => c.Role)
                 .FirstOrDefaultAsync(c => c.idCatClient == id);
 
             if (client == null)
