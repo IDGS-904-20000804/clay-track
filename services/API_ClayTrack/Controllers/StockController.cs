@@ -4,6 +4,7 @@ using API_ClayTrack.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,11 +33,40 @@ namespace API_ClayTrack.Controllers
             var stockDto = stock.Select(r => new StockDto
             {
                 Name = r.name,
+                ImagePath = r.imagePath,
+                Price = r.price,
                 QuantityStock = r.quantityStock,
                 Size = r.Size
             }).ToList();
 
             return stockDto;
+        }
+
+        [HttpPost]
+        [Route("Add")]
+        public async Task<ActionResult> AddStock([FromBody] CatRecipe recipe)
+        {
+            dbContext.Add(recipe);
+            await dbContext.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("Delete{id:int}")]
+        public async Task<ActionResult> DeleteStock(int id)
+        {
+            var stock = await dbContext.CatRecipe
+                .Include(r => r.Size)
+                .FirstOrDefaultAsync(r => r.idCatRecipe == id);
+
+            if (stock == null)
+            {
+                return NotFound();
+            }
+
+            stock.status = false;
+            await dbContext.SaveChangesAsync();
+            return Ok();
         }
     }
 }
