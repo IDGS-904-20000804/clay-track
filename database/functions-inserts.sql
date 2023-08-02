@@ -35,31 +35,6 @@ EXEC procedureInsertColor 'Terracota', '#E2725B';
 GO
 
 
-CREATE PROCEDURE procedureInsertRoles (@name VARCHAR(255))
-AS
-BEGIN
-  INSERT INTO CatRole (name) VALUES (@name);
-END;
-GO
-
-
-EXEC procedureInsertRoles 'Cliente';
-EXEC procedureInsertRoles 'Empleado';
-EXEC procedureInsertRoles 'Atención al cliente';
-EXEC procedureInsertRoles 'Director';
-EXEC procedureInsertRoles 'Jefe de almacén';
-EXEC procedureInsertRoles 'Representante de ventas';
-EXEC procedureInsertRoles 'Agente de compras';
-EXEC procedureInsertRoles 'Supervisor de producción';
-EXEC procedureInsertRoles 'Expedición';
-EXEC procedureInsertRoles 'Coordinador de envíos';
-EXEC procedureInsertRoles 'Director financiero';
-EXEC procedureInsertRoles 'Especialista en marketing';
-EXEC procedureInsertRoles 'Inspector de control de calidad';
-EXEC procedureInsertRoles 'Administrador';
-GO
-
-
 CREATE PROCEDURE procedureInsertUnitMeasure (@description VARCHAR(255))
 AS
 BEGIN
@@ -90,35 +65,6 @@ EXEC procedureInsertUnitMeasure 'Caja';
 GO
 
 
-CREATE PROCEDURE procedureInsertDetailRoles (
-  @idCatUser INT,
-  @jsonRoles NVARCHAR(MAX)
-)
-AS
-BEGIN
-  DECLARE @rolesTable TABLE (
-    idRole INT
-  )
-  INSERT INTO @rolesTable (idRole)
-    SELECT Value
-    FROM OPENJSON(@jsonRoles)
-  DECLARE @idRole INT
-  DECLARE roleCursor CURSOR FOR
-  SELECT idRole FROM @rolesTable
-  OPEN roleCursor
-  FETCH NEXT FROM roleCursor INTO @idRole
-  WHILE @@FETCH_STATUS = 0
-  BEGIN
-    INSERT INTO DetailRoleUser (fkCatUser, fkCatRole)
-    VALUES (@idCatUser, @idRole);
-    FETCH NEXT FROM roleCursor INTO @idRole
-  END
-  CLOSE roleCursor
-  DEALLOCATE roleCursor
-END;
-GO
-
-
 CREATE PROCEDURE procedureInsertEmployee (
   @name VARCHAR(255),
   @lastName VARCHAR(255),
@@ -130,12 +76,13 @@ CREATE PROCEDURE procedureInsertEmployee (
   @street VARCHAR(255),
   @neighborhood VARCHAR(255),
   @password VARCHAR(255),
-  @jsonRoles NVARCHAR(MAX)
+  @uuidRole NVARCHAR(255)
 )
 AS
 BEGIN
   DECLARE @idCatPerson INT;
-  DECLARE @idCatUser INT;
+  DECLARE @uuidUserTable TABLE(Id NVARCHAR(256));
+  DECLARE @uuidUser NVARCHAR(256);
   DECLARE @email VARCHAR(255);
   INSERT INTO CatPerson (name, lastName, middleName, phone, postalCode, streetNumber, apartmentNumber, street, neighborhood)
   VALUES (@name, @lastName, @middleName, @phone, @postalCode, @streetNumber, @apartmentNumber, @street, @neighborhood);
@@ -149,12 +96,45 @@ BEGIN
       '@gmail.com'
     )
   );
-  INSERT INTO CatUser (email, password)
-  VALUES (@email, @password);
-  SET @idCatUser = SCOPE_IDENTITY();
-  INSERT INTO CatEmployee (fkCatPerson, fkCatUser)
-  VALUES (@idCatPerson, @idCatUser);
-  EXEC procedureInsertDetailRoles @idCatUser, @jsonRoles;
+  INSERT INTO AspNetUsers (
+    Id,                   -- 1
+    UserName,             -- 2
+    NormalizedUserName,   -- 3
+    Email,                -- 4
+    NormalizedEmail,      -- 5
+    EmailConfirmed,       -- 6
+    PasswordHash,         -- 7
+    SecurityStamp,        -- 8
+    ConcurrencyStamp,     -- 9
+    PhoneNumber,          -- 10
+    PhoneNumberConfirmed, -- 11
+    TwoFactorEnabled,     -- 12
+    LockoutEnd,           -- 13
+    LockoutEnabled,       -- 14
+    AccessFailedCount     -- 15
+  )
+  OUTPUT inserted.Id INTO @uuidUserTable
+  VALUES (
+    NEWID(),                                          -- 1
+    LOWER(LEFT(@email, CHARINDEX('@', @email) - 1)),  -- 2
+    LEFT(@email, CHARINDEX('@', @email) - 1),         -- 3
+    @email,                                           -- 4
+    'NormalizedEmail',                                -- 5
+    1,                                                -- 6
+    @password,                                        -- 7
+    'SecurityStamp',                                  -- 8
+    'ConcurrencyStamp',                               -- 9
+    @phone,                                           -- 10
+    0,                                                -- 11
+    0,                                                -- 12
+    null,                                             -- 13
+    0,                                                -- 14
+    0                                                 -- 15
+  );
+	SET @uuidUser = (SELECT TOP 1 Id FROM @uuidUserTable);
+
+  INSERT INTO CatEmployee (fkCatPerson, fkRol, fkUser)
+  VALUES (@idCatPerson, @uuidRole, @uuidUser);
 END;
 GO
 
@@ -175,19 +155,51 @@ CREATE PROCEDURE procedureInsertClient (
 AS
 BEGIN
   DECLARE @idCatPerson INT;
-  DECLARE @idRole INT;
-  DECLARE @idCatUser INT;
+  DECLARE @uuidUserTable TABLE(Id NVARCHAR(256));
+  DECLARE @uuidUser NVARCHAR(256);
   INSERT INTO CatPerson (name, lastName, middleName, phone, postalCode, streetNumber, apartmentNumber, street, neighborhood)
   VALUES (@name, @lastName, @middleName, @phone, @postalCode, @streetNumber, @apartmentNumber, @street, @neighborhood);
   SET @idCatPerson = SCOPE_IDENTITY();
-  INSERT INTO CatUser (email, password)
-  VALUES (@email, @password);
-  SET @idCatUser = SCOPE_IDENTITY();
-  INSERT INTO CatClient (fkCatPerson, fkCatUser)
-  VALUES (@idCatPerson, @idCatUser);
-  SET @idRole = (SELECT TOP 1 idCatRole FROM CatRole WHERE name = 'Cliente');
-  INSERT INTO DetailRoleUser (fkCatUser, fkCatRole)
-    VALUES (@idCatUser, @idRole);
+
+  INSERT INTO AspNetUsers (
+    Id,                   -- 1
+    UserName,             -- 2
+    NormalizedUserName,   -- 3
+    Email,                -- 4
+    NormalizedEmail,      -- 5
+    EmailConfirmed,       -- 6
+    PasswordHash,         -- 7
+    SecurityStamp,        -- 8
+    ConcurrencyStamp,     -- 9
+    PhoneNumber,          -- 10
+    PhoneNumberConfirmed, -- 11
+    TwoFactorEnabled,     -- 12
+    LockoutEnd,           -- 13
+    LockoutEnabled,       -- 14
+    AccessFailedCount     -- 15
+  )
+  OUTPUT inserted.Id INTO @uuidUserTable
+  VALUES (
+    NEWID(),                                          -- 1
+    LOWER(LEFT(@email, CHARINDEX('@', @email) - 1)),  -- 2
+    LEFT(@email, CHARINDEX('@', @email) - 1),         -- 3
+    @email,                                           -- 4
+    'NormalizedEmail',                                -- 5
+    1,                                                -- 6
+    @password,                                        -- 7
+    'SecurityStamp',                                  -- 8
+    'ConcurrencyStamp',                               -- 9
+    @phone,                                           -- 10
+    0,                                                -- 11
+    0,                                                -- 12
+    null,                                             -- 13
+    0,                                                -- 14
+    0                                                 -- 15
+  );
+	SET @uuidUser = (SELECT TOP 1 Id FROM @uuidUserTable);
+
+  INSERT INTO CatClient (fkCatPerson, fkRol, fkUser)
+  VALUES (@idCatPerson, 'a71a55d6-99d7-4123-b4e0-1218ecb90e3e', @uuidUser);
 END;
 GO
 
@@ -215,43 +227,43 @@ END;
 GO
 
 
-EXEC procedureInsertEmployee 'Olatz','Puerto','Trujillo','+514778852126','37138','704',null,'Lucita','Gran Jardín', 'eL3eB5cB', '[3]';
-EXEC procedureInsertEmployee 'Raúl','Avila','Palacios','+514771181062','37353','821','B','Calle Efraín Calderón','Pedregal del Sol', 'nC1hQ3bR', '[4]';
-EXEC procedureInsertEmployee 'Neus','Villar','Villar','+514775395135','37548','548','B','Calle Sarmiento','Luz del Refugio', 'eO1fN1mC', '[5]';
-EXEC procedureInsertEmployee 'Rachid','Ubeda','Mosquera','+514771985903','37550','188','B','Lucita','Cumbres de la Pradera', 'tH4pB1cE', '[6]';
-EXEC procedureInsertEmployee 'Claudio','Leon','Alcantara','+514778900172','37295','696',null,'Calle Bosque Del Carajonai','Jardines de San Juan', 'zC7cU1iE', '[7]';
-EXEC procedureInsertEmployee 'Manel','Cardona','Moyano','+514778148765','37530','243',null,'Calle Parque Guatemala','Residencial San Isidro', 'iB1hB4jL', '[8]';
-EXEC procedureInsertEmployee 'Catalina','Guevara','Quiroga','+514770482841','37210','200','A','Calle San Matías','Praderas de Santa Rosa', 'qB3kF5cH', '[9]';
-EXEC procedureInsertEmployee 'Aurea','Lazaro','Miranda','+514773943080','37280','220','B','Calle Bosque Del Carajonai','Arboledas de San Pedro', 'cS2bD6dI', '[10]';
-EXEC procedureInsertEmployee 'Gumersindo','Moro','Peiro','+514778190823','37680','291',null,'Calle Campo Verde','Álvaro Obregón (Santa Ana del Conde)', 'pJ2hJ3rD', '[11]';
-EXEC procedureInsertEmployee 'Josefa','Robledo','Robledo','+514773750303','37238','778','C','Calle Mar Jónico','Prado Hermoso', 'bB4bB5rM', '[12]';
-EXEC procedureInsertEmployee 'Eladio','Peiro','Tirado','+514775263673','37357','272',null,'Andador De La Esponja','Centro Familiar Soledad', 'cB8eC4bL', '[13]';
-EXEC procedureInsertEmployee 'Alain','Grande','Fernández','+514777837646','37207','230',null,'Calle Noria De Los Pedregales','El Consuelo', 'cH1dI2dS', '[14]';
-EXEC procedureInsertEmployee 'Marcial','García','Puerto','+514775653880','37538','916','B','Privada San Anselmo','Loma Hermosa', 'cD5hP1kN', '[2]';
-EXEC procedureInsertEmployee 'Izaskun','Sanchez','Grande','+514775519653','37299','712','A','Privada Cervera','Soberna', 'vB2wC2oL', '[2]';
-EXEC procedureInsertEmployee 'Montse','Cantero','Herranz','+514777954784','37204','840',null,'Calle 18','Cibeles', 'cE2eL2lR', '[2]';
-EXEC procedureInsertEmployee 'Sagrario','Moyano','Martin','+514777834299','37419','329',null,'Calle De La Col','Las Mandarinas', 'cE7eM2cG', '[2]';
-EXEC procedureInsertEmployee 'Zaida','Cuadrado','Garrido','+514776424326','37669','134','B','León','Los Laureles', 'kE2pF3iI', '[2]';
-EXEC procedureInsertEmployee 'Cayetano','Estrada','Sanchez','+514778884326','37287','610',null,'Lucita','Residencial San Ángel', 'iC5hB1q2', '[2]';
-EXEC procedureInsertEmployee 'Iris','Marin','Ubeda','+514771149094','37549','265',null,'San Carlos','Unión Obrera', 'gE5iJ1mN', '[2]';
+EXEC procedureInsertEmployee 'Olatz','Puerto','Trujillo','+514778852126','37138','704',null,'Lucita','Gran Jardín', '50a3f9d36ea0861814a23fdc43920051cff0b59cb795eb16415806b113f85cb9', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Raúl','Avila','Palacios','+514771181062','37353','821','B','Calle Efraín Calderón','Pedregal del Sol', 'bfc2408c333e94b735a91a3b63c6309a5a0c192cc552999affe3039b3170d6c9', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Neus','Villar','Villar','+514775395135','37548','548','B','Calle Sarmiento','Luz del Refugio', '98ff97384a632e49ca6c02e8725e8e663772902b395e7ac3195f6e7b24a0ce80', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Rachid','Ubeda','Mosquera','+514771985903','37550','188','B','Lucita','Cumbres de la Pradera', 'd201ab2221e2949924fa203c2dffa67cf8f6e4ecaa67ef3ea826e495ff128dd4', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Claudio','Leon','Alcantara','+514778900172','37295','696',null,'Calle Bosque Del Carajonai','Jardines de San Juan', '1567daad1a425bee640f6b0942465012297c97817bb44ad836962d81c364065e', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Manel','Cardona','Moyano','+514778148765','37530','243',null,'Calle Parque Guatemala','Residencial San Isidro', 'df4f3d120f452990d80f20fd9b56a49c8b911d3088e5e61ecd35ce542da7e008', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Catalina','Guevara','Quiroga','+514770482841','37210','200','A','Calle San Matías','Praderas de Santa Rosa', '3a21ea49046b54dcac3a6d9c14a34c74bcff15c1761879e5bd1ffcd5696e2ba7', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Aurea','Lazaro','Miranda','+514773943080','37280','220','B','Calle Bosque Del Carajonai','Arboledas de San Pedro', '1df7e29248cf987ab712aacd6e7e01385738db0fdab854b3607025cee89f6e60', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Gumersindo','Moro','Peiro','+514778190823','37680','291',null,'Calle Campo Verde','Álvaro Obregón (Santa Ana del Conde)', 'd4d5564c62419324e29301842f3e7a51e7d3c52d020eb07c67e7d596eac3c44e', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Josefa','Robledo','Robledo','+514773750303','37238','778','C','Calle Mar Jónico','Prado Hermoso', 'ebff2ad0da0d0ed2be1deb5836f9f8f0c98a9e4e4e36b329454e703081626b2a', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Eladio','Peiro','Tirado','+514775263673','37357','272',null,'Andador De La Esponja','Centro Familiar Soledad', '123d31a0639324348c2b61e28699f8b14bbd6fb3cab0e7c22dbf5babb6300a30', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Alain','Grande','Fernández','+514777837646','37207','230',null,'Calle Noria De Los Pedregales','El Consuelo', 'da541298ffa159a20db4df19e3472cc66c94d91490f4fdc752767a427d2590d1', 'c309fa92-2123-47be-b397-a1c77adb502c';
+EXEC procedureInsertEmployee 'Marcial','García','Puerto','+514775653880','37538','916','B','Privada San Anselmo','Loma Hermosa', '89f0d5655a5d85d7632fa47b17f002920d222db87c0ae797c2405808ac896fa7', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Izaskun','Sanchez','Grande','+514775519653','37299','712','A','Privada Cervera','Soberna', '3d6c5363b544e27f33aeff4f30c0e7ebd495db85e66e16851f5891c4534af090', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Montse','Cantero','Herranz','+514777954784','37204','840',null,'Calle 18','Cibeles', '624f0b127561bf588125873ddecb705ab105a6217e50e67cb476dcfc6d90e759', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Sagrario','Moyano','Martin','+514777834299','37419','329',null,'Calle De La Col','Las Mandarinas', 'b9d744b646ef3f9e4c1abc5f917ff8e9210a612abbed5a3fc605299b9f90fab7', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Zaida','Cuadrado','Garrido','+514776424326','37669','134','B','León','Los Laureles', '19bbd834f49c0e647dfa7460bc40fad4d3d383083c3e700d4ba548585a8606d1', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Cayetano','Estrada','Sanchez','+514778884326','37287','610',null,'Lucita','Residencial San Ángel', 'dd679497960a49da0415736ebbd93e5af662b1967332f4ff3d64c7cf02e1d9a7', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Iris','Marin','Ubeda','+514771149094','37549','265',null,'San Carlos','Unión Obrera', '8c795d965ce76402440904b5298c6beeb0ce4beeea7d960871f92b65889a7717', 'c309fa92-2123-47be-b397-adfdgdfg3344';
 GO
 
-EXEC procedureInsertClient 'Francisco','Gaspar','Avila','+514777710708','37128','773',null,'Mayorazgo De Taboalapa','Misión La Cañada', 'FRANCISCO_la332@gmail.com', 'eC1dC1xE';
-EXEC procedureInsertClient 'Iryna','Fernández','Valero','+514775088347','37555','547','B','Boulevard Paseo De Los Insurgentes','San José de Cementos', 'IRYNA_ro349@gmail.com', 'dV2eF4bJ';
-EXEC procedureInsertClient 'Noel','Mosquera','Estrada','+514772665826','37670','142','C','Calle Parque La Granada','La Laborcita', 'NOEL_da366@gmail.com', 'b1mB4eP1';
-EXEC procedureInsertClient 'Hilario','Alcantara','Moyano','+514773103141','37210','873',null,'Calle San Florencio','Residencial Villa Contemporánea', 'HILARIO_no383@gmail.com', 'gM3bB2lQ';
-EXEC procedureInsertClient 'Florin','Beltran','Rivera','+514772280363','37689','402',null,'Ramal A San Pedro Del Monte','Capellanía de San Sebastián', 'FLORIN_ra400@gmail.com', 'iM1jB1qO';
-EXEC procedureInsertClient 'German','Rivera','Alcantara','+514777270751','37669','453','A','Boulevard Delta','Katania', 'GERMAN_ra417@gmail.com', 'nI1bL2bP';
-EXEC procedureInsertClient 'Unax','Verdu','Yañez','+514772750921','37355','784','C','Calle Mezquite De Jerez','Real 2000', 'UNAX_ez434@gmail.com', 'dO2dM2gB';
-EXEC procedureInsertClient 'Unai','Hidalgo','Felipe','+514774175683','37278','839',null,'Calle Bosque Del Ocote','Popular Inca', 'UNAI_pe451@gmail.com', 'cI1jG5cE';
-EXEC procedureInsertClient 'Fabian','Quiroga','Ubeda','+514771294823','37288','207','C','Calle Santa Crocce','Villa Verde', 'FABIAN_da468@gmail.com', 'eP3mD1G1';
-EXEC procedureInsertClient 'Maria','Cabanillas','García','+514775152672','37259','751',null,'Calle Paseo De Los Verdines','San Manuel', 'MARIA_ia485@gmail.com', 'eI2bB5hB';
-EXEC procedureInsertClient 'Narciso','Reyes','Verdu','+514775894018','37687','516','C','Chupicuaro','La Estancia de la Sandía', 'NARCISO_du502@gmail.com', 'lQ1nR1cL';
-EXEC procedureInsertClient 'Anibal','Garrido','Valero','+514773509338','37125','452',null,'Calle Paraíso','Fracciones del Rosario', 'ANIBAL_ro519@gmail.com', 'mU1dD3cL';
-EXEC procedureInsertClient 'Jeronima','Tirado','Martorell','+514775794020','37118','357','A','Calle Del Narciso','Jardines del Valle', 'JERONIMA_ll536@gmail.com', 'hJ5hD7vF';
-EXEC procedureInsertClient 'Segundo','Martin','Gaspar','+514773680309','37555','126',null,'Calle Industrial Morelos','Praderas del Bosque', 'SEGUNDO_ar553@gmail.com', 'bL2hB6bI';
-EXEC procedureInsertClient 'Julia','Yañez','Gaspar','+514779839014','37328','756',null,'Valeriana','Moderna', 'JULIA_ar570@gmail.com', 'uN4bH4bE';
-EXEC procedureInsertClient 'Leire','Martorell','Fernández','+514777531816','37100','836',null,'Boulevard Antonio Martínez Aguayo','Privada Echeveste', 'LEIRE_ez587@gmail.com', 'eW4lF4hB';
+EXEC procedureInsertClient 'Francisco','Gaspar','Avila','+514777710708','37128','773',null,'Mayorazgo De Taboalapa','Misión La Cañada', 'FRANCISCO_la332@gmail.com', '372610e2d4453cd1ab2505493a6054ef6e57d263d331b8cdb50dc2363460647c';
+EXEC procedureInsertClient 'Iryna','Fernández','Valero','+514775088347','37555','547','B','Boulevard Paseo De Los Insurgentes','San José de Cementos', 'IRYNA_ro349@gmail.com', '5ee35a3e0896a1baa0376087042955e25ada5978352dd7e11e3837716a365194';
+EXEC procedureInsertClient 'Noel','Mosquera','Estrada','+514772665826','37670','142','C','Calle Parque La Granada','La Laborcita', 'NOEL_da366@gmail.com', 'db48160161c633a31ea0c331a80ff84e535b19c8950bcd36c637812d126fd47d';
+EXEC procedureInsertClient 'Hilario','Alcantara','Moyano','+514773103141','37210','873',null,'Calle San Florencio','Residencial Villa Contemporánea', 'HILARIO_no383@gmail.com', 'a0fe3b2f6769128e47392f3d14da4f7f93367f22c313aadaae6e266cd729f8c6';
+EXEC procedureInsertClient 'Florin','Beltran','Rivera','+514772280363','37689','402',null,'Ramal A San Pedro Del Monte','Capellanía de San Sebastián', 'FLORIN_ra400@gmail.com', 'ea4e44b03ebd9d4eaec7e4da14dc18bfef308e9b79ca50443052f0435121b9d6';
+EXEC procedureInsertClient 'German','Rivera','Alcantara','+514777270751','37669','453','A','Boulevard Delta','Katania', 'GERMAN_ra417@gmail.com', '9fe974386cd19b5c10e68d275b5be73689ac2a804be7dd1966c1fd53d00bae30';
+EXEC procedureInsertClient 'Unax','Verdu','Yañez','+514772750921','37355','784','C','Calle Mezquite De Jerez','Real 2000', 'UNAX_ez434@gmail.com', 'f29b5da297e7bf6f3c82595ab18cd6515f2b4e91255cc4afb70c715033993beb';
+EXEC procedureInsertClient 'Unai','Hidalgo','Felipe','+514774175683','37278','839',null,'Calle Bosque Del Ocote','Popular Inca', 'UNAI_pe451@gmail.com', '303f9424a30f98bcdf90e5da8f5d19e07eee0a94e53a1398a187c451520456e8';
+EXEC procedureInsertClient 'Fabian','Quiroga','Ubeda','+514771294823','37288','207','C','Calle Santa Crocce','Villa Verde', 'FABIAN_da468@gmail.com', 'd4dd9fd93f1db62534866eb66d5461fcfc94c8e23ab9fe52e7b8a0831cdcdc9e';
+EXEC procedureInsertClient 'Maria','Cabanillas','García','+514775152672','37259','751',null,'Calle Paseo De Los Verdines','San Manuel', 'MARIA_ia485@gmail.com', '6266007c91f4ce368b51ca9764f2e1195d04d1504de98ebd8c19e9f681d05775';
+EXEC procedureInsertClient 'Narciso','Reyes','Verdu','+514775894018','37687','516','C','Chupicuaro','La Estancia de la Sandía', 'NARCISO_du502@gmail.com', 'cbffd43b968d3e8878a2c268000f169541b7bd34215d0d41a39dab01038a2a1a';
+EXEC procedureInsertClient 'Anibal','Garrido','Valero','+514773509338','37125','452',null,'Calle Paraíso','Fracciones del Rosario', 'ANIBAL_ro519@gmail.com', '843cd336076647686f2c5072074467f8f48736453bead24586d7c2c8c9e200f5';
+EXEC procedureInsertClient 'Jeronima','Tirado','Martorell','+514775794020','37118','357','A','Calle Del Narciso','Jardines del Valle', 'JERONIMA_ll536@gmail.com', 'f5fea9fe0313ee884469731b80f71d1ac2ded75634f1f5380ad643130f9a1c8a';
+EXEC procedureInsertClient 'Segundo','Martin','Gaspar','+514773680309','37555','126',null,'Calle Industrial Morelos','Praderas del Bosque', 'SEGUNDO_ar553@gmail.com', 'b88ceaa467812d2b91a93b36eb037fad1dd3677626b25e5e3e86fd3f92ffb03d';
+EXEC procedureInsertClient 'Julia','Yañez','Gaspar','+514779839014','37328','756',null,'Valeriana','Moderna', 'JULIA_ar570@gmail.com', '0af8adb1453571a6cd49dae54e30e0689d99e03128655b8d68f60daf9cecdd63';
+EXEC procedureInsertClient 'Leire','Martorell','Fernández','+514777531816','37100','836',null,'Boulevard Antonio Martínez Aguayo','Privada Echeveste', 'LEIRE_ez587@gmail.com', '0ecda67e82742d4fa262635e95b1faebd9f7fc96a004ffb9ffdb062f6492d32a';
 GO
 
 EXEC procedureInsertSupplier 'Estibaliz','Iglesias','Guevara','+514779590896','37438','675',null,'Calle Mayorazgo Del Moral','Industrial Pamplona', 'ESTIBALIZ_ra604@gmail.com';
@@ -450,17 +462,15 @@ GO
 
 
 CREATE PROCEDURE procedureFillingInsertRecipe (
-  @nameProduct VARCHAR(255),
+  @name VARCHAR(255),
   @jsonIdRawMaterial NVARCHAR(MAX)
 )
 AS
 BEGIN
-  DECLARE @name VARCHAR(255);
   DECLARE @jsonDetailRawMaterial NVARCHAR(MAX);
   DECLARE @jsonData NVARCHAR(MAX);
   DECLARE @mergedJson NVARCHAR(MAX);
 
-  SET @name = CONCAT(@nameProduct, ' color sólido');
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
   EXEC procedureInsertRecipe @name, 0, null, 1, '[1]', @mergedJson;
@@ -541,7 +551,6 @@ BEGIN
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
   EXEC procedureInsertRecipe @name, 0, null, 3, '[10]', @mergedJson;
 
-  SET @name = CONCAT(@nameProduct, ' colores');
   SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":31},{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":38}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
   EXEC procedureInsertRecipe @name, 0, null, 1, '[2,4,9]', @mergedJson;
@@ -573,33 +582,57 @@ BEGIN
   EXEC procedureInsertRecipe @name, 0, null, 2, '[10,4,9]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
   EXEC procedureInsertRecipe @name, 0, null, 3, '[10,4,9]', @mergedJson;
+
   END;
 GO
 
 
-EXEC procedureFillingInsertRecipe 'Azulejo', '[6,13,16,19,44]';
-EXEC procedureFillingInsertRecipe 'Bidé', '[8,14,17,20,44]';
-EXEC procedureFillingInsertRecipe 'Cacerola', '[9,15,18,22,45]';
-EXEC procedureFillingInsertRecipe 'Candelabro', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Cuenco', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Ensaladera', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Florero', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Fregadero', '[9,15,18,19,45]';
-EXEC procedureFillingInsertRecipe 'Inodoro', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Jarra', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Jarrón', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Ladrillo', '[9,18,22]';
-EXEC procedureFillingInsertRecipe 'Lavabo', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Maceta', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Mosaico', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Pimentero', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Platillo', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Plato', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Salero', '[6,13,16,19,44]';
-EXEC procedureFillingInsertRecipe 'Taza', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Tazón', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Tetera', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Vaso', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Azulejo color solido', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Azulejo colores', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Bidé color solido', '[8,14,17,20,44]';
+EXEC procedureFillingInsertRecipe 'Bidé colores', '[8,14,17,20,44]';
+EXEC procedureFillingInsertRecipe 'Cacerola color solido', '[9,15,18,22,45]';
+EXEC procedureFillingInsertRecipe 'Cacerola colores', '[9,15,18,22,45]';
+EXEC procedureFillingInsertRecipe 'Candelabro color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Candelabro colores', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Cuenco color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Cuenco colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Ensaladera color solido', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Ensaladera colores', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Florero color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Florero colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Fregadero color solido', '[9,15,18,19,45]';
+EXEC procedureFillingInsertRecipe 'Fregadero colores', '[9,15,18,19,45]';
+EXEC procedureFillingInsertRecipe 'Inodoro color solido', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Inodoro colores', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Jarra color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Jarra colores', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Jarrón color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Jarrón colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Ladrillo color solido', '[9,18,22]';
+EXEC procedureFillingInsertRecipe 'Ladrillo colores', '[9,18,22]';
+EXEC procedureFillingInsertRecipe 'Lavabo color solido', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Lavabo colores', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Maceta color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Maceta colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Mosaico color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Mosaico colores', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Pimentero color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Pimentero colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Platillo color solido', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Platillo colores', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Plato color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Plato colores', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Salero color solido', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Salero colores', '[6,13,16,19,44]';
+EXEC procedureFillingInsertRecipe 'Taza color solido', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Taza colores', '[8,14,16,20,44]';
+EXEC procedureFillingInsertRecipe 'Tazón color solido', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Tazón colores', '[6,13,18]';
+EXEC procedureFillingInsertRecipe 'Tetera color solido', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Tetera colores', '[8,13,18]';
+EXEC procedureFillingInsertRecipe 'Vaso color solido', '[7,15,18]';
+EXEC procedureFillingInsertRecipe 'Vaso colores', '[7,15,18]';
 GO
 
 
@@ -838,106 +871,106 @@ END;
 GO
 
 
-EXEC procedureInsertStock 27, 160;
-EXEC procedureInsertStock 29, 135;
-EXEC procedureInsertStock 31, 225;
-EXEC procedureInsertStock 35, 145;
-EXEC procedureInsertStock 56, 115;
-EXEC procedureInsertStock 91, 135;
-EXEC procedureInsertStock 99, 460;
-EXEC procedureInsertStock 126, 175;
-EXEC procedureInsertStock 164, 370;
-EXEC procedureInsertStock 182, 265;
-EXEC procedureInsertStock 188, 345;
-EXEC procedureInsertStock 192, 380;
-EXEC procedureInsertStock 202, 405;
-EXEC procedureInsertStock 209, 225;
-EXEC procedureInsertStock 258, 465;
-EXEC procedureInsertStock 269, 155;
-EXEC procedureInsertStock 288, 295;
-EXEC procedureInsertStock 292, 415;
-EXEC procedureInsertStock 312, 425;
-EXEC procedureInsertStock 358, 415;
-EXEC procedureInsertStock 368, 350;
-EXEC procedureInsertStock 454, 315;
-EXEC procedureInsertStock 467, 440;
-EXEC procedureInsertStock 484, 395;
-EXEC procedureInsertStock 515, 215;
-EXEC procedureInsertStock 532, 325;
-EXEC procedureInsertStock 584, 245;
-EXEC procedureInsertStock 587, 395;
-EXEC procedureInsertStock 593, 445;
-EXEC procedureInsertStock 620, 245;
-EXEC procedureInsertStock 622, 275;
-EXEC procedureInsertStock 682, 450;
-EXEC procedureInsertStock 697, 310;
-EXEC procedureInsertStock 736, 255;
-EXEC procedureInsertStock 759, 445;
-EXEC procedureInsertStock 768, 390;
-EXEC procedureInsertStock 795, 195;
-EXEC procedureInsertStock 800, 305;
-EXEC procedureInsertStock 806, 170;
-EXEC procedureInsertStock 815, 325;
-EXEC procedureInsertStock 820, 235;
-EXEC procedureInsertStock 830, 410;
-EXEC procedureInsertStock 849, 160;
-EXEC procedureInsertStock 853, 360;
-EXEC procedureInsertStock 912, 415;
-EXEC procedureInsertStock 922, 130;
-EXEC procedureInsertStock 933, 500;
-EXEC procedureInsertStock 990, 225;
-EXEC procedureInsertStock 1008, 435;
-EXEC procedureInsertStock 1021, 170;
-EXEC procedureInsertStock 1045, 475;
-EXEC procedureInsertStock 1046, 385;
-EXEC procedureInsertStock 1061, 405;
-EXEC procedureInsertStock 1138, 140;
-EXEC procedureInsertStock 1140, 105;
-EXEC procedureInsertStock 1144, 270;
-EXEC procedureInsertStock 1145, 400;
-EXEC procedureInsertStock 1150, 330;
-EXEC procedureInsertStock 1163, 195;
-EXEC procedureInsertStock 1172, 355;
-EXEC procedureInsertStock 1210, 430;
-EXEC procedureInsertStock 1211, 110;
-EXEC procedureInsertStock 1213, 100;
-EXEC procedureInsertStock 1237, 355;
-EXEC procedureInsertStock 1294, 430;
-EXEC procedureInsertStock 1305, 460;
-EXEC procedureInsertStock 1309, 240;
-EXEC procedureInsertStock 1351, 130;
-EXEC procedureInsertStock 1368, 285;
-EXEC procedureInsertStock 1402, 255;
-EXEC procedureInsertStock 1417, 105;
-EXEC procedureInsertStock 1448, 365;
-EXEC procedureInsertStock 1449, 200;
-EXEC procedureInsertStock 1466, 340;
-EXEC procedureInsertStock 1472, 185;
-EXEC procedureInsertStock 1515, 290;
-EXEC procedureInsertStock 1516, 380;
-EXEC procedureInsertStock 1581, 265;
-EXEC procedureInsertStock 1586, 165;
-EXEC procedureInsertStock 1589, 275;
-EXEC procedureInsertStock 1593, 330;
-EXEC procedureInsertStock 1607, 150;
-EXEC procedureInsertStock 1635, 195;
-EXEC procedureInsertStock 1650, 195;
-EXEC procedureInsertStock 1691, 490;
-EXEC procedureInsertStock 1699, 225;
-EXEC procedureInsertStock 1708, 170;
-EXEC procedureInsertStock 1737, 390;
-EXEC procedureInsertStock 1756, 120;
-EXEC procedureInsertStock 1774, 375;
-EXEC procedureInsertStock 1788, 420;
-EXEC procedureInsertStock 1789, 285;
-EXEC procedureInsertStock 1793, 240;
-EXEC procedureInsertStock 1798, 420;
-EXEC procedureInsertStock 1827, 410;
-EXEC procedureInsertStock 1849, 385;
-EXEC procedureInsertStock 1873, 495;
-EXEC procedureInsertStock 1904, 170;
-EXEC procedureInsertStock 1925, 115;
-EXEC procedureInsertStock 1929, 350;
+EXEC procedureInsertStock 27, 32;
+EXEC procedureInsertStock 29, 27;
+EXEC procedureInsertStock 31, 45;
+EXEC procedureInsertStock 35, 29;
+EXEC procedureInsertStock 56, 23;
+EXEC procedureInsertStock 91, 27;
+EXEC procedureInsertStock 99, 92;
+EXEC procedureInsertStock 126, 35;
+EXEC procedureInsertStock 164, 74;
+EXEC procedureInsertStock 182, 53;
+EXEC procedureInsertStock 188, 69;
+EXEC procedureInsertStock 192, 76;
+EXEC procedureInsertStock 202, 81;
+EXEC procedureInsertStock 209, 45;
+EXEC procedureInsertStock 258, 93;
+EXEC procedureInsertStock 269, 31;
+EXEC procedureInsertStock 288, 59;
+EXEC procedureInsertStock 292, 83;
+EXEC procedureInsertStock 312, 85;
+EXEC procedureInsertStock 358, 83;
+EXEC procedureInsertStock 368, 70;
+EXEC procedureInsertStock 454, 63;
+EXEC procedureInsertStock 467, 88;
+EXEC procedureInsertStock 484, 79;
+EXEC procedureInsertStock 515, 43;
+EXEC procedureInsertStock 532, 65;
+EXEC procedureInsertStock 584, 49;
+EXEC procedureInsertStock 587, 79;
+EXEC procedureInsertStock 593, 89;
+EXEC procedureInsertStock 620, 49;
+EXEC procedureInsertStock 622, 55;
+EXEC procedureInsertStock 682, 90;
+EXEC procedureInsertStock 697, 62;
+EXEC procedureInsertStock 736, 51;
+EXEC procedureInsertStock 759, 89;
+EXEC procedureInsertStock 768, 78;
+EXEC procedureInsertStock 795, 39;
+EXEC procedureInsertStock 800, 61;
+EXEC procedureInsertStock 806, 34;
+EXEC procedureInsertStock 815, 65;
+EXEC procedureInsertStock 820, 47;
+EXEC procedureInsertStock 830, 82;
+EXEC procedureInsertStock 849, 32;
+EXEC procedureInsertStock 853, 72;
+EXEC procedureInsertStock 912, 83;
+EXEC procedureInsertStock 922, 26;
+EXEC procedureInsertStock 933, 100;
+EXEC procedureInsertStock 990, 45;
+EXEC procedureInsertStock 1008, 87;
+EXEC procedureInsertStock 1021, 34;
+EXEC procedureInsertStock 1045, 95;
+EXEC procedureInsertStock 1046, 77;
+EXEC procedureInsertStock 1061, 81;
+EXEC procedureInsertStock 1138, 28;
+EXEC procedureInsertStock 1140, 21;
+EXEC procedureInsertStock 1144, 54;
+EXEC procedureInsertStock 1145, 80;
+EXEC procedureInsertStock 1150, 66;
+EXEC procedureInsertStock 1163, 39;
+EXEC procedureInsertStock 1172, 71;
+EXEC procedureInsertStock 1210, 86;
+EXEC procedureInsertStock 1211, 22;
+EXEC procedureInsertStock 1213, 20;
+EXEC procedureInsertStock 1237, 71;
+EXEC procedureInsertStock 1294, 86;
+EXEC procedureInsertStock 1305, 92;
+EXEC procedureInsertStock 1309, 48;
+EXEC procedureInsertStock 1351, 26;
+EXEC procedureInsertStock 1368, 57;
+EXEC procedureInsertStock 1402, 51;
+EXEC procedureInsertStock 1417, 21;
+EXEC procedureInsertStock 1448, 73;
+EXEC procedureInsertStock 1449, 40;
+EXEC procedureInsertStock 1466, 68;
+EXEC procedureInsertStock 1472, 37;
+EXEC procedureInsertStock 1515, 58;
+EXEC procedureInsertStock 1516, 76;
+EXEC procedureInsertStock 1581, 53;
+EXEC procedureInsertStock 1586, 33;
+EXEC procedureInsertStock 1589, 55;
+EXEC procedureInsertStock 1593, 66;
+EXEC procedureInsertStock 1607, 30;
+EXEC procedureInsertStock 1635, 39;
+EXEC procedureInsertStock 1650, 39;
+EXEC procedureInsertStock 1691, 98;
+EXEC procedureInsertStock 1699, 45;
+EXEC procedureInsertStock 1708, 34;
+EXEC procedureInsertStock 1737, 78;
+EXEC procedureInsertStock 1756, 24;
+EXEC procedureInsertStock 1774, 75;
+EXEC procedureInsertStock 1788, 84;
+EXEC procedureInsertStock 1789, 57;
+EXEC procedureInsertStock 1793, 48;
+EXEC procedureInsertStock 1798, 84;
+EXEC procedureInsertStock 1827, 82;
+EXEC procedureInsertStock 1849, 77;
+EXEC procedureInsertStock 1873, 99;
+EXEC procedureInsertStock 1904, 34;
+EXEC procedureInsertStock 1925, 23;
+EXEC procedureInsertStock 1929, 70;
 GO
 
 
@@ -969,76 +1002,54 @@ FROM CatRecipe cr;
 GO
 
 
-DROP PROCEDURE IF EXISTS procedureFillingInsertSales;
-GO
 CREATE PROCEDURE procedureFillingInsertSales (
+  @total INT,
   @fkCatClient INT,
   @totalSales INT
 )
 AS
   BEGIN
-    DECLARE @totalDetailRecipes INT;
-    DECLARE @totalRecipes INT;
+    DECLARE @subtractValue INT;
+    DECLARE @tempTotalRecipes INT;
     DECLARE @idCatSale INT;
     DECLARE @idCatRecipe INT;
     DECLARE @priceRecipe FLOAT;
-    DECLARE @counterSales INT = 1;
-    DECLARE @counterRecipes INT = 1;
-    WHILE @counterSales <= @totalSales
-      BEGIN
-        INSERT INTO CatSale (total, fkCatClient) VALUES (1, @fkCatClient);
-        SET @idCatSale = SCOPE_IDENTITY();
-        SET @totalDetailRecipes = FLOOR(RAND() * 5) + 1;
-        WHILE @counterRecipes <= @totalDetailRecipes
-          BEGIN
-            SET @totalRecipes = FLOOR(RAND() * 3) + 1;
-            SET @idCatRecipe = (SELECT TOP 1 idCatRecipe FROM CatRecipe WHERE quantityStock >= @totalRecipes AND quantityStock > 0 ORDER BY NEWID());
-            IF @idCatRecipe > 0
-              BEGIN
-                SET @priceRecipe = (SELECT price FROM CatRecipe WHERE idCatRecipe = @idCatRecipe);
-                IF (SELECT COUNT(*) FROM DetailSale WHERE fkCatRecipe = @idCatRecipe AND fkCatSale = @idCatSale) > 0
-                  BEGIN
-                    UPDATE DetailSale
-                      SET quantity = quantity + @totalRecipes,
-                          price = price + (@priceRecipe * @totalRecipes)
-                      WHERE fkCatRecipe = @idCatRecipe AND fkCatSale = @idCatSale;
-                  END
-                ELSE
-                  BEGIN
-                    INSERT INTO DetailSale (quantity, price, fkCatRecipe, fkCatSale) VALUES (@totalRecipes, (@priceRecipe * @totalRecipes), @idCatRecipe, @idCatSale);
-                  END
-                UPDATE CatRecipe SET quantityStock = (quantityStock - @totalRecipes) WHERE idCatRecipe = @idCatRecipe;
-                INSERT INTO CatShipment (delivered, fkCatSale, fkCatEmployee) VALUES ((ABS(CHECKSUM(NEWID())) % 2), @idCatSale, 8);
-              END
-            SET @counterRecipes = @counterRecipes + 1;
-          END
-        IF (SELECT COUNT(*) FROM DetailSale WHERE fkCatSale = @idCatSale) = 0
-          BEGIN
-            DELETE FROM CatSale WHERE idCatSale = @idCatSale;
-          END
-        SET @counterRecipes = 1;
-        SET @counterSales = @counterSales + 1;
-      END
+    DECLARE @counter INT = 1;
+    WHILE @counter <= @totalSales
+    BEGIN    
+      SET @tempTotalRecipes = 1 + CAST(RAND() * 100 AS INT);
+      SET @idCatRecipe = (SELECT TOP 1 idCatRecipe FROM CatRecipe WHERE quantityStock >= @tempTotalRecipes ORDER BY NEWID())
+      IF @idCatRecipe > 0
+        BEGIN
+          INSERT INTO CatSale (total, fkCatClient) VALUES (@total, @fkCatClient);
+          SET @idCatSale = SCOPE_IDENTITY();
+          SET @priceRecipe = (SELECT price FROM CatRecipe WHERE idCatRecipe = @idCatRecipe);
+          INSERT INTO DetailSale (quantity, price, fkCatRecipe, fkCatSale) VALUES (@tempTotalRecipes, (@priceRecipe * @tempTotalRecipes), @idCatRecipe, @idCatSale);
+          UPDATE CatRecipe SET quantityStock = (quantityStock - @tempTotalRecipes) WHERE idCatRecipe = @idCatRecipe;
+          INSERT INTO CatShipment (delivered, fkCatSale, fkCatEmployee) VALUES ((ABS(CHECKSUM(NEWID())) % 2), @idCatSale, 8);
+        END
+      SET @counter = @counter + 1;
+    END
   END;
 GO
 
 
-EXEC procedureFillingInsertSales 1, 10;
-EXEC procedureFillingInsertSales 2, 29;
-EXEC procedureFillingInsertSales 3, 37;
-EXEC procedureFillingInsertSales 4, 41;
-EXEC procedureFillingInsertSales 5, 31;
-EXEC procedureFillingInsertSales 6, 34;
-EXEC procedureFillingInsertSales 7, 35;
-EXEC procedureFillingInsertSales 8, 39;
-EXEC procedureFillingInsertSales 9, 40;
-EXEC procedureFillingInsertSales 10, 43;
-EXEC procedureFillingInsertSales 11, 46;
-EXEC procedureFillingInsertSales 12, 71;
-EXEC procedureFillingInsertSales 13, 78;
-EXEC procedureFillingInsertSales 14, 82;
-EXEC procedureFillingInsertSales 15, 83;
-EXEC procedureFillingInsertSales 16, 94;
+EXEC procedureFillingInsertSales 1, 1, 10;
+EXEC procedureFillingInsertSales 1, 2, 29;
+EXEC procedureFillingInsertSales 1, 3, 37;
+EXEC procedureFillingInsertSales 1, 4, 41;
+EXEC procedureFillingInsertSales 1, 5, 31;
+EXEC procedureFillingInsertSales 1, 6, 34;
+EXEC procedureFillingInsertSales 1, 7, 35;
+EXEC procedureFillingInsertSales 1, 8, 39;
+EXEC procedureFillingInsertSales 1, 9, 40;
+EXEC procedureFillingInsertSales 1, 10, 43;
+EXEC procedureFillingInsertSales 1, 11, 46;
+EXEC procedureFillingInsertSales 1, 12, 71;
+EXEC procedureFillingInsertSales 1, 13, 78;
+EXEC procedureFillingInsertSales 1, 14, 82;
+EXEC procedureFillingInsertSales 1, 15, 83;
+EXEC procedureFillingInsertSales 1, 16, 94;
 GO
 
 

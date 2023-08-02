@@ -60,3 +60,40 @@ a
 16. Se removio el siguiente campo a CatStock
   price FLOAT NOT NULL,
 y se agregó a 
+
+Cambios para ivan
+Cambiar los roles a los que tiene pau
+Eliminar estas tablas:
+	CatRole
+	CatUser
+	DetailRoleUser
+Eliminar fk:
+	DetailRoleUser (fkCatRole) REFERENCES CatRole (idCatRole)
+	DetailRoleUser (fkCatUser) REFERENCES CatUser (idCatUser)
+Crear estas tablas:
+	__EFMigrationsHistory
+	AspNetRoleClaims
+	AspNetRoles
+	AspNetUserClaims
+	AspNetUserLogins
+	AspNetUserRoles
+	AspNetUsers
+	AspNetUserTokens
+Agregar estas fk:
+	AspNetRoleClaims (RoleId) REFERENCES AspNetRoles (Id)
+	AspNetUserClaims (UserId) REFERENCES AspNetUsers (Id)
+	AspNetUserLogins (UserId) REFERENCES AspNetUsers (Id)
+	AspNetUserRoles (RoleId) REFERENCES AspNetRoles (Id)
+	AspNetUserRoles (UserId) REFERENCES AspNetUsers (Id)
+	AspNetUserTokens (UserId) REFERENCES AspNetUsers (Id)
+Cambiar estas fk:
+	fkUser nvarchar(450) COLLATE Modern_Spanish_CI_AS NOT NULL
+		CatClient (fkCatUser) REFERENCES CatUser (idCatUser) - I
+		CatClient (fkUser) REFERENCES AspNetUsers (Id) - P
+
+		CatEmployee (fkCatUser) REFERENCES CatUser (idCatUser) - I
+		CatEmployee (fkUser) REFERENCES AspNetUsers (Id) - P
+Agregar estas fk y campo
+	fkRol nvarchar(450) COLLATE Modern_Spanish_CI_AS NOT NULL
+		CatClient (fkRol) REFERENCES AspNetRoles (Id) - P
+		CatEmployee (fkRol) REFERENCES AspNetRoles (Id) - P
