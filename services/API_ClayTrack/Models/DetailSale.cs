@@ -17,14 +17,14 @@ namespace API_ClayTrack.Models
 
         [Required]
         [ForeignKey("Stock")]
-        public int fkCatStock { get; set; }
+        public int fkCatRecipe { get; set; }
 
         [Required]
         [ForeignKey("Sale")]
         public int fkCatSale { get; set; }
 
         // Relaciones de llave foránea
-        public CatRecipe Stock { get; set; }
+        public CatRecipe Recipe { get; set; }
         public CatSale Sale { get; set; }
     }
 }

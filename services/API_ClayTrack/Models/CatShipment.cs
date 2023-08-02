@@ -22,9 +22,8 @@ namespace API_ClayTrack.Models
         [ForeignKey("Sale")]
         public int fkCatSale { get; set; }
 
-        [Required]
         [ForeignKey("Employee")]
-        public int fkCatEmployee { get; set; }
+        public int? fkCatEmployee { get; set; }
 
         // Relaciones de llave foránea
         public CatSale Sale { get; set; }

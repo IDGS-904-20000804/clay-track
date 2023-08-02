@@ -60,7 +60,7 @@ namespace API_ClayTrack.Controllers
 
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("Update{id:int}")]
         public async Task<ActionResult> UpdateRawMaterial(CatRawMaterial rawMaterial, int id)
         {
             if (rawMaterial.idCatRawMaterial != id)
@@ -81,7 +81,8 @@ namespace API_ClayTrack.Controllers
             return Ok();
         }
 
-
+        //Cambiar estatus a  false
+/*
         [HttpPut]
         [Route("Delete{id:int}")]
         public async Task<ActionResult> Delete(int id)
@@ -97,6 +98,6 @@ namespace API_ClayTrack.Controllers
             dbContext.Remove(rawMaterial);
             await dbContext.SaveChangesAsync();
             return Ok();
-        }
+        }*/
     }
 }

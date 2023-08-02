@@ -181,6 +181,11 @@ namespace API_ClayTrack.DataBase
             .Property(p => p.quantityWarehouse)
             .HasDefaultValue(0);
 
+            //CatShipment campo delivered defaul false
+            modelBuilder.Entity<CatShipment>()
+            .Property(p => p.delivered)
+            .HasDefaultValue(false);
+
             base.OnModelCreating(modelBuilder);
         }
         public ClayTrackDbContext(DbContextOptions dbContextOptions): base(dbContextOptions) 

@@ -20,7 +20,7 @@ namespace API_ClayTrack.Models
         public int quantityStock { get; set; }
 
         [StringLength(255)]
-        public string imagePath { get; set; }
+        public string? imagePath { get; set; }
 
         [Required]
         public bool status { get; set; }
