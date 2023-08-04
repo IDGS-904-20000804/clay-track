@@ -14,3 +14,8 @@ WHERE cr.quantityStock > 0
   AND cr.status = 1
 GROUP BY cr.idCatRecipe, cr.name
 ORDER BY cr.idCatRecipe;
+
+
+SELECT DATEADD(DAY, 1, '2023/04/30') AS DateAdd;
+
+
