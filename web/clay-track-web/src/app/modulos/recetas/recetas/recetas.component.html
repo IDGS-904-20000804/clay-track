@@ -1,0 +1,113 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 text-start">
+                    <p-button label="Nuevo" icon="pi pi-user-plus" styleClass="p-button-outlined  p-button-warning"
+                    (click)="showDialog()"></p-button>
+                </div>
+            </div>
+            <p-table [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr style="opacity: 0.8;">
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Telefono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card flex justify-content-center">
+                <p-toast></p-toast>
+                <div class="card flex justify-content-center">
+                        <p-dialog
+                        header="INFORMACION RECETA"
+                        [(visible)]="visible"
+                        [style]="{ width: '60vw' }"
+                        [maximizable]="true"
+                        headerStyleClass="custom-dialog-header"
+                        >       
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="Nombre">Nombre:</label>
+                                        <input type="text" class="form-control"  />
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="cantidad">Cantidad:</label>
+                                        <input type="text" class="form-control"  />
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="precio">Precio:</label>
+                                        <input type="text" class="form-control"  />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="unidadMedida">Unidad de Medida:</label>
+                                        <select class="form-select" [(ngModel)]="unidadMedida" aria-label="Default select example">
+                                            <option selected>Open this select menu</option>
+                                            <option value="Uno">One</option>
+                                            <option value="Dos">Two</option>
+                                            <option value="Tres">Three</option>
+                                          </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="cantidad">Cantidad:</label>
+                                        <input type="text"  [(ngModel)]="cantidad" class="form-control"  /><br>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <p-button label="Agregar" icon="pi pi-plus" (click)="agregarMateria()" styleClass="p-button-outlined p-button-info p-button-sm  mx-5"></p-button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label>Materia Prima</label>
+                                <p-table [value]="arrayMateriaPrima" [tableStyle]="{ 'min-width': '40rem' }">
+                                    <ng-template pTemplate="header">
+                                        <tr style="opacity: 0.8;">
+                                            <th>#</th>
+                                            <th>Materia Prima</th>
+                                            <th>Cantidad</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-materiaP let-rowIndex="rowIndex">
+                                        <tr>
+                                            <td>{{rowIndex + 1}}</td>
+                                            <td>{{materiaP.materia}}</td>
+                                            <td>{{materiaP.cantidad}}</td>
+                                            <td> <p-button icon="pi pi-times" styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm" (click)="eliminarMateriaP(rowIndex)" ></p-button>
+                                            </td>
+                                        </tr>
+                                    </ng-template> 
+                                </p-table>
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()" styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                                <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
