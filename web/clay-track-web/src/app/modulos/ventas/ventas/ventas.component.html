@@ -1,98 +1,111 @@
 <p-toast position="top-center" key="tc"></p-toast>
-
-<div class="row">
-  <div class="col-12 text-start">
-    <p-button label="Stock" icon="pi pi-user-plus" styleClass="p-button-outlined  p-button-warning"
-    (click)="showDialog()"></p-button>
-</div>
-</div>
-<div class="product-list">
-    <div class="product-item" *ngFor="let product of products">
-      <div class="product-image">
-        <img [src]="product.image" [alt]="product.name" />
+<div class="row" class="background-image">
+  <div [@fadeInOut] [hidden]="navBar" class="col-3">
+    <app-menu></app-menu>
+  </div>
+  <div [class]="columna">
+    <div class="row " style="margin-top: 6%; ">
+      <div class="col-6">
+        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"
+          (click)="toggleNavBar()">
+          <i class="fa fa-bars mr-2"></i>
+          <small class="text-uppercase font-weight-bold">MODULOS</small>
+        </button>
       </div>
-      <div class="product-details">
-        <h3 class="product-name">{{ product.name }}</h3>
-        <p class="product-description">{{ product.description }}</p>
-        <div class="product-price">{{ '$' + product.price }}</div>
-        <button class="add-to-cart-btn" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'" (click)="agregarCarrito(product)">Add to Cart</button>
+      <div class="col-6 text-end">
+        <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
+
+      </div>
+      <div class="col-12 mt-3">
+        <div class="product-list">
+          <div class="product-item" *ngFor="let product of products">
+            <div class="product-image">
+              <img [src]="product.image" [alt]="product.name" />
+            </div>
+            <div class="product-details">
+              <h3 class="product-name">{{ product.name }}</h3>
+              <p class="product-description">{{ product.description }}</p>
+              <div class="product-price">{{ '$' + product.price }}</div>
+              <button class="add-to-cart-btn" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"
+                (click)="agregarCarrito(product)">Add to Cart</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  
-  <h2>Carrito de Compras</h2>
-  <div class="cart-list" *ngIf="productosAgregar.length > 0">
-    <p-table [value]="productosAgregar" [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Producto</th>
-          <th>Nombre</th>
-          <th>Precio</th>
-          <th>Cantidad</th>
-          <th>Subtotal</th>
-          <th>Acciones</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-product>
-        <tr>
-          <td><img [src]="product.image" [alt]="product.name" class="product-image" /></td>
-          <td>{{ product.name }}</td>
-          <td>{{ '$' + product.price }}</td>
-          <td>
-            <div class="quantity-input">
-                <button class="quantity-btn btn btn-danger" (click)="modificarCantidad(product, -1)">-</button>
-                <input type="text" [(ngModel)]="product.quantity" (change)="calcularSubtotal(product)" />
-                <button class="quantity-btn btn btn-success" (click)="modificarCantidad(product, 1)">+</button>
-              </div>
-              
-          </td>
-          <td>{{ '$' + product.subtotal }}</td>
-          <td>
-            <button class="remove-from-cart-btn" (click)="eliminarProducto(product)">Eliminar</button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <div class="cart-total">Total: {{ calcularTotal() | currency }}</div>
-  </div>
-  
+</div>
 
-  
+<h2>Carrito de Compras</h2>
+<div class="cart-list" *ngIf="productosAgregar.length > 0">
+  <p-table [value]="productosAgregar" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Producto</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td><img [src]="product.image" [alt]="product.name" class="product-image" /></td>
+        <td>{{ product.name }}</td>
+        <td>{{ '$' + product.price }}</td>
+        <td>
+          <div class="quantity-input">
+            <button class="quantity-btn btn btn-danger" (click)="modificarCantidad(product, -1)">-</button>
+            <input type="text" [(ngModel)]="product.quantity" (change)="calcularSubtotal(product)" />
+            <button class="quantity-btn btn btn-success" (click)="modificarCantidad(product, 1)">+</button>
+          </div>
+
+        </td>
+        <td>{{ '$' + product.subtotal }}</td>
+        <td>
+          <button class="remove-from-cart-btn" (click)="eliminarProducto(product)">Eliminar</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <div class="cart-total">Total: {{ calcularTotal() | currency }}</div>
+</div>
+
+
+
 <div class="container">
   <div class="row">
-      <div class="col-12">
-          <div class="card flex justify-content-center">
-              <p-toast></p-toast>
-              <div class="card flex justify-content-center">
-                      <p-dialog
-                      header="INFORMACION STOCK"
-                      [(visible)]="visible"
-                      [style]="{ width: '60vw' }"
-                      [maximizable]="true"
-                      headerStyleClass="custom-dialog-header"
-                      >       
-                      <div class="row">
-                          <div class="col-12">
-                              <label for="Nombre">Nombre Producto:</label>
-                              <input type="text" class="form-control"  />
-                          </div>
-                          <div class="col-6">
-                              <label for="apaterno">Cantidad:</label>
-                              <input type="text" class="form-control"  />
-                          </div>
-                          <div class="col-6">
-                              <label for="amaterno">Precio:</label>
-                              <input type="text" class="form-control"  />
-                          </div>
-                         
-                          <div class="col-12 text-center mt-4">
-                              <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()" styleClass="p-button-outlined p-button-success  mx-5"></p-button>
-                              <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
-                          </div>
-                      </div>
-                  </p-dialog>
+    <div class="col-12">
+      <div class=" flex justify-content-center">
+        <p-toast></p-toast>
+        <div class=" flex justify-content-center">
+          <p-dialog header="INFORMACION STOCK" [(visible)]="visible" [style]="{ width: '60vw' }" [maximizable]="true"
+            headerStyleClass="custom-dialog-header">
+            <div class="row">
+              <div class="col-12">
+                <label for="Nombre">Nombre Producto:</label>
+                <input type="text" class="form-control" />
               </div>
-          </div>
+              <div class="col-6">
+                <label for="apaterno">Cantidad:</label>
+                <input type="text" class="form-control" />
+              </div>
+              <div class="col-6">
+                <label for="amaterno">Precio:</label>
+                <input type="text" class="form-control" />
+              </div>
+
+              <div class="col-12 text-center mt-4">
+                <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()"
+                  styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger"
+                  (click)="cancelar()"></p-button>
+              </div>
+            </div>
+          </p-dialog>
+        </div>
       </div>
+    </div>
   </div>
 </div>

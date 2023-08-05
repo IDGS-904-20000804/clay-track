@@ -7,6 +7,13 @@ import { Component } from '@angular/core';
 })
 export class MenuComponent {
   isSidebarCollapsed = false;
+  usuario!:any;
+  rol!:any;
+
+  ngOnInit(): void {
+    this.usuario=localStorage.getItem('usuario');
+    this.rol=localStorage.getItem('rol');
+  }
 
   onToggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;

@@ -1,28 +1,38 @@
 <p-toast position="top-center" key="tc"></p-toast>
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-12 text-start">
-                    <p-button label="Nuevo" icon="pi pi-user-plus" styleClass="p-button-outlined  p-button-warning"
-                    (click)="showDialog()"></p-button>
-                </div>
+<div class="row" class="background-image">
+    <div [@fadeInOut] [hidden]="navBar" class="col-3">
+        <app-menu></app-menu>
+    </div>
+    <div [class]="columna">
+        <div class="row " style="margin-top: 6%; ">
+            <div class="col-6">
+                <button id="sidebarCollapse" type="button"
+                    class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4" (click)="toggleNavBar()">
+                    <i class="fa fa-bars mr-2"></i>
+                    <small class="text-uppercase font-weight-bold">MODULOS</small>
+                </button>
             </div>
-            <p-table [tableStyle]="{ 'min-width': '50rem' }">
-                <ng-template pTemplate="header">
-                    <tr style="opacity: 0.8;">
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Telefono</th>
-                        <th>Acciones</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-product>
-                    <tr>
+            <div class="col-6 text-end">
+                <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
 
-                    </tr>
-                </ng-template>
-            </p-table>
+            </div>
+            <div class="col-12 mt-3">
+                <p-table [tableStyle]="{ 'min-width': '50rem' }">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Telefono</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-product>
+                        <tr>
+
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
         </div>
     </div>
 </div>
@@ -30,36 +40,33 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div class="card flex justify-content-center">
+            <div class=" flex justify-content-center">
                 <p-toast></p-toast>
-                <div class="card flex justify-content-center">
-                        <p-dialog
-                        header="INFORMACION RECETA"
-                        [(visible)]="visible"
-                        [style]="{ width: '60vw' }"
-                        [maximizable]="true"
-                        headerStyleClass="custom-dialog-header"
-                        >       
+                <div class=" flex justify-content-center">
+                    <p-dialog header="INFORMACION RECETA" [(visible)]="visible" [style]="{ width: '60vw' }"
+                        [maximizable]="true" headerStyleClass="custom-dialog-header">
                         <div class="row">
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12">
                                         <label for="proveedor">Proveedor:</label>
-                                        <select class="form-select" [(ngModel)]="provedor" aria-label="Default select example">
+                                        <select class="form-select" [(ngModel)]="provedor"
+                                            aria-label="Default select example">
                                             <option selected>Open this select menu</option>
                                             <option value="Uno">One</option>
                                             <option value="Dos">Two</option>
                                             <option value="Tres">Three</option>
-                                          </select>
+                                        </select>
                                     </div>
                                     <div class="col-12">
                                         <label for="empleado">Empleado:</label>
-                                        <select class="form-select" [(ngModel)]="empleado" aria-label="Default select example">
+                                        <select class="form-select" [(ngModel)]="empleado"
+                                            aria-label="Default select example">
                                             <option selected>Open this select menu</option>
                                             <option value="Uno">One</option>
                                             <option value="Dos">Two</option>
                                             <option value="Tres">Three</option>
-                                          </select><br><br>
+                                        </select><br><br>
                                     </div>
                                 </div>
                             </div>
@@ -67,31 +74,33 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="materiap">Materia Prima:</label>
-                                        <select class="form-select" [(ngModel)]="materiaP" aria-label="Default select example">
+                                        <select class="form-select" [(ngModel)]="materiaP"
+                                            aria-label="Default select example">
                                             <option selected>Open this select menu</option>
                                             <option value="Uno">One</option>
                                             <option value="Dos">Two</option>
                                             <option value="Tres">Three</option>
-                                          </select>
+                                        </select>
                                     </div>
                                     <div class="col-6">
                                         <label for="cantidad">Cantidad:</label>
-                                        <input type="text"  [(ngModel)]="cantidad" class="form-control"  />
+                                        <input type="text" [(ngModel)]="cantidad" class="form-control" />
                                     </div>
                                     <div class="col-6">
                                         <label for="precio">Precio:</label>
-                                        <input type="text"  [(ngModel)]="precio" class="form-control"  />
+                                        <input type="text" [(ngModel)]="precio" class="form-control" />
                                     </div>
                                     <div class="col-6">
                                         <label for="precio">Fecha Caducidad:</label>
-                                        <input type="date"  [(ngModel)]="fechaC" class="form-control"  /><br>
+                                        <input type="date" [(ngModel)]="fechaC" class="form-control" /><br>
                                     </div>
                                     <div class="col-12 text-center">
-                                        <p-button label="Agregar" icon="pi pi-plus" (click)="agregarCompra()" styleClass="p-button-outlined p-button-info p-button-sm  mx-5"></p-button>
+                                        <p-button label="Agregar" icon="pi pi-plus" (click)="agregarCompra()"
+                                            styleClass="p-button-outlined p-button-info p-button-sm  mx-5"></p-button>
                                     </div>
                                 </div>
                             </div>
-                           
+
                             <div class="col-12">
                                 <label>Materia Prima</label>
                                 <p-table [value]="arrayCompra" [tableStyle]="{ 'min-width': '40rem' }">
@@ -112,15 +121,19 @@
                                             <td>{{materiaP.cantidad}}</td>
                                             <td>{{materiaP.precio}}</td>
                                             <td>{{materiaP.fechaC}}</td>
-                                            <td> <p-button icon="pi pi-times" styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm" (click)="eliminarCompra(rowIndex)" ></p-button>
+                                            <td> <p-button icon="pi pi-times"
+                                                    styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"
+                                                    (click)="eliminarCompra(rowIndex)"></p-button>
                                             </td>
                                         </tr>
-                                    </ng-template> 
+                                    </ng-template>
                                 </p-table>
                             </div>
                             <div class="col-12 text-center mt-4">
-                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()" styleClass="p-button-outlined p-button-success  mx-5"></p-button>
-                                <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
+                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()"
+                                    styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                                <p-button label="Cancelar" icon="pi pi-times"
+                                    styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
                             </div>
                         </div>
                     </p-dialog>

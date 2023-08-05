@@ -12,9 +12,9 @@ export class LoginService {
    }
 
    login(usuario:string, contrasenia:string): Observable<any> {
-    const url = `${this.baseUrl}api/Account/login`;
+    const url = `${this.baseUrl}api/Account/Login`;
     const body = {
-      email: usuario,
+      username: usuario,
       password: contrasenia
     };
     const headers = new HttpHeaders({

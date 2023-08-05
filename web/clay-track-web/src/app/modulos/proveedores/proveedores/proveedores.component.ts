@@ -5,12 +5,26 @@ import { switchMap } from 'rxjs';
 import { ProveedorService, Supplier } from 'src/app/servicios/proveedor/proveedor.service';
 import Swal from 'sweetalert2';
 import { es } from '../../es';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-proveedores',
   templateUrl: './proveedores.component.html',
   styleUrls: ['./proveedores.component.css'], 
-  providers: [MessageService]
+  providers: [MessageService],
+  animations: [
+    trigger('fadeInOut', [
+      state('void', style({
+        opacity: 0,
+        transform: 'translateX(-100%)'
+      })),
+      state('*', style({
+        opacity: 1,
+        transform: 'translateX(0)'
+      })),
+      transition('void <=> *', animate('600ms ease-in-out')),
+    ])
+  ]
 
 })
 export class ProveedoresComponent {
@@ -19,6 +33,8 @@ export class ProveedoresComponent {
   idProvedor!:any;
   loading: boolean = true; 
   es = es;
+  columna:string='col-9';
+  navBar:boolean=false;
   provedor:Supplier={
     idCatSupplier: 0,
     email: "",
@@ -43,6 +59,17 @@ export class ProveedoresComponent {
   
   showDialog() {
     this.visible = true;
+  }
+
+  toggleNavBar() {
+    if(this.navBar==false){
+      this.navBar =true;
+      this.columna='col-12';
+    }else{
+      this.navBar =false;
+      this.columna='col-9';
+    }
+    
   }
   constructor(private messageService: MessageService, private _servicioProveedor:ProveedorService,private router: Router,private activatedRoute: ActivatedRoute) { 
     this.obtenerProveedor()
@@ -87,20 +114,33 @@ export class ProveedoresComponent {
     );
   }
 
+  obtenerIdProvedor(){
+    this._servicioProveedor.obtenerProveedorPorId(this.idProvedor).subscribe((datosProveedor)=>{
+      this.provedor= datosProveedor;
+      console.log('DATOS',datosProveedor )
+      this.showDialog();
+    })
+  }
+
   agregarProvedor() {
-    this._servicioProveedor.guardarProvedor(this.provedor).subscribe(
-      (response) => {
-        // Cliente guardado con éxito, realizar acciones adicionales si es necesario
-        this.visible = false;
-        this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo el provedor correctamente.' });
-        console.log('Provedor guardado exitosamente:', response);
-        this.obtenerProveedor();
-      },
-      (error) => {
-        // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
-        console.error('Error al guardar el provedor:', error);
-      }
-    );
+    if(this.provedor.idCatSupplier>0){
+      this.modificarProvedor()
+    }else{
+      this._servicioProveedor.guardarProvedor(this.provedor).subscribe(
+        (response) => {
+          // Cliente guardado con éxito, realizar acciones adicionales si es necesario
+          this.visible = false;
+          this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo el provedor correctamente.' });
+          console.log('Provedor guardado exitosamente:', response);
+          this.obtenerProveedor();
+        },
+        (error) => {
+          // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+          console.error('Error al guardar el provedor:', error);
+        }
+      );
+    }
+    
   }
 
   modificarProvedor() {
@@ -118,7 +158,7 @@ export class ProveedoresComponent {
       }
     );
   }
-  eliminarProvedor(id: number) {
+  eliminarProvedor(id: string) {
     // Mostrar SweetAlert de confirmación antes de eliminar el proveedor
     Swal.fire({
       title: 'Confirmación',

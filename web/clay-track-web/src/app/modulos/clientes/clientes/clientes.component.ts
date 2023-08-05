@@ -1,3 +1,4 @@
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Client, ClientesService } from 'src/app/servicios/clientes/clientes.service';
@@ -7,7 +8,20 @@ import { LoginService } from 'src/app/servicios/login/login.service';
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
   styleUrls: ['./clientes.component.css'],
-  providers: [MessageService]
+  providers: [MessageService],
+  animations: [
+    trigger('fadeInOut', [
+      state('void', style({
+        opacity: 0,
+        transform: 'translateX(-100%)'
+      })),
+      state('*', style({
+        opacity: 1,
+        transform: 'translateX(0)'
+      })),
+      transition('void <=> *', animate('600ms ease-in-out')),
+    ])
+  ]
 
 })
 export class ClientesComponent {
@@ -15,7 +29,8 @@ export class ClientesComponent {
   arrayClientes: any= new Array();
   usuariId = 1;
   fecha = new Date().toISOString();
-
+  columna:string='col-9';
+  navBar:boolean=false;
   cliente: Client = {
     idCatClient: 0,
     fkCatPerson: 0,
@@ -63,6 +78,16 @@ export class ClientesComponent {
 
   showDialog() {
     this.visible = true;
+  }
+  toggleNavBar() {
+    if(this.navBar==false){
+      this.navBar =true;
+      this.columna='col-12';
+    }else{
+      this.navBar =false;
+      this.columna='col-9';
+    }
+    
   }
   constructor( private messageService: MessageService, private _servicioClientes: ClientesService,private clientService: ClientesService) { 
     this.obtenerClientes()

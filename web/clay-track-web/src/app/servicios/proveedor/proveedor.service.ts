@@ -45,12 +45,26 @@ export class ProveedorService {
   }
 
   guardarProvedor(provedor: Supplier): Observable<any> {
-    const url = `${this.baseUrl}api/Supplier`; // Ajusta la URL según la ruta de la API para guardar provedors
+    const url = `${this.baseUrl}api/Supplier`; // Ajusta la URL según la ruta de la https://accounts.google.com/b/0/AddMailServiceAPI para guardar provedors
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
     return this.http.post<Supplier>(url, provedor, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
+  obtenerProveedorPorId(id:string):Observable<Supplier>{
+    const url = `${this.baseUrl}api/Supplier/GetOne${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<Supplier>(url, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
@@ -72,13 +86,13 @@ export class ProveedorService {
     );
   }
 
-  eliminarProvedor(id:number): Observable<any> {
-    const url = `${this.baseUrl}api/Supplier/${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+  eliminarProvedor(id:string): Observable<any> {
+    const url = `${this.baseUrl}api/Supplier/Delete${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.delete<Supplier>(url, { headers }).pipe(
+    return this.http.put<Supplier>(url, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
