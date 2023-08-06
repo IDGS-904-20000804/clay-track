@@ -1180,3 +1180,4 @@ C:\Clay-track\services\API_ClayTrack\obj\Debug\net6.0\refint\API_ClayTrack.dll
 C:\Clay-track\services\API_ClayTrack\obj\Debug\net6.0\API_ClayTrack.pdb
 C:\Clay-track\services\API_ClayTrack\obj\Debug\net6.0\API_ClayTrack.genruntimeconfig.cache
 C:\Clay-track\services\API_ClayTrack\obj\Debug\net6.0\ref\API_ClayTrack.dll
+C:\Clay-track\services\API_ClayTrack\bin\Debug\net6.0\Newtonsoft.Json.dll
