@@ -1,40 +1,35 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
-
-export interface Supplier {
-  idCatSupplier: number;
-  email: string;
-  fkCatPerson: number;
-  person: {
-    idCatPerson: number;
-    name: string;
-    lastName: string;
-    middleName: string;
-    phone: string;
-    postalCode: number;
-    streetNumber: string;
-    apartmentNumber: string;
-    street: string;
-    neighborhood: string;
+export interface RawMaterial {
+  idCatRawMaterial: number;
+  name: string;
+  quantityWarehouse: number;
+  quantityPackage: number;
+  status: boolean;
+  creationDate: string;
+  updateDate: string;
+  fkCatUnitMeasure: number;
+  unitMeasure: {
+    idCatUnitMeasure: number;
+    description: string;
     status: boolean;
     creationDate: string;
     updateDate: string;
   };
 }
-
 @Injectable({
   providedIn: 'root'
 })
-export class ProveedorService {
+export class MateriaPrimaService {
   private baseUrl = 'https://localhost:7106/';
   private token=localStorage.getItem("token");
 
   constructor(private http: HttpClient) {
    }
 
-   obtenerProveedor(): Observable<any> {
-    const url = `${this.baseUrl}api/Supplier`;
+   obtenerMateriaP(): Observable<any> {
+    const url = `${this.baseUrl}api/RawMaterial/GetAll`;
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -44,13 +39,13 @@ export class ProveedorService {
     return this.http.get<any>(url, { headers });
   }
 
-  guardarProvedor(provedor: Supplier): Observable<any> {
-    const url = `${this.baseUrl}api/Supplier`; // Ajusta la URL según la ruta de la https://accounts.google.com/b/0/AddMailServiceAPI para guardar provedors
+  guardarMatreriaP(materiaP: RawMaterial): Observable<any> {
+    const url = `${this.baseUrl}api/RawMaterial`; // Ajusta la URL según la ruta de la https://accounts.google.com/b/0/AddMailServiceAPI para guardar materiaPs
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.post<Supplier>(url, provedor, { headers }).pipe(
+    return this.http.post<RawMaterial>(url, materiaP, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
@@ -58,13 +53,13 @@ export class ProveedorService {
     );
   }
 
-  obtenerProveedorPorId(id:string):Observable<Supplier>{
-    const url = `${this.baseUrl}api/Supplier/GetOne${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+  obtenerMateriaPPorId(id:string):Observable<RawMaterial>{
+    const url = `${this.baseUrl}api/RawMaterial/GetOne${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.get<Supplier>(url, { headers }).pipe(
+    return this.http.get<RawMaterial>(url, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
@@ -72,13 +67,13 @@ export class ProveedorService {
     );
   }
 
-  actualizarProvedor(provedor: Supplier,id:number): Observable<any> {
-    const url = `${this.baseUrl}api/Supplier/${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+  actualizarMateriaP(materiaP: RawMaterial,id:number): Observable<any> {
+    const url = `${this.baseUrl}api/RawMaterial/${id}`; // Ajusta la URL según la ruta de la API para guardar materiaPs
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.put<Supplier>(url, provedor, { headers }).pipe(
+    return this.http.put<RawMaterial>(url, materiaP, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
@@ -86,18 +81,17 @@ export class ProveedorService {
     );
   }
 
-  eliminarProvedor(id:string): Observable<any> {
-    const url = `${this.baseUrl}api/Supplier/Delete${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+  eliminarMateriaPrima(id:string): Observable<any> {
+    const url = `${this.baseUrl}api/RawMaterial/Delete${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.put<Supplier>(url, null, { headers }).pipe(
+    return this.http.put<RawMaterial>(url, null, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
       })
     );
   }
-
 }

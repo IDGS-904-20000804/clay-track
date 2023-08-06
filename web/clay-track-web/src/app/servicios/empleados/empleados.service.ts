@@ -1,20 +1,20 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
-export interface Employee {
+export interface Empleado {
   idCatEmployee: number;
   fkCatPerson: number;
-  fkUser: string;
+  fkUser: number | string;
   fkRol: string;
   person: {
     idCatPerson: number;
     name: string;
     lastName: string;
-    middleName: string;
+    middleName: string | undefined;
     phone: string;
     postalCode: number;
-    streetNumber: string;
-    apartmentNumber: string;
+    streetNumber: string | number;
+    apartmentNumber: string | undefined;
     street: string;
     neighborhood: string;
     status: boolean;
@@ -24,19 +24,8 @@ export interface Employee {
   user: {
     id: string;
     userName: string;
-    normalizedUserName: string;
     email: string;
-    normalizedEmail: string;
-    emailConfirmed: boolean;
     passwordHash: string;
-    securityStamp: string;
-    concurrencyStamp: string;
-    phoneNumber: string;
-    phoneNumberConfirmed: boolean;
-    twoFactorEnabled: boolean;
-    lockoutEnd: string;
-    lockoutEnabled: boolean;
-    accessFailedCount: number;
   };
   role: {
     id: string;
@@ -45,6 +34,7 @@ export interface Employee {
     concurrencyStamp: string;
   };
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +47,7 @@ export class EmpleadosService {
    }
 
    obtenerEmpleados(): Observable<any> {
-    const url = `${this.baseUrl}api/Employee`;
+    const url = `${this.baseUrl}api/Employee/GetAll`;
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -68,17 +58,46 @@ export class EmpleadosService {
   }
 
   
-  guardarEmpleado(empleado: Employee): Observable<any> {
-    const url = `${this.baseUrl}api/Employee`; // Ajusta la URL según la ruta de la API para guardar empleados
+  guardarEmpleado(empleado: Empleado): Observable<any> {
+    const url = `${this.baseUrl}api/Employee/AddEmployee`; // Ajusta la URL según la ruta de la API para guardar empleados
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.post<Employee>(url, empleado, { headers }).pipe(
+    return this.http.post<Empleado>(url, empleado, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
       })
     );
   }
+
+  obtenerEmpleadoPorId(id:string):Observable<Empleado>{
+    const url = `${this.baseUrl}api/Employee/GetOne${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Empleado>(url, null, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
+  eliminarEmpleado(id:string): Observable<any> {
+    const url = `${this.baseUrl}api/Employee/Delete${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<any>(url, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
 }

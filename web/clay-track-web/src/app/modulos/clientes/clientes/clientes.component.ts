@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Client, ClientesService } from 'src/app/servicios/clientes/clientes.service';
 import { LoginService } from 'src/app/servicios/login/login.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-clientes',
@@ -31,11 +32,12 @@ export class ClientesComponent {
   fecha = new Date().toISOString();
   columna:string='col-9';
   navBar:boolean=false;
+  loading: boolean = true;
   cliente: Client = {
     idCatClient: 0,
     fkCatPerson: 0,
     fkUser: "string",
-    fkRol: "",
+    fkRol: "c309fa92-2123-47be-b397-adfdgdfg3344",
     person: {
       idCatPerson: 0,
       name: "",
@@ -54,22 +56,11 @@ export class ClientesComponent {
     user: {
       id: "string",
       userName: "",
-      normalizedUserName: "",
       email: "",
-      normalizedEmail: "",
-      emailConfirmed: true,
       passwordHash: "",
-      securityStamp: "",
-      concurrencyStamp: "",
-      phoneNumber: "",
-      phoneNumberConfirmed: true,
-      twoFactorEnabled: true,
-      lockoutEnd:  "2023-07-28T00:47:02.987Z",
-      lockoutEnabled: true,
-      accessFailedCount: 0
     },
     role: {
-      id: "",
+      id: "c309fa92-2123-47be-b397-adfdgdfg3344",
       name: "",
       normalizedName: "",
       concurrencyStamp: ""
@@ -117,7 +108,13 @@ export class ClientesComponent {
     );
   }
 
-
+  obtenerIdProvedor(id: string){
+    this._servicioClientes.obtenerClientePorId(id).subscribe((datosCliente)=>{
+      this.cliente= datosCliente;
+      console.log('DATOS',datosCliente )
+      this.showDialog();
+    })
+  }
 
   cancelar() {
     this.visible=false;
@@ -125,12 +122,65 @@ export class ClientesComponent {
   }
 
   obtenerClientes(){
+    this.loading = true; 
+
     this._servicioClientes.obtenerClientes().subscribe((clientes)=>{
       this.arrayClientes=clientes;
       console.log('Clientes',this.arrayClientes)
+      this.loading = false; 
+
     }, (err)=>{
       console.log(err)
+      this.loading = false; 
       this.messageService.add({key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener los clientes' });
     })
+  }
+
+  
+  agregarCliente() {
+    this._servicioClientes.guardarCliente(this.cliente).subscribe(
+      (response) => {
+        
+          this.visible = false;
+          this.messageService.add({key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se guardó el cliente correctamente.' });
+          console.log('CLIENTE guardado exitosamente:', response); // Acceder al mensaje de éxito
+        
+      },
+      (error) => {
+        // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+        console.error('Error al guardar el cliente:', error);
+      }
+    );
+  }
+
+  eliminarCliente(id: string) {
+    // Mostrar SweetAlert de confirmación antes de eliminar el cliente
+    Swal.fire({
+      title: 'Confirmación',
+      text: '¿Estás seguro de eliminar este cliente?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // El usuario ha confirmado la eliminación
+        this._servicioClientes.eliminarCliente(id).subscribe(
+          (response) => {
+            // cliente eliminado con éxito, realizar acciones adicionales si es necesario
+            this.messageService.add({ key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se eliminó el cliente correctamente.' });
+            console.log('Cliente eliminado exitosamente:', response);
+            this.obtenerClientes(); // Llamar a la función para actualizar la lista de clientees
+          },
+          (error) => {
+            // Ocurrió un error al eliminar el cliente, manejar el error apropiadamente
+            this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al eliminar el Cliente' });
+            console.error('Error al eliminar el cliente:', error);
+          }
+        );
+      }
+    });
   }
 }

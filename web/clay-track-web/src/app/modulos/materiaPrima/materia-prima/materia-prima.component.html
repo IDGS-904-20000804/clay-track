@@ -17,21 +17,60 @@
 
       </div>
       <div class="col-12 mt-3">
-            <p-table [tableStyle]="{ 'min-width': '50rem' }">
-                <ng-template pTemplate="header">
-                    <tr >
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Telefono</th>
-                        <th>Acciones</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-product>
-                    <tr>
-
-                    </tr>
-                </ng-template>
-            </p-table>
+        <p-table #dt1 [value]="arrayMateriaPrima" dataKey="idCatSupplier" [rows]="10"
+        [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+        [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        filterMode="global">
+        <ng-template pTemplate="caption">
+            <!-- Aquí puedes agregar algún contenido adicional para la cabecera de la tabla si lo deseas -->
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <div class="flex align-items-center">
+                        Nombre Materia Prima
+                        <p-columnFilter type="text" field="person.name" display="menu" filterHeader="Nombre"
+                            filterMatchMode="contains"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex align-items-center">
+                        Unidad de Medida
+                        <p-columnFilter type="text" field="person.phone" display="menu"
+                            filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex align-items-center">
+                        Creacion
+                        <p-columnFilter type="text" field="person.street" display="menu"
+                            filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
+                    </div>
+                </th>
+                <th>Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-materiaPrima>
+            <tr>
+                <td>{{ materiaPrima.name }}</td>
+                <td>{{ materiaPrima.unitMeasure.description }}</td>
+                <td>{{materiaPrima.creationDate}}</td>
+                <td>
+                        <p-button icon="pi pi-pencil" (click)="obtenerIdMateriaP(materiaPrima.idCatRawMaterial)"
+                            styleClass="p-button-rounded p-button-warning p-button-outlined p-button-sm" ></p-button>
+                    &nbsp;&nbsp;
+                    <p-button icon="pi pi-times"  (click)="eliminarMateriaP(materiaPrima.idCatRawMaterial)"
+                        styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4">No hay materia prima disponibles.</td>
+            </tr>
+        </ng-template>
+    </p-table>
         </div>
     </div>
 </div>
@@ -52,22 +91,29 @@
                         headerStyleClass="custom-dialog-header"
                         >       
                         <div class="row">
+                            <input type="text" hidden [(ngModel)]="materiaP.idCatRawMaterial" class="form-control"  />
                             <div class="col-6">
                                 <label for="NombreMP">Nombre Materia Prima:</label>
-                                <input type="text" class="form-control"  />
+                                <input type="text" [(ngModel)]="materiaP.name" class="form-control"  />
                             </div>
                             <div class="col-6">
-                                <label for="unidadMedida">Unidad de Medida:</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                  </select>
+                                <select class="form-select mt-4" [(ngModel)]="materiaP.unitMeasure.description" aria-label="Default select example">
+                                    <option value="" selected>Selecciona la unidad de medida</option>
+                                    <option value="Kilogramos">Kilogramos</option>
+                                    <option value="Gramos">Gramos</option>
+                                    <option value="Litros">Litros</option>
+                                    <option value="Mililitros">Mililitros</option>
+                                    <option value="Saco">Saco</option>
+                                    <option value="Bolsa">Bolsa</option>
+                                    <option value="Paquete">Paquete</option>
+                                    <option value="Cartón">Cartón</option>
+                                    <option value="Frasco">Frasco</option>
+                                    <option value="Unidad">Unidad</option>
+                                </select>
+                                
                             </div>
-                            
                             <div class="col-12 text-center mt-4">
-                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()" styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarMateroiaP()" styleClass="p-button-outlined p-button-success  mx-5"></p-button>
                                 <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
                             </div>
                         </div>

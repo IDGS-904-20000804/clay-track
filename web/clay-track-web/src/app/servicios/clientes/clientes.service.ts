@@ -5,17 +5,17 @@ import { Observable, catchError, throwError } from 'rxjs';
 export interface Client {
   idCatClient: number;
   fkCatPerson: number;
-  fkUser: string;
+  fkUser: number | string;
   fkRol: string;
   person: {
     idCatPerson: number;
     name: string;
     lastName: string;
-    middleName: string;
+    middleName: string | undefined;
     phone: string;
     postalCode: number;
-    streetNumber: string;
-    apartmentNumber: string;
+    streetNumber: string | number;
+    apartmentNumber: string | undefined;
     street: string;
     neighborhood: string;
     status: boolean;
@@ -25,19 +25,8 @@ export interface Client {
   user: {
     id: string;
     userName: string;
-    normalizedUserName: string;
     email: string;
-    normalizedEmail: string;
-    emailConfirmed: boolean;
     passwordHash: string;
-    securityStamp: string;
-    concurrencyStamp: string;
-    phoneNumber: string;
-    phoneNumberConfirmed: boolean;
-    twoFactorEnabled: boolean;
-    lockoutEnd: string;
-    lockoutEnabled: boolean;
-    accessFailedCount: number;
   };
   role: {
     id: string;
@@ -59,7 +48,7 @@ export class ClientesService {
    }
 
    obtenerClientes(): Observable<any> {
-    const url = `${this.baseUrl}api/Client`;
+    const url = `${this.baseUrl}api/Client/GetAll`;
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -70,7 +59,7 @@ export class ClientesService {
   }
 
   guardarCliente(cliente: Client): Observable<Client> {
-    const url = `${this.baseUrl}api/Client`;
+    const url = `${this.baseUrl}api/Client/AddClient`;
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -82,4 +71,33 @@ export class ClientesService {
       })
     );
   }
+
+  obtenerClientePorId(id:string):Observable<Client>{
+    const url = `${this.baseUrl}api/Client/GetOne${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<Client>(url, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
+  eliminarCliente(id:string): Observable<any> {
+    const url = `${this.baseUrl}api/Client/Delete${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Client>(url, null, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
 }

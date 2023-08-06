@@ -52,7 +52,7 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-proveedor>
-                        <tr>
+                        <tr [hidden]="proveedor.person.status==false">
                             <td>{{ proveedor.person.name }} {{ proveedor.person.lastName }}</td>
                             <td>{{ proveedor.person.phone }}</td>
                             <td>{{ proveedor.person.street }}, {{ proveedor.person.neighborhood }}</td>
@@ -77,7 +77,6 @@
         </div>
     </div>
     </div>
-    <h1>{{idProvedor}}</h1>
     <div class="container">
         <div class="row">
             <div class="col-12">

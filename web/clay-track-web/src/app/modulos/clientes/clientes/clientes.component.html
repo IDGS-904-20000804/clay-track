@@ -17,25 +17,58 @@
 
       </div>
       <div class="col-12 mt-3">
-        <p-table [value]="arrayClientes" [tableStyle]="{ 'min-width': '50rem' }">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>Telefono</th>
-              <th>Acciones</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-client>
-            <tr>
-              <td>{{ client.person.name }} {{ client.person.lastName }}</td>
-              <td>{{ client.user.email }}</td>
-              <td>{{ client.person.phone }}</td>
-              <td>
-                <!-- Add action buttons here -->
-              </td>
-            </tr>
-          </ng-template>
+        <p-table #dt1 [value]="arrayClientes" dataKey="idCatSupplier" [rows]="10"
+            [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+            [paginator]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+            filterMode="global">
+            <ng-template pTemplate="caption">
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        <div class="flex align-items-center">
+                            Nombre
+                            <p-columnFilter type="text" field="person.name" display="menu" filterHeader="Nombre"
+                                filterMatchMode="contains"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex align-items-center">
+                            Teléfono
+                            <p-columnFilter type="text" field="person.phone" display="menu"
+                                filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex align-items-center">
+                            Dirección
+                            <p-columnFilter type="text" field="person.street" display="menu"
+                                filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-clientes>
+                <tr>
+                    <td>{{ clientes.person.name }} {{ clientes.person.lastName }}</td>
+                    <td>{{ clientes.person.phone }}</td>
+                    <td>{{ clientes.person.street }}, {{ clientes.person.neighborhood }}</td>
+                    <td>
+                            <p-button icon="pi pi-pencil" (click)="obtenerIdProvedor(clientes.idCatClient)"
+                                styleClass="p-button-rounded p-button-warning p-button-outlined p-button-sm" ></p-button>
+                        &nbsp;&nbsp;
+                        <p-button icon="pi pi-times" (click)="eliminarCliente(clientes.idCatClient)"
+                            styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="4">No hay clientes disponibles.</td>
+                </tr>
+            </ng-template>
         </p-table>
       </div>
     </div>
@@ -97,7 +130,7 @@
               </div>
             </div>
             <div class="col-12 text-center mt-4">
-              <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()"
+              <p-button label="Guardar" icon="pi pi-save" (click)="agregarCliente()"
                 styleClass="p-button-outlined p-button-success mx-5"></p-button>
               <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger"
                 (click)="cancelar()"></p-button>
