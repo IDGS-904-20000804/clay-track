@@ -12,7 +12,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
     public class StockController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -40,6 +40,22 @@ namespace API_ClayTrack.Controllers
             }).ToList();
 
             return stockDto;
+        }
+
+        [HttpGet]
+        [Route("GetOne{id:int}")]
+        public async Task<ActionResult<CatRecipe>> GetStock(int id)
+        {
+            var stock = await dbContext.CatRecipe
+                .Include(r => r.fkCatSize)
+                .FirstOrDefaultAsync(s => s.idCatRecipe == id);
+
+            if (stock == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(stock);
         }
 
         [HttpPost]

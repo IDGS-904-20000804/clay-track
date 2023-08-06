@@ -51,6 +51,7 @@ namespace API_ClayTrack.Controllers
 
 
         [HttpPost]
+        [Route("Add")]
         public async Task<ActionResult> AddRawMaterial([FromBody] CatRawMaterial rawMaterial)
         {
             dbContext.Add(rawMaterial);
@@ -82,10 +83,10 @@ namespace API_ClayTrack.Controllers
         }
 
         //Cambiar estatus a  false
-/*
+
         [HttpPut]
         [Route("Delete{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteMaterial(int id)
         {
             var rawMaterial = await dbContext.CatRawMaterial
                 .FirstOrDefaultAsync(e => e.idCatRawMaterial == id);
@@ -95,9 +96,9 @@ namespace API_ClayTrack.Controllers
                 return NotFound();
             }
 
-            dbContext.Remove(rawMaterial);
+            rawMaterial.status = false;
             await dbContext.SaveChangesAsync();
             return Ok();
-        }*/
+        }
     }
 }

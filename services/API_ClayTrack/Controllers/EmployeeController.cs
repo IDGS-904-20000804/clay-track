@@ -57,7 +57,6 @@ namespace API_ClayTrack.Controllers
 
         [HttpPost]
         [Route("AddEmployee")]
-        //[AllowAnonymous]
         public async Task<ActionResult> AddEmployee([FromBody] CatEmployee employee)
         {
             try

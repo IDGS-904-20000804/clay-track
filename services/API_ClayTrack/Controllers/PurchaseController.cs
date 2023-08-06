@@ -21,6 +21,7 @@ namespace API_ClayTrack.Controllers
         }
 
         [HttpGet]
+        [Route("GetAll")]
         public async Task<ActionResult<List<CatPurchase>>> GetAllSupplier()
         {
             return await dbContext.CatPurchase
@@ -30,6 +31,7 @@ namespace API_ClayTrack.Controllers
         }
 
         [HttpPost]
+        [Route("Add")]
         public async Task<ActionResult> AddPurchase([FromBody] CatPurchase purchase)
         {
 
@@ -40,7 +42,7 @@ namespace API_ClayTrack.Controllers
 
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("Update{id:int}")]
         public async Task<ActionResult> UpdatePurchase(CatPurchase purchase, int id)
         {
             if (purchase.idCatPurchase != id)
@@ -60,7 +62,7 @@ namespace API_ClayTrack.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("Delete{id:int}")]
         public async Task<ActionResult> DeletePurchase(int id)
         {
             var exist = await dbContext.CatPurchase.AnyAsync(x => x.idCatPurchase == id);

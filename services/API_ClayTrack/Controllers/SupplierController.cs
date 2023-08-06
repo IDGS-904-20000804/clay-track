@@ -31,7 +31,6 @@ namespace API_ClayTrack.Controllers
 
         [HttpGet]
         [Route("GetOne{id:int}")]
-        [AllowAnonymous]
         public async Task<ActionResult<CatSupplier>> GetSupplier(int id)
         {
             var supplier = await dbContext.CatSupplier
@@ -48,6 +47,7 @@ namespace API_ClayTrack.Controllers
 
 
         [HttpPost]
+        [Route("Add")]
         public async Task<ActionResult> AddSupplier([FromBody] CatSupplier supplier)
         {
 
@@ -58,7 +58,7 @@ namespace API_ClayTrack.Controllers
 
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("Update{id:int}")]
         public async Task<ActionResult> UpdateSupplier(CatSupplier supplier, int id)
         {
             if (supplier.idCatSupplier != id)
