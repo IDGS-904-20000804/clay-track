@@ -29,4 +29,8 @@ export class MenuComponent {
       }
     }
   }
+
+  cerrarSesion(){
+    localStorage.clear()
+  }
 }

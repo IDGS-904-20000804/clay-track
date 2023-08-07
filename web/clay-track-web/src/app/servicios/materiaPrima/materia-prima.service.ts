@@ -40,7 +40,7 @@ export class MateriaPrimaService {
   }
 
   guardarMatreriaP(materiaP: RawMaterial): Observable<any> {
-    const url = `${this.baseUrl}api/RawMaterial`; // Ajusta la URL según la ruta de la https://accounts.google.com/b/0/AddMailServiceAPI para guardar materiaPs
+    const url = `${this.baseUrl}api/RawMaterial/Add`; // Ajusta la URL según la ruta de la https://accounts.google.com/b/0/AddMailServiceAPI para guardar materiaPs
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`

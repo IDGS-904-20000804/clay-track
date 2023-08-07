@@ -49,3 +49,18 @@
   
   }
   
+  .color-option {
+    width: 20px; /* Ancho de la barra de color */
+    height: 100%; /* Altura de la opción completa */
+    display: inline-block; /* Mostrar en línea junto al texto */
+}
+
+.color-label {
+    display: inline-block; /* Mostrar en línea junto a la barra de color */
+    vertical-align: middle; /* Alinear verticalmente con la barra de color */
+    margin-left: 5px; /* Espacio entre la barra de color y el texto */
+}
+
+.custom-multiselect .ui-multiselect-label {
+  width: 500px; /* Ajustar el ancho según tus necesidades */
+}

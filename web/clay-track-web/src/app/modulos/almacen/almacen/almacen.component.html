@@ -1,1 +1,66 @@
-<p>almacen works!</p>
+<p-toast position="top-center" key="tc"></p-toast>
+<div class="row" class="background-image">
+  <div [@fadeInOut] [hidden]="navBar" class="col-3">
+    <app-menu></app-menu>
+  </div>
+  <div [class]="columna">
+    <div class="row " style="margin-top: 6%; ">
+      <div class="col-6">
+        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"
+          (click)="toggleNavBar()">
+          <i class="fa fa-bars mr-2"></i>
+          <small class="text-uppercase font-weight-bold">MODULOS</small>
+        </button>
+      </div>
+        <div class="col-12 mt-3">
+        <p-table #dt1 [value]="arrayAlmacen" dataKey="idCatSupplier" [rows]="10"
+            [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+            [paginator]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+            filterMode="global">
+            <ng-template pTemplate="caption">
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        <div class="flex align-items-center">
+                            Nombre
+                            <p-columnFilter type="text" field="person.name" display="menu" filterHeader="Nombre"
+                                filterMatchMode="contains"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex align-items-center">
+                            Teléfono
+                            <p-columnFilter type="text" field="person.phone" display="menu"
+                                filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex align-items-center">
+                            Dirección
+                            <p-columnFilter type="text" field="person.street" display="menu"
+                                filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-clientes>
+                <tr>
+                    <td>{{ clientes.person.name }} {{ clientes.person.lastName }}</td>
+                    <td>{{ clientes.person.phone }}</td>
+                    <td>{{ clientes.person.street }}, {{ clientes.person.neighborhood }}</td>
+                   
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="4">No hay clientes disponibles.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>

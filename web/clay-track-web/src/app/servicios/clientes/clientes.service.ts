@@ -21,13 +21,24 @@ export interface Client {
     status: boolean;
     creationDate: string;
     updateDate: string;
-  };
+  },
   user: {
-    id: string;
-    userName: string;
-    email: string;
-    passwordHash: string;
-  };
+    "id": "string",
+    "userName": "string",
+    "normalizedUserName": "string",
+    "email": "string",
+    "normalizedEmail": "string",
+    "emailConfirmed": true,
+    "passwordHash": "string",
+    "securityStamp": "string",
+    "concurrencyStamp": "string",
+    "phoneNumber": "string",
+    "phoneNumberConfirmed": true,
+    "twoFactorEnabled": true,
+    "lockoutEnd": "2023-08-06T19:29:05.037Z",
+    "lockoutEnabled": true,
+    "accessFailedCount": 0
+  },
   role: {
     id: string;
     name: string;

@@ -54,10 +54,21 @@ export class ClientesComponent {
       updateDate: "2023-07-28T00:47:02.987Z"
     },
     user: {
-      id: "string",
-      userName: "",
-      email: "",
-      passwordHash: "",
+      "id": "string",
+      "userName": "string",
+      "normalizedUserName": "string",
+      "email": "string",
+      "normalizedEmail": "string",
+      "emailConfirmed": true,
+      "passwordHash": "string",
+      "securityStamp": "string",
+      "concurrencyStamp": "string",
+      "phoneNumber": "string",
+      "phoneNumberConfirmed": true,
+      "twoFactorEnabled": true,
+      "lockoutEnd": "2023-08-06T19:29:05.037Z",
+      "lockoutEnabled": true,
+      "accessFailedCount": 0
     },
     role: {
       id: "c309fa92-2123-47be-b397-adfdgdfg3344",

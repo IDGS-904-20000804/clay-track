@@ -1,6 +1,16 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { MateriaPrimaService } from 'src/app/servicios/materiaPrima/materia-prima.service';
+import { Product, RecetasService } from 'src/app/servicios/recetas/recetas.service';
+interface Color {
+  idCatColor: number;
+  description: string;
+  hexadecimal: string;
+  status: boolean;
+  creationDate: string;
+  updateDate: string;
+}
 
 @Component({
   selector: 'app-recetas',
@@ -30,8 +40,23 @@ export class RecetasComponent {
   arrayMateriaPrima: any[]=  new Array();
   columna:string='col-9';
   navBar:boolean=false;
+  arrayMateriaPrimaSelector: any[]= new Array();
+  arrayColores: any[]= new Array();
+  coloresObtenidos: any[]= new Array();
 
 
+  receta: Product = {
+    name: "",
+    price: 0,
+    imagePath: "path",
+    fkCatSize: 0,
+    colorIds: [],
+    rawMaterials: 
+      this.arrayMateriaPrima
+    ,
+  };
+  
+  
   showDialog() {
     this.visible = true;
   }
@@ -46,7 +71,10 @@ export class RecetasComponent {
     }
     
   }
-  constructor( private messageService: MessageService) { }
+  constructor( private messageService: MessageService, private _servicioMateriaP: MateriaPrimaService, private _servicioReceta: RecetasService) { 
+    this.obtenerMateriaPrima();
+    this.obtenerColores();
+  }
 
   agregarEmpleado() {
     this.visible=false;
@@ -70,6 +98,7 @@ export class RecetasComponent {
         recetaExistente.cantidad += cantidadNueva;
       } else {
         this.arrayMateriaPrima.push({
+          idCatalog: 1,
           materia: this.unidadMedida,
           cantidad: cantidadNueva
         });
@@ -86,6 +115,51 @@ export class RecetasComponent {
     this.arrayMateriaPrima.splice(i,1)
   }
 
+  obtenerMateriaPrima() {
+    this._servicioMateriaP.obtenerMateriaP().subscribe(
+      (materiaP) => {
+        this.arrayMateriaPrimaSelector = materiaP;
+        console.log('Materia Prima', this.arrayMateriaPrima);
+      },
+      (err) => {
+        console.log(err);
+        this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener los proveedores' });
+      }
+    );
+  }
 
+  obtenerColores() {
+    this._servicioReceta.obtenerColor().subscribe(
+      (colores) => {
+        this.arrayColores = colores;
+        console.log('Materia Prima', this.arrayColores);
+      },
+      (err) => {
+        console.log(err);
+        this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener los colores' });
+      }
+    );
+  }
+  obtencionIdColor(event: any) {
+   this.coloresObtenidos= event.value.map((color: any) => color.idCatColor);
+    console.log('IDs seleccionados:', this.coloresObtenidos);
+    this.receta.colorIds=this.coloresObtenidos;
+  }
+
+  agregarReceta() {
+    this._servicioReceta.guardarReceta(this.receta).subscribe(
+      (response) => {
+        // Cliente guardado con éxito, realizar acciones adicionales si es necesario
+        this.visible = false;
+        this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
+        console.log('Receta guardado exitosamente:', response);
+      },
+      (error) => {
+        // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+        console.error('Error al guardar la receta:', error);
+      }
+    );
+    }
+  
 
 }

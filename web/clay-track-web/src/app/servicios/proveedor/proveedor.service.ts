@@ -45,7 +45,7 @@ export class ProveedorService {
   }
 
   guardarProvedor(provedor: Supplier): Observable<any> {
-    const url = `${this.baseUrl}api/Supplier`; // Ajusta la URL según la ruta de la https://accounts.google.com/b/0/AddMailServiceAPI para guardar provedors
+    const url = `${this.baseUrl}api/Supplier/Add`; // Ajusta la URL según la ruta de la https://accounts.google.com/b/0/AddMailServiceAPI para guardar provedors
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
