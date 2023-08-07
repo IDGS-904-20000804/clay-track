@@ -28,12 +28,13 @@ namespace API_ClayTrack.Controllers
         {
             var stock = await dbContext.CatRecipe
                 .Include(r => r.Size)
+                .Include(r => r.fkCatImage)
                 .ToListAsync();
 
             var stockDto = stock.Select(r => new StockDto
             {
                 Name = r.name,
-                ImagePath = r.imagePath,
+                FkCatImage = r.fkCatImage,
                 Price = r.price,
                 QuantityStock = r.quantityStock,
                 Size = r.Size
@@ -48,6 +49,7 @@ namespace API_ClayTrack.Controllers
         {
             var stock = await dbContext.CatRecipe
                 .Include(r => r.fkCatSize)
+                .Include(r => r.fkCatImage)
                 .FirstOrDefaultAsync(s => s.idCatRecipe == id);
 
             if (stock == null)
@@ -73,6 +75,7 @@ namespace API_ClayTrack.Controllers
         {
             var stock = await dbContext.CatRecipe
                 .Include(r => r.Size)
+                .Include(r => r.fkCatImage)
                 .FirstOrDefaultAsync(r => r.idCatRecipe == id);
 
             if (stock == null)

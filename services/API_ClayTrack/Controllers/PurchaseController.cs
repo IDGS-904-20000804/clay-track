@@ -20,7 +20,8 @@ namespace API_ClayTrack.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpGet]
+
+       /* [HttpGet]
         [Route("GetAll")]
         public async Task<ActionResult<List<CatPurchase>>> GetAllSupplier()
         {
@@ -74,6 +75,6 @@ namespace API_ClayTrack.Controllers
             dbContext.Remove(new CatPurchase() { idCatPurchase = id });
             await dbContext.SaveChangesAsync();
             return Ok();
-        }
+        }*/
     }
 }

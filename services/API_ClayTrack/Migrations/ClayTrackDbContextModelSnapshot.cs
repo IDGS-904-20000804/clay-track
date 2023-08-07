@@ -120,6 +120,34 @@ namespace API_ClayTrack.Migrations
                     b.ToTable("CatEmployee");
                 });
 
+            modelBuilder.Entity("API_ClayTrack.Models.CatImage", b =>
+                {
+                    b.Property<int>("IdCatImage")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCatImage"));
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSizeInBytes")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("IdCatImage");
+
+                    b.ToTable("CatImage");
+                });
+
             modelBuilder.Entity("API_ClayTrack.Models.CatPerson", b =>
                 {
                     b.Property<int>("idCatPerson")
@@ -284,12 +312,11 @@ namespace API_ClayTrack.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("fkCatSize")
+                    b.Property<int>("fkCatImage")
                         .HasColumnType("int");
 
-                    b.Property<string>("imagePath")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<int>("fkCatSize")
+                        .HasColumnType("int");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -313,6 +340,8 @@ namespace API_ClayTrack.Migrations
                         .HasDefaultValueSql("GETDATE()");
 
                     b.HasKey("idCatRecipe");
+
+                    b.HasIndex("fkCatImage");
 
                     b.HasIndex("fkCatSize");
 
@@ -900,11 +929,19 @@ namespace API_ClayTrack.Migrations
 
             modelBuilder.Entity("API_ClayTrack.Models.CatRecipe", b =>
                 {
+                    b.HasOne("API_ClayTrack.Models.CatImage", "Image")
+                        .WithMany()
+                        .HasForeignKey("fkCatImage")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API_ClayTrack.Models.CatSize", "Size")
                         .WithMany()
                         .HasForeignKey("fkCatSize")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Image");
 
                     b.Navigation("Size");
                 });

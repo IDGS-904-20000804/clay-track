@@ -22,7 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Token\" />
+    <Folder Include="Images\" />
+    <Folder Include="Repositories\Token\" />
   </ItemGroup>
 
 </Project>

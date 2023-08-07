@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using API_ClayTrack.Repositories.Token;
 using Microsoft.Extensions.Configuration;
-
+using API_ClayTrack.Repositories.IImageRepository;
 
 namespace API_ClayTrack
 {
@@ -48,7 +48,8 @@ namespace API_ClayTrack
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                    ClockSkew = TimeSpan.Zero
                 });
 
             services.AddSwaggerGen(c =>
@@ -87,8 +88,10 @@ namespace API_ClayTrack
                 .AddRoles<IdentityRole>()
                 .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("ClayTrack")
                 .AddEntityFrameworkStores<ClayTrackDbContext>().AddDefaultTokenProviders();
-            
+
+            services.AddHttpContextAccessor();
             services.AddScoped<ITokenRepository, TokenRepository>();
+            services.AddScoped<IImageRepository, LocalImageRepository>();
 
         }
 

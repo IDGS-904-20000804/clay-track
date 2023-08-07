@@ -19,9 +19,6 @@ namespace API_ClayTrack.Models
         [Required]
         public int quantityStock { get; set; }
 
-        [StringLength(255)]
-        public string? imagePath { get; set; }
-
         [Required]
         public bool status { get; set; }
 
@@ -35,7 +32,12 @@ namespace API_ClayTrack.Models
         [ForeignKey("Size")]
         public int fkCatSize { get; set; }
 
+        [Required]
+        [ForeignKey("Image")]
+        public int fkCatImage { get; set; }
+
         // Relaciones de llave foránea
         public CatSize Size { get; set; }
+        public CatImage Image { get; set; }
     }
 }
