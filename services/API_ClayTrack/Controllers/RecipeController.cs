@@ -14,7 +14,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin,Employee")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin,Employee")]
     public partial class RecipeController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;

@@ -12,7 +12,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
     public class StockController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -28,7 +28,7 @@ namespace API_ClayTrack.Controllers
         {
             var stock = await dbContext.CatRecipe
                 .Include(r => r.Size)
-                .Include(r => r.fkCatImage)
+                .Include(r => r.Image)
                 .ToListAsync();
 
             var stockDto = stock.Select(r => new StockDto
@@ -48,8 +48,8 @@ namespace API_ClayTrack.Controllers
         public async Task<ActionResult<CatRecipe>> GetStock(int id)
         {
             var stock = await dbContext.CatRecipe
-                .Include(r => r.fkCatSize)
-                .Include(r => r.fkCatImage)
+                .Include(r => r.Size)
+                .Include(r => r.Image)
                 .FirstOrDefaultAsync(s => s.idCatRecipe == id);
 
             if (stock == null)
@@ -75,7 +75,7 @@ namespace API_ClayTrack.Controllers
         {
             var stock = await dbContext.CatRecipe
                 .Include(r => r.Size)
-                .Include(r => r.fkCatImage)
+                .Include(r => r.Image)
                 .FirstOrDefaultAsync(r => r.idCatRecipe == id);
 
             if (stock == null)
