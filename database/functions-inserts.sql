@@ -426,7 +426,6 @@ GO
 CREATE PROCEDURE procedureInsertRecipe (
   @name VARCHAR(255),
   @price FLOAT,
-  @imagePath VARCHAR(255),
   @fkCatSize INT,
   @jsonColors NVARCHAR(MAX),
   @jsonRawMaterial NVARCHAR(MAX)
@@ -434,7 +433,7 @@ CREATE PROCEDURE procedureInsertRecipe (
 AS
 BEGIN
   DECLARE @idCatRecipe INT;
-  INSERT INTO CatRecipe (name, price, imagePath, fkCatSize) VALUES (@name, @price, @imagePath, @fkCatSize);
+  INSERT INTO CatRecipe (name, price, fkCatSize) VALUES (@name, @price, @fkCatSize);
   SET @idCatRecipe = SCOPE_IDENTITY();
   EXEC procedureInsertDetailColors @idCatRecipe, @jsonColors;
   EXEC procedureInsertDetailRawMaterial @idCatRecipe, @jsonRawMaterial;
@@ -485,115 +484,115 @@ BEGIN
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[1]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[1]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[1]', @mergedJson;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":31},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[2]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[2]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[2]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[2]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[2]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[2]', @mergedJson;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[3]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[3]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[3]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[3]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[3]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[3]', @mergedJson;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[4]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[4]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[4]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[4]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[4]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[4]', @mergedJson;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":34},{"quantity":1,"fkCatRawMaterial":35},{"quantity":1,"fkCatRawMaterial":36}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[5]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[5]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[5]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[5]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[5]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[5]', @mergedJson;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":37},{"quantity":1,"fkCatRawMaterial":36},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[6]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[6]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[6]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[6]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[6]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[6]', @mergedJson;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[7]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[7]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[7]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[7]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[7]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[7]', @mergedJson;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":36},{"quantity":1,"fkCatRawMaterial":32}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[8]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[8]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[8]', @mergedJson;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":38},{"quantity":1,"fkCatRawMaterial":39}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[9]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[9]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[9]', @mergedJson;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":38}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[10]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[10]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[10]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[10]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[10]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[10]', @mergedJson;
 
   SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":31},{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":38}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[2,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[2,4,9]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[2,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[2,4,9]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[2,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[2,4,9]', @mergedJson;
 
   SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30},{"quantity":2,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":36}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[1,3,8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[1,3,8]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[1,3,8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[1,3,8]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[1,3,8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[1,3,8]', @mergedJson;
 
   SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30},{"quantity":1,"fkCatRawMaterial":34},{"quantity":1,"fkCatRawMaterial":35},{"quantity":2,"fkCatRawMaterial":36},{"quantity":1,"fkCatRawMaterial":37}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[5,6,1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[5,6,1]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[5,6,1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[5,6,1]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[5,6,1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[5,6,1]', @mergedJson;
 
   SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":32},{"quantity":2,"fkCatRawMaterial":33},{"quantity":2,"fkCatRawMaterial":38}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 1, '[10,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[10,4,9]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 2, '[10,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[10,4,9]', @mergedJson;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, null, 3, '[10,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[10,4,9]', @mergedJson;
 
   END;
 GO

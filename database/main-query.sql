@@ -171,11 +171,11 @@ CREATE TABLE CatRecipe (
   name VARCHAR(255) NOT NULL,
   price FLOAT NOT NULL,
   quantityStock INT NOT NULL DEFAULT 0,
-  imagePath VARCHAR(255),
   status BIT DEFAULT 1 NOT NULL,
   creationDate DATETIME NOT NULL DEFAULT GETDATE(),
   updateDate DATETIME NOT NULL DEFAULT GETDATE(),
-  fkCatSize INT NOT NULL
+  fkCatSize INT NOT NULL,
+  fkCatImage INT
 );
 GO
 CREATE TABLE DetailRecipeRawMaterial (
@@ -225,7 +225,14 @@ CREATE TABLE CatColor (
   updateDate DATETIME NOT NULL DEFAULT GETDATE()
 );
 GO
-
+CREATE TABLE CatImage(
+	IdCatImage int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	FileName nvarchar(max) NOT NULL,
+	FileExtension nvarchar(max) NOT NULL,
+	FileSizeInBytes bigint NOT NULL,
+	FilePath nvarchar(max) NOT NULL
+);
+GO
 
 ALTER TABLE CatRawMaterial ADD CONSTRAINT FK_CatRawMaterial_CatUnitMeasure FOREIGN KEY (fkCatUnitMeasure) REFERENCES CatUnitMeasure(idCatUnitMeasure);
 ALTER TABLE CatClient ADD CONSTRAINT FK_CatClient_CatPerson FOREIGN KEY (fkCatPerson) REFERENCES CatPerson(idCatPerson);
@@ -282,4 +289,7 @@ GO
 ALTER TABLE [dbo].[AspNetUserTokens] ADD CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY CLUSTERED ([UserId], [LoginProvider], [Name])
 WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
 ON [PRIMARY]
+GO
+
+ALTER TABLE CatRecipe ADD CONSTRAINT FK_CatRecipe_CatImage FOREIGN KEY (fkCatImage) REFERENCES CatImage(IdCatImage);
 GO
