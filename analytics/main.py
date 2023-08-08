@@ -1,18 +1,13 @@
 
+import time
+from controllers.process.mainProcessAnalytics import mainProcessAnalytics
+
+
 def main():
-  try:
-    cursor = conn.cursor()
-    query = "SELECT * FROM CatSale"
-    cursor.execute(query)
-    results = cursor.fetchall()
-    for row in results:
-      print(row)
-    conn.commit()
-    cursor.close()
-  except Exception as e:
-    print(f"Error: {e}")
-  finally:
-    conn.close()
+  mainProcessAnalytics()
+  # while True:
+  #   print("Executing code every hour...")
+  #   time.sleep(30)
 
 
 if __name__ == "__main__":
