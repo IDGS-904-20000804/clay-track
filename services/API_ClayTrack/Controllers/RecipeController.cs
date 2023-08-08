@@ -215,7 +215,6 @@ namespace API_ClayTrack.Controllers
             return BadRequest(ModelState);
         }
 
-
         private void ValidateFileUpload(ImageUploadRequestDto request)
         {
             var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };

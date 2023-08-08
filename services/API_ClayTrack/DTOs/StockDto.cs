@@ -14,5 +14,6 @@ namespace API_ClayTrack.DTOs
         public CatSize Size { get; set; }
 
         public float Price { get; set; }
+        public bool status { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
     public class StockController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -29,8 +29,14 @@ namespace API_ClayTrack.Controllers
             var stock = await dbContext.CatRecipe
                 .Include(r => r.Size)
                 .Include(r => r.Image)
+                .Where(r => r.status)
                 .ToListAsync();
-            //Poner solo que se muestre cuando receta sea 1 corrección
+
+            if (stock.Count == 0)
+            {
+                return NotFound("No products found.");
+            }
+
             var stockDto = stock.Select(r => new StockDto
             {
                 Name = r.name,
@@ -82,7 +88,6 @@ namespace API_ClayTrack.Controllers
         [HttpPost("InsertStock")]
         public IActionResult InsertStock(int idCatRecipe, int totalRecipes)
         {
-            // Obtener la receta por su identificador
             var recipe = dbContext.CatRecipe.FirstOrDefault(r => r.idCatRecipe == idCatRecipe);
 
             if (recipe == null)
@@ -90,16 +95,13 @@ namespace API_ClayTrack.Controllers
                 return NotFound();
             }
 
-            // Verificar si hay suficiente materia prima para producir las recetas
             bool isEnough = CheckRawMaterialByRecipe(idCatRecipe, totalRecipes);
 
             if (isEnough)
             {
-                // Realizar las actualizaciones en la base de datos
                 UpdateRawMaterialQuantity(idCatRecipe, totalRecipes);
                 UpdateRecipeStock(idCatRecipe, totalRecipes);
 
-                // Guardar los cambios en la base de datos
                 dbContext.SaveChanges();
 
                 return Ok("Stock inserted successfully.");
