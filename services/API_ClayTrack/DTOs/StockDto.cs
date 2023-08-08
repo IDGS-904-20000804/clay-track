@@ -7,7 +7,7 @@ namespace API_ClayTrack.DTOs
     {
         public string Name { get; set; }
 
-        public int FkCatImage { get; set; }
+        public int? FkCatImage { get; set; }
 
         public int QuantityStock { get; set; }
 

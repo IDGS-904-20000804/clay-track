@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_ClayTrack.Migrations
 {
     [DbContext(typeof(ClayTrackDbContext))]
-    [Migration("20230807040238_Start")]
+    [Migration("20230807233504_Start")]
     partial class Start
     {
         /// <inheritdoc />
@@ -315,7 +315,8 @@ namespace API_ClayTrack.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("fkCatImage")
+                    b.Property<int?>("fkCatImage")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("fkCatSize")

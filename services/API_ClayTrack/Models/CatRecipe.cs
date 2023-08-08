@@ -32,9 +32,8 @@ namespace API_ClayTrack.Models
         [ForeignKey("Size")]
         public int fkCatSize { get; set; }
 
-        [Required]
         [ForeignKey("Image")]
-        public int fkCatImage { get; set; }
+        public int? fkCatImage { get; set; }
 
         // Relaciones de llave foránea
         public CatSize Size { get; set; }

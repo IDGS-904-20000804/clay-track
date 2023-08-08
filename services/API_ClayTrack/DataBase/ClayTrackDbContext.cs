@@ -188,9 +188,10 @@ namespace API_ClayTrack.DataBase
 
             base.OnModelCreating(modelBuilder);
         }
-        public ClayTrackDbContext(DbContextOptions dbContextOptions): base(dbContextOptions) 
+
+        public ClayTrackDbContext(DbContextOptions<ClayTrackDbContext> dbContextOptions) : base(dbContextOptions)
         {
-            
+
         }
 
         public DbSet<CatClient> CatClient { get; set; }

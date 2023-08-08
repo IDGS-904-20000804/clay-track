@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 using API_ClayTrack.Repositories.Token;
 using Microsoft.Extensions.Configuration;
 using API_ClayTrack.Repositories.IImageRepository;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace API_ClayTrack
 {
@@ -34,10 +35,14 @@ namespace API_ClayTrack
                            .AllowAnyMethod();
                 });
             });
-
+            services.AddControllers(options =>
+            {
+                options.OutputFormatters.RemoveType<StringOutputFormatter>();
+            });
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             services.AddDbContext<ClayTrackDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("ClayTrackConnectionString")));
+            services.AddDbContext<ClayTrackAnalyticsDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("ClayTrackAnalyticsConnectionString")));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
