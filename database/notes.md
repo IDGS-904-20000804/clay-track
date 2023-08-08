@@ -2,21 +2,21 @@ HMAC-SHA1
 
 **table aspnetusers**
 
-3e65a643-54b7-4237-b652-f6250a6334df
-Admin
-ADMIN
-admin@example.com
-ADMIN@EXAMPLE.COM
-0
-AQAAAAIAAYagAAAAECTkOKFj/oyEhJ0mWkpCk8h/EMZsjwLOU5z/ndDHb+sxZepMqNTQJWENBT6uULqidg==
-U7MO4NSTASXY73GLGGZ2HPF5HJK7MMO3
-870c888e-7d0a-42fc-b99f-c7bb1fcff8aa
-
-0
-0
-
-1
-0
+Id                    : '3e65a643-54b7-4237-b652-f6250a6334df'
+UserName              : 'Admin'
+NormalizedUserName    : 'ADMIN'
+Email                 : 'admin@example.com'
+NormalizedEmail       : 'ADMIN@EXAMPLE.COM'
+EmailConfirmed        : '0'
+PasswordHash          : 'AQAAAAIAAYagAAAAECTkOKFj/oyEhJ0mWkpCk8h/EMZsjwLOU5z/ndDHb+sxZepMqNTQJWENBT6uULqidg=='
+SecurityStamp         : 'U7MO4NSTASXY73GLGGZ2HPF5HJK7MMO3'
+ConcurrencyStamp      : '870c888e-7d0a-42fc-b99f-c7bb1fcff8aa'
+PhoneNumber           : 'null'
+PhoneNumberConfirmed  : '0'
+TwoFactorEnabled      : '0'
+LockoutEnd            : 'null'
+LockoutEnabled        : '1'
+AccessFailedCount     : '0'
 
 **days**
 Domingo	Lunes	Martes	Miercoles	Jueves	Viernes	Sabado

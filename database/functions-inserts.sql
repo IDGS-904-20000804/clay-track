@@ -11,7 +11,7 @@ EXEC procedureInsertSize 'Mediano', 'M';
 EXEC procedureInsertSize 'Grande', 'G';
 GO
 
-UPDATE CatSize SET creationDate = DATEADD(DAY, 1, '2023/04/30'), updateDate = DATEADD(DAY, 1, '2023/04/30');
+UPDATE CatSize SET creationDate = DATEADD(DAY, 1, '2023/05/10'), updateDate = DATEADD(DAY, 1, '2023/05/10');
 GO
 
 CREATE PROCEDURE procedureInsertColor (@description VARCHAR(255), @hexadecimal VARCHAR(255))
@@ -34,7 +34,7 @@ EXEC procedureInsertColor 'Crema', '#FFFDD0';
 EXEC procedureInsertColor 'Terracota', '#E2725B';
 GO
 
-UPDATE CatColor SET creationDate = DATEADD(DAY, 1, '2023/04/30'), updateDate = DATEADD(DAY, 1, '2023/04/30');
+UPDATE CatColor SET creationDate = DATEADD(DAY, 1, '2023/05/10'), updateDate = DATEADD(DAY, 1, '2023/05/10');
 GO
 
 CREATE PROCEDURE procedureInsertUnitMeasure (@description VARCHAR(255))
@@ -65,7 +65,7 @@ EXEC procedureInsertUnitMeasure 'Envase';
 EXEC procedureInsertUnitMeasure 'Caja';
 GO
 
-UPDATE CatUnitMeasure SET creationDate = DATEADD(DAY, 1, '2023/04/30'), updateDate = DATEADD(DAY, 1, '2023/04/30');
+UPDATE CatUnitMeasure SET creationDate = DATEADD(DAY, 1, '2023/05/10'), updateDate = DATEADD(DAY, 1, '2023/05/10');
 GO
 
 CREATE PROCEDURE procedureInsertEmployee (
@@ -120,17 +120,17 @@ BEGIN
   VALUES (
     NEWID(),                                          -- 1
     LOWER(LEFT(@email, CHARINDEX('@', @email) - 1)),  -- 2
-    LEFT(@email, CHARINDEX('@', @email) - 1),         -- 3
-    @email,                                           -- 4
-    'NormalizedEmail',                                -- 5
+    UPPER(LEFT(@email, CHARINDEX('@', @email) - 1)),  -- 3
+    LOWER(@email),                                    -- 4
+    UPPER(@email),                                    -- 5
     1,                                                -- 6
     @password,                                        -- 7
-    'SecurityStamp',                                  -- 8
-    'ConcurrencyStamp',                               -- 9
+    NULL,                                  -- 8
+    NULL,                               -- 9
     @phone,                                           -- 10
     0,                                                -- 11
     0,                                                -- 12
-    null,                                             -- 13
+    NULL,                                             -- 13
     0,                                                -- 14
     0                                                 -- 15
   );
@@ -141,7 +141,7 @@ BEGIN
 END;
 GO
 
-UPDATE CatPerson SET creationDate = DATEADD(DAY, 1, '2023/04/30'), updateDate = DATEADD(DAY, 1, '2023/04/30')
+UPDATE CatPerson SET creationDate = DATEADD(DAY, 1, '2023/05/10'), updateDate = DATEADD(DAY, 1, '2023/05/10')
 WHERE idCatPerson IN (SELECT fkCatPerson FROM CatEmployee);
 GO
 
@@ -166,7 +166,7 @@ BEGIN
   DECLARE @numberAleatoryDate INT;
   SET @numberAleatoryDate = CAST((FLOOR(RAND()*(25-10+1))+10) AS INT);
   INSERT INTO CatPerson (name, lastName, middleName, phone, postalCode, streetNumber, apartmentNumber, street, neighborhood, creationDate, updateDate)
-  VALUES (@name, @lastName, @middleName, @phone, @postalCode, @streetNumber, @apartmentNumber, @street, @neighborhood, DATEADD(DAY, @numberAleatoryDate, '2023/04/30'), DATEADD(DAY, @numberAleatoryDate, '2023/04/30'));
+  VALUES (@name, @lastName, @middleName, @phone, @postalCode, @streetNumber, @apartmentNumber, @street, @neighborhood, DATEADD(DAY, @numberAleatoryDate, '2023/05/10'), DATEADD(DAY, @numberAleatoryDate, '2023/05/10'));
   SET @idCatPerson = SCOPE_IDENTITY();
 
   INSERT INTO AspNetUsers (
@@ -190,17 +190,17 @@ BEGIN
   VALUES (
     NEWID(),                                          -- 1
     LOWER(LEFT(@email, CHARINDEX('@', @email) - 1)),  -- 2
-    LEFT(@email, CHARINDEX('@', @email) - 1),         -- 3
-    @email,                                           -- 4
-    'NormalizedEmail',                                -- 5
+    UPPER(LEFT(@email, CHARINDEX('@', @email) - 1)),  -- 3
+    LOWER(@email),                                    -- 4
+    UPPER(@email),                                    -- 5
     1,                                                -- 6
     @password,                                        -- 7
-    'SecurityStamp',                                  -- 8
-    'ConcurrencyStamp',                               -- 9
+    NULL,                                             -- 8
+    NULL,                                             -- 9
     @phone,                                           -- 10
     0,                                                -- 11
     0,                                                -- 12
-    null,                                             -- 13
+    NULL,                                             -- 13
     0,                                                -- 14
     0                                                 -- 15
   );
@@ -233,7 +233,7 @@ BEGIN
 END;
 GO
 
-UPDATE CatPerson SET creationDate = DATEADD(DAY, 1, '2023/04/30'), updateDate = DATEADD(DAY, 1, '2023/04/30')
+UPDATE CatPerson SET creationDate = DATEADD(DAY, 1, '2023/05/10'), updateDate = DATEADD(DAY, 1, '2023/05/10')
 WHERE idCatPerson IN (SELECT fkCatPerson FROM CatSupplier);
 GO
 
@@ -303,7 +303,7 @@ BEGIN
 END;
 GO
 
-UPDATE CatRawMaterial SET creationDate = DATEADD(DAY, 1, '2023/04/30'), updateDate = DATEADD(DAY, 1, '2023/04/30');
+UPDATE CatRawMaterial SET creationDate = DATEADD(DAY, 1, '2023/05/10'), updateDate = DATEADD(DAY, 1, '2023/05/10');
 GO
 
 EXEC procedureInsertRawMaterial 'Talco', 20, 3;
@@ -440,7 +440,7 @@ BEGIN
 END;
 GO
 
-UPDATE CatRecipe SET creationDate = DATEADD(DAY, 1, '2023/04/30'), updateDate = DATEADD(DAY, 1, '2023/04/30');
+UPDATE CatRecipe SET creationDate = DATEADD(DAY, 1, '2023/05/10'), updateDate = DATEADD(DAY, 1, '2023/05/10');
 GO
 
 CREATE FUNCTION dbo.mergeJsonWithIdsAndData (
@@ -677,16 +677,16 @@ UPDATE DetailRecipeRawMaterial SET quantity = quantity*2 WHERE fkCatRecipe IN (S
 UPDATE DetailRecipeRawMaterial SET quantity = quantity*3 WHERE fkCatRecipe IN (SELECT idCatRecipe FROM CatRecipe WHERE fkCatSize = 3);
 GO
 
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 5, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 7, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/04/30'), DATEADD(DAY, 8, '2023/04/30'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 5, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 7, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 8, '2023/05/10'), DATEADD(DAY, 8, '2023/05/10'));
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (25000, 1250, 6, 1); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (19000, 950, 7, 1); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (25000, 2000, 13, 2); -- Feldespato -----2
@@ -705,14 +705,14 @@ INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VA
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (100000, 8000, 35, 9); -- Carbonato ---- 7
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (150000, 12000, 44, 10); -- Esmalte ----- 8
 
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/04/30'), DATEADD(DAY, 29, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/04/30'), DATEADD(DAY, 29, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/04/30'), DATEADD(DAY, 29, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/04/30'), DATEADD(DAY, 29, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 5, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/04/30'), DATEADD(DAY, 29, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/04/30'), DATEADD(DAY, 29, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 7, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/04/30'), DATEADD(DAY, 29, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/04/30'), DATEADD(DAY, 29, '2023/04/30'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/05/10'), DATEADD(DAY, 29, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/05/10'), DATEADD(DAY, 29, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/05/10'), DATEADD(DAY, 29, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/05/10'), DATEADD(DAY, 29, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 5, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/05/10'), DATEADD(DAY, 29, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/05/10'), DATEADD(DAY, 29, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 7, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/05/10'), DATEADD(DAY, 29, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 29, '2023/05/10'), DATEADD(DAY, 29, '2023/05/10'));
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (50000, 2500, 8, 11); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (30000, 1500, 9, 11); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (30000, 2400, 15, 12); -- Feldespato -----2
@@ -730,13 +730,13 @@ INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VA
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (100000, 8000, 35, 17); -- Carbonato ---- 7
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (25000, 2000, 45, 18); -- Esmalte ----- 8
 
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/04/30'), DATEADD(DAY, 50, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/04/30'), DATEADD(DAY, 50, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/04/30'), DATEADD(DAY, 50, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/04/30'), DATEADD(DAY, 50, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 5, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/04/30'), DATEADD(DAY, 50, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/04/30'), DATEADD(DAY, 50, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/04/30'), DATEADD(DAY, 50, '2023/04/30'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/05/10'), DATEADD(DAY, 50, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/05/10'), DATEADD(DAY, 50, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/05/10'), DATEADD(DAY, 50, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/05/10'), DATEADD(DAY, 50, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 5, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/05/10'), DATEADD(DAY, 50, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/05/10'), DATEADD(DAY, 50, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 50, '2023/05/10'), DATEADD(DAY, 50, '2023/05/10'));
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (17000, 850, 6, 19); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (50000, 2500, 8, 19); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (100000, 8000, 14, 20); -- Feldespato -----2
@@ -752,13 +752,13 @@ INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VA
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (50000, 4000, 37, 24); -- Óxido 3 ------ 6
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (150000, 12000, 44, 25); -- Esmalte ----- 8
 
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/04/30'), DATEADD(DAY, 71, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/04/30'), DATEADD(DAY, 71, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/04/30'), DATEADD(DAY, 71, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/04/30'), DATEADD(DAY, 71, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 5, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/04/30'), DATEADD(DAY, 71, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/04/30'), DATEADD(DAY, 71, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/04/30'), DATEADD(DAY, 71, '2023/04/30'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/05/10'), DATEADD(DAY, 71, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/05/10'), DATEADD(DAY, 71, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/05/10'), DATEADD(DAY, 71, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/05/10'), DATEADD(DAY, 71, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 5, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/05/10'), DATEADD(DAY, 71, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/05/10'), DATEADD(DAY, 71, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 71, '2023/05/10'), DATEADD(DAY, 71, '2023/05/10'));
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (30000, 1500, 9, 26); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (50000, 2500, 8, 26); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (25000, 2000, 13, 27); -- Feldespato -----2
@@ -772,12 +772,12 @@ INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VA
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (50000, 4000, 38, 31); -- Óxido 3 ------ 6
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (150000, 12000, 44, 32); -- Esmalte ----- 8
 
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/04/30'), DATEADD(DAY, 92, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/04/30'), DATEADD(DAY, 92, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/04/30'), DATEADD(DAY, 92, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/04/30'), DATEADD(DAY, 92, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/04/30'), DATEADD(DAY, 92, '2023/04/30'));
-INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/04/30'), DATEADD(DAY, 92, '2023/04/30'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 1, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/05/10'), DATEADD(DAY, 92, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 2, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/05/10'), DATEADD(DAY, 92, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 3, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/05/10'), DATEADD(DAY, 92, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 4, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/05/10'), DATEADD(DAY, 92, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 6, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/05/10'), DATEADD(DAY, 92, '2023/05/10'));
+INSERT INTO CatPurchase (total, fkCatSupplier, fkCatEmployee, creationDate, updateDate) VALUES (1, 8, (SELECT TOP 1 CatEmployee.idCatEmployee FROM CatEmployee WHERE CatEmployee.fkRol = (SELECT TOP 1 Id FROM AspNetRoles WHERE AspNetRoles.Name = 'Employee') ORDER BY NEWID()), DATEADD(DAY, 92, '2023/05/10'), DATEADD(DAY, 92, '2023/05/10'));
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (50000, 2500, 8, 33); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (50000, 2500, 8, 33); -- Arcilla     ---- 1
 INSERT INTO DetailPurchase (quantity, price, fkCatRawMaterial, fkCatPurchase) VALUES (30000, 2400, 15, 34); -- Feldespato -----2
@@ -1033,12 +1033,12 @@ AS
       IF @idCatRecipe > 0
         BEGIN
           SET @numberAleatoryDate = CAST((FLOOR(RAND()*(82-15+1))+15) AS INT);
-          INSERT INTO CatSale (total, fkCatClient, creationDate, updateDate) VALUES (@total, @fkCatClient, DATEADD(DAY, @numberAleatoryDate, '2023/04/30'), DATEADD(DAY, @numberAleatoryDate, '2023/04/30'));
+          INSERT INTO CatSale (total, fkCatClient, creationDate, updateDate) VALUES (@total, @fkCatClient, DATEADD(DAY, @numberAleatoryDate, '2023/05/10'), DATEADD(DAY, @numberAleatoryDate, '2023/05/10'));
           SET @idCatSale = SCOPE_IDENTITY();
           SET @priceRecipe = (SELECT price FROM CatRecipe WHERE idCatRecipe = @idCatRecipe);
           INSERT INTO DetailSale (quantity, price, fkCatRecipe, fkCatSale) VALUES (@tempTotalRecipes, (@priceRecipe * @tempTotalRecipes), @idCatRecipe, @idCatSale);
           UPDATE CatRecipe SET quantityStock = (quantityStock - @tempTotalRecipes) WHERE idCatRecipe = @idCatRecipe;
-          INSERT INTO CatShipment (delivered, fkCatSale, fkCatEmployee, creationDate, updateDate) VALUES ((ABS(CHECKSUM(NEWID())) % 2), @idCatSale, 8,  DATEADD(DAY, @numberAleatoryDate, '2023/04/30'), DATEADD(DAY, (@numberAleatoryDate + 3), '2023/04/30'));
+          INSERT INTO CatShipment (delivered, fkCatSale, fkCatEmployee, creationDate, updateDate) VALUES ((ABS(CHECKSUM(NEWID())) % 2), @idCatSale, 8,  DATEADD(DAY, @numberAleatoryDate, '2023/05/10'), DATEADD(DAY, (@numberAleatoryDate + 3), '2023/05/10'));
         END
       SET @counter = @counter + 1;
     END
