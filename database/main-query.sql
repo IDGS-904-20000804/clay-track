@@ -178,6 +178,13 @@ CREATE TABLE CatRecipe (
   fkCatImage INT
 );
 GO
+CREATE TABLE HelperDateToRecipe (
+  idHelperDatesToRecipe INT IDENTITY(1,1) PRIMARY KEY,
+  quantity INT NOT NULL,
+  creationDate DATETIME NOT NULL DEFAULT GETDATE(),
+  fkCatRecipe INT NOT NULL
+);
+GO
 CREATE TABLE DetailRecipeRawMaterial (
   idDetailRecipeRawMaterial INT IDENTITY(1,1) PRIMARY KEY,
   fkCatRecipe INT NOT NULL,
@@ -252,8 +259,9 @@ ALTER TABLE CatShipment ADD CONSTRAINT FK_CatShipment_CatEmployee FOREIGN KEY (f
 ALTER TABLE CatRecipe ADD CONSTRAINT FK_CatRecipe_CatSize FOREIGN KEY (fkCatSize) REFERENCES CatSize(idCatSize);
 ALTER TABLE DetailRecipeColor ADD CONSTRAINT FK_DetailRecipeColor_CatRecipe FOREIGN KEY (fkCatRecipe) REFERENCES CatRecipe(idCatRecipe);
 ALTER TABLE DetailRecipeColor ADD CONSTRAINT FK_DetailRecipeColor_CatColor FOREIGN KEY (fkCatColor) REFERENCES CatColor(idCatColor);
-GO
+ALTER TABLE HelperDateToRecipe ADD CONSTRAINT FK_HelperDateToRecipe_CatRecipe FOREIGN KEY (fkCatRecipe) REFERENCES CatRecipe(idCatRecipe);
 
+GO
 ALTER TABLE [dbo].[CatClient] ADD CONSTRAINT [FK_CatClient_AspNetRoles_fkRol] FOREIGN KEY ([fkRol]) REFERENCES [dbo].[AspNetRoles] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
 GO
 ALTER TABLE [dbo].[CatClient] ADD CONSTRAINT [FK_CatClient_AspNetUsers_fkUser] FOREIGN KEY ([fkUser]) REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
