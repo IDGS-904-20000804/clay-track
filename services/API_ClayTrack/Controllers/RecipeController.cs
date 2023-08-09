@@ -109,7 +109,6 @@ namespace API_ClayTrack.Controllers
             return Ok("Recipe inserted successfully.");
         }
 
-
         [HttpPost]
         [Route("InsertDetailColors")]
         public async Task<IActionResult> InsertDetailColors([FromBody] ColorJsonDto colorJson)

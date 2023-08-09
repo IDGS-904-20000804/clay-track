@@ -21,6 +21,7 @@ namespace API_ClayTrack.Controllers
         }
 
 
+
        /* [HttpGet]
         [Route("GetAll")]
         public async Task<ActionResult<List<CatPurchase>>> GetAllSupplier()

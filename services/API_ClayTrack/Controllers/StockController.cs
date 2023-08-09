@@ -12,7 +12,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
     public class StockController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -21,7 +21,6 @@ namespace API_ClayTrack.Controllers
         {
             this.dbContext = dbContext;
         }
-
         [HttpGet]
         [Route("GetAll")]
         public async Task<ActionResult<List<StockDto>>> GetAll()
@@ -29,25 +28,22 @@ namespace API_ClayTrack.Controllers
             var stock = await dbContext.CatRecipe
                 .Include(r => r.Size)
                 .Include(r => r.Image)
-                .Where(r => r.status)
                 .ToListAsync();
-
-            if (stock.Count == 0)
-            {
-                return NotFound("No products found.");
-            }
 
             var stockDto = stock.Select(r => new StockDto
             {
+                idCatRecipe = r.idCatRecipe,
                 Name = r.name,
                 FkCatImage = r.fkCatImage,
                 Price = r.price,
                 QuantityStock = r.quantityStock,
-                Size = r.Size
+                Size = r.Size,
+                FilePath = r.Image.FilePath
             }).ToList();
 
             return stockDto;
         }
+
 
         [HttpGet]
         [Route("GetOne{id:int}")]
@@ -68,19 +64,19 @@ namespace API_ClayTrack.Controllers
 
         [HttpPut]
         [Route("Delete{id:int}")]
-        public async Task<ActionResult> DeleteStock(int id)
+        public async Task<ActionResult> DeleteRecipe(int id)
         {
-            var stock = await dbContext.CatRecipe
+            var recipe = await dbContext.CatRecipe
                 .Include(r => r.Size)
                 .Include(r => r.Image)
                 .FirstOrDefaultAsync(r => r.idCatRecipe == id);
 
-            if (stock == null)
+            if (recipe == null)
             {
                 return NotFound();
             }
 
-            stock.status = false;
+            recipe.status = false;
             await dbContext.SaveChangesAsync();
             return Ok();
         }

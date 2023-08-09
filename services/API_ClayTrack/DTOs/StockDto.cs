@@ -5,6 +5,7 @@ namespace API_ClayTrack.DTOs
 {
     public class StockDto
     {
+        public int idCatRecipe { get; set; }
         public string Name { get; set; }
 
         public int? FkCatImage { get; set; }
@@ -15,5 +16,6 @@ namespace API_ClayTrack.DTOs
 
         public float Price { get; set; }
         public bool status { get; set; }
+        public string FilePath { get; set; }
     }
 }
