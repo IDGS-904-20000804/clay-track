@@ -1,7 +1,7 @@
 
 from databases.databaseMain import DatabaseMain
 
-def getSales():
+def getSalesByClient():
   try:
     db = DatabaseMain()
     query = """
@@ -32,7 +32,7 @@ def getSales():
       ON csr.fkCatPerson = cpn.idCatPerson
     INNER JOIN AspNetUsers aspnetu
       ON aspnetu.Id = csr.fkUser
-    WHERE DATEADD(MONTH, DATEDIFF(MONTH, 0, cse.creationDate), 0) = DATEADD(MONTH, DATEDIFF(MONTH, 0, getdate()), 0);
+    WHERE cse.creationDate >= DATEADD(DAY, -30, GETDATE());
     """
     results = db.execute_query(query)
     result_list = []
@@ -62,6 +62,6 @@ def getSales():
     db.commit()
     return result_list
   except Exception as e:
-    print(f"Error: {e}")
+    print(f"Error - getSalesByClient: {e}")
   finally:
     db.disconnect()

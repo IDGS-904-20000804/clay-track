@@ -9,7 +9,7 @@ def saveSalesByClient(json):
     db.manipulate_data(query)
     db.commit()
   except Exception as e:
-    print(f"Error: {e}")
+    print(f"Error - saveSalesByClient: {e}")
   finally:
     db.disconnect()
 

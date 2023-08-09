@@ -4,12 +4,6 @@ from operator import itemgetter
 import json
 
 
-# idCatSale
-# total
-# creationDateCatSale
-# updateDateCatSale
-# idCatClient
-# name lastName middleName (UserName)
 def filterSalesByClient(rows):
   grouped_results = []
   for key, group in groupby(rows, key=itemgetter('idCatClient')):

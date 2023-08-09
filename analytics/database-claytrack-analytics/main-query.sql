@@ -21,3 +21,21 @@ CREATE TABLE Graphic(
   type VARCHAR(MAX) NOT NULL
 );
 
+-- SELECT
+--   result
+-- FROM Graphic
+-- WHERE type = 'SalesByClient'
+-- AND YEAR(date) = YEAR('2023-08-08')
+-- AND MONTH(date) = MONTH('2023-08-08');
+
+
+-- SELECT
+--   result
+-- FROM Graphic
+-- WHERE type = 'SalesByClient'
+-- AND date >= DATEADD(DAY, -30, GETDATE());
+
+-- PurchasesBySupplier
+-- RawMaterialsByRecipe
+-- RecipesBySale
+-- SalesByClient

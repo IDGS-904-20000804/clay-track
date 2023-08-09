@@ -1,7 +1,8 @@
 
 from databases.databaseMain import DatabaseMain
 
-def getPurchases():
+
+def getPurchasesBySupplier():
   try:
     db = DatabaseMain()
     query = """
@@ -29,7 +30,7 @@ def getPurchases():
       ON cpe.fkCatSupplier = csr.idCatSupplier
     INNER JOIN CatPerson cpn
       ON csr.fkCatPerson = cpn.idCatPerson
-    WHERE DATEADD(MONTH, DATEDIFF(MONTH, 0, cpe.creationDate), 0) = DATEADD(MONTH, DATEDIFF(MONTH, 0, getdate()), 0);
+    WHERE cpe.creationDate >= DATEADD(DAY, -30, GETDATE());
     """
     results = db.execute_query(query)
     result_list = []
@@ -58,6 +59,6 @@ def getPurchases():
     db.commit()
     return result_list
   except Exception as e:
-    print(f"Error: {e}")
+    print(f"Error - getPurchasesBySupplier: {e}")
   finally:
     db.disconnect()

@@ -1,6 +1,6 @@
 
 import time
-from controllers.process.mainProcessAnalytics import mainProcessAnalytics
+from controllers.mainProcessAnalytics import mainProcessAnalytics
 
 
 def main():
