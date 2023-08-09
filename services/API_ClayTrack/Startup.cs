@@ -34,7 +34,15 @@ namespace API_ClayTrack
                            .AllowAnyHeader()
                            .AllowAnyMethod();
                 });
+                options.AddPolicy("AllowFlutterApp", builder =>
+                {
+                    builder.WithOrigins("http://localhost:57783")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
             });
+
+
             services.AddControllers(options =>
             {
                 options.OutputFormatters.RemoveType<StringOutputFormatter>();
@@ -108,10 +116,12 @@ namespace API_ClayTrack
                 app.UseDeveloperExceptionPage();
 
             }
-            app.UseCors("AllowOrigin");
 
+            app.UseCors("AllowOrigin");
+            app.UseCors("AllowFlutterApp");
 
             app.UseSwagger();
+
             app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
@@ -121,7 +131,6 @@ namespace API_ClayTrack
             app.UseCors();
 
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {
