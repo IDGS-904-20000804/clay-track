@@ -11,11 +11,12 @@ export interface RawMaterial {
 export interface Product {
   name: string;
   price: number;
-  imagePath: string;
+  fkCatImage: number;
   fkCatSize: number;
   colorIds: any[];
   rawMaterials: RawMaterial[];
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -38,12 +39,29 @@ export class RecetasService {
     return this.http.get<any>(url, { headers });
   }
 
-  guardarReceta(provedor: Product): Observable<any> {
+  guardarReceta(): Observable<any> {
     const url = `${this.baseUrl}api/Recipe/InsertRecipe`; // Ajusta la URL según la ruta de la https://accounts.google.com/b/0/AddMailServiceAPI para guardar provedors
     const token = this.token;
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
     });
+    const provedor ={
+      "name": "Nestor",
+      "price": 0,
+      "fkCatSize": 1,
+      "fkCatImage": 1,
+      "colorIds": [
+        0
+      ],
+      "rawMaterials": [
+        {
+          "idCatalog": 0,
+          "quantity": 0,
+          "fkCatRawMaterial": 0
+        }
+      ]
+    }
     return this.http.post<Product>(url, provedor, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.

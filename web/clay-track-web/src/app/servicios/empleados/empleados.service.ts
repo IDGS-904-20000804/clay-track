@@ -78,7 +78,7 @@ export class EmpleadosService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.put<Empleado>(url, null, { headers }).pipe(
+    return this.http.get<Empleado>(url, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.

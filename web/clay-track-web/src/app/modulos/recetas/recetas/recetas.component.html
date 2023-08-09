@@ -60,6 +60,7 @@
                 </p-table>
                 <pre>{{receta | json}}</pre>
                 <pre>{{coloresObtenidos | json}}</pre>
+                <pre>{{arrayMateriaPrimaSelector | json}}</pre>
             </div>
         </div>
     </div>
@@ -115,7 +116,8 @@
                                             aria-label="Default select example">
                                             <option selected>Selecciona una opcion</option>
                                             <option *ngFor="let receta of arrayMateriaPrimaSelector"
-                                                value="{{receta.name}}">{{receta.name}}</option>
+                                                value="{{receta.idCatRawMaterial}}">{{receta.name}}</option>
+                                            <input class="form-control" [(ngModel)]="idMateriaP">
                                         </select>
                                     </div>
                                     <div class="col-12">

@@ -149,6 +149,9 @@ export class ClientesComponent {
 
   
   agregarCliente() {
+    if(this.cliente.idCatClient>0){
+      this.modificarProvedor()
+    }else{
     this._servicioClientes.guardarCliente(this.cliente).subscribe(
       (response) => {
         
@@ -160,6 +163,23 @@ export class ClientesComponent {
       (error) => {
         // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
         console.error('Error al guardar el cliente:', error);
+      }
+    );
+    }
+  }
+
+  modificarProvedor() {
+    this._servicioClientes.actualizarCliente(this.cliente,this.cliente.idCatClient).subscribe(
+      (response) => {
+        // Cliente guardado con éxito, realizar acciones adicionales si es necesario
+        this.visible = false;
+        this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo el provedor correctamente.' });
+        console.log('Provedor guardado exitosamente:', response);
+        this.obtenerClientes();
+      },
+      (error) => {
+        // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+        console.error('Error al guardar el provedor:', error);
       }
     );
   }

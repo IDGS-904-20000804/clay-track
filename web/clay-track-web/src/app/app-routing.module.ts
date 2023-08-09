@@ -12,6 +12,7 @@ import { VentasComponent } from './modulos/ventas/ventas/ventas.component';
 import { ProveedoresComponent } from './modulos/proveedores/proveedores/proveedores.component';
 import { ComprasComponent } from './modulos/compras/compras/compras.component';
 import { EnviosComponent } from './modulos/envios/envios/envios.component';
+import { GraficasComponent } from './modulos/graficas/graficas.component';
 
 const routes: Routes = [
   { path: 'Inicio', component: MenuComponent },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'EditarProveedores/:id', component: ProveedoresComponent } ,
   { path: 'Compras', component: ComprasComponent },
   { path: 'Envios', component: EnviosComponent },
+  { path: 'Dashboard', component: GraficasComponent },
   { path: '**', redirectTo: 'InicioSesion' }
 ];
 

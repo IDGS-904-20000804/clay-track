@@ -35,7 +35,8 @@ interface Color {
 export class RecetasComponent {
 
   visible: boolean = false;
-  unidadMedida!:string;
+  unidadMedida!:number;
+  idMateriaP!:string;
   cantidad!:string;
   arrayMateriaPrima: any[]=  new Array();
   columna:string='col-9';
@@ -44,12 +45,28 @@ export class RecetasComponent {
   arrayColores: any[]= new Array();
   coloresObtenidos: any[]= new Array();
 
+  // {
+  //   "name": "string",
+  //   "price": 0,
+  //   "fkCatSize": 1,
+  //   "fkCatImage": 1,
+  //   "colorIds": [
+  //     0
+  //   ],
+  //   "rawMaterials": [
+  //     {
+  //       "idCatalog": 0,
+  //       "quantity": 0,
+  //       "fkCatRawMaterial": 0
+  //     }
+  //   ]
+  // }
 
   receta: Product = {
     name: "",
     price: 0,
-    imagePath: "path",
-    fkCatSize: 0,
+    fkCatImage: 1,
+    fkCatSize: 1,
     colorIds: [],
     rawMaterials: 
       this.arrayMateriaPrima
@@ -98,12 +115,12 @@ export class RecetasComponent {
         recetaExistente.cantidad += cantidadNueva;
       } else {
         this.arrayMateriaPrima.push({
-          idCatalog: 1,
+          idCatalog: 0,
           materia: this.unidadMedida,
           cantidad: cantidadNueva
         });
       }
-      this.unidadMedida = '';
+      this.unidadMedida = 0;
       this.cantidad = '';
     } else {
       this.messageService.add({ key: 'tc',severity: 'info', summary: 'Verifica', detail: 'La cantidad debe ser un número válido mayor que cero.' });
@@ -147,7 +164,7 @@ export class RecetasComponent {
   }
 
   agregarReceta() {
-    this._servicioReceta.guardarReceta(this.receta).subscribe(
+    this._servicioReceta.guardarReceta().subscribe(
       (response) => {
         // Cliente guardado con éxito, realizar acciones adicionales si es necesario
         this.visible = false;

@@ -83,6 +83,20 @@ export class ClientesService {
     );
   }
 
+  actualizarCliente(cliente: Client,id:number): Observable<any> {
+    const url = `${this.baseUrl}api/Client/Update${id}`; // Ajusta la URL según la ruta de la API para guardar clientes
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Client>(url, cliente, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
   obtenerClientePorId(id:string):Observable<Client>{
     const url = `${this.baseUrl}api/Client/GetOne${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
     const token = this.token;
@@ -96,6 +110,7 @@ export class ClientesService {
       })
     );
   }
+
 
   eliminarCliente(id:string): Observable<any> {
     const url = `${this.baseUrl}api/Client/Delete${id}`; // Ajusta la URL según la ruta de la API para guardar provedors

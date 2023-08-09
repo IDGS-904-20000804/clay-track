@@ -29,6 +29,8 @@ import { TagModule } from 'primeng/tag';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MenuComponent } from 'src/app/menu/menu.component';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ChartModule } from 'primeng/chart';
+import { GraficasComponent } from 'src/app/modulos/graficas/graficas.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     ComprasComponent,
     EnviosComponent,
     StockComponent,
-    MenuComponent
+    MenuComponent,
+    GraficasComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +68,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     TagModule,
     ButtonModule,
     InputNumberModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ChartModule
     
     
   ],
@@ -83,7 +87,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     EnviosComponent,
     StockComponent,
     MenuComponent,
-    MultiSelectModule
+    MultiSelectModule,
+    ChartModule
   ]
 })
 export class PrimeNgModule { }

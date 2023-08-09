@@ -84,6 +84,7 @@
           <p-dialog header="INFORMACION CLIENTE" [(visible)]="visible" [style]="{ width: '60vw' }" [maximizable]="true"
             headerStyleClass="custom-dialog-header">
             <div class="row">
+              <input type="text" class="form-control" hidden [(ngModel)]="cliente.idCatClient">
               <div class="col-6">
                 <label for="Nombre">Nombre:</label>
                 <input type="text" class="form-control" [(ngModel)]="cliente.person.name" />
