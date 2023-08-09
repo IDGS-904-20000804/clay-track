@@ -41,11 +41,11 @@ namespace API_ClayTrack.Controllers
         [Route("GetOne{id:int}")]
         public async Task<ActionResult<CatEmployee>> GetEmployee(int id)
         {
-            var employee = await dbContext.CatClient
+            var employee = await dbContext.CatEmployee
                 .Include(e => e.Person)
                 .Include(e => e.User)
                 .Include(e => e.Role)
-                .FirstOrDefaultAsync(e => e.idCatClient == id);
+                .FirstOrDefaultAsync(e => e.idCatEmployee == id);
 
             if (employee == null)
             {

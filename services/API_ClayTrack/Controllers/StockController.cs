@@ -1,6 +1,7 @@
 ﻿using API_ClayTrack.DataBase;
 using API_ClayTrack.DTOs;
 using API_ClayTrack.Models;
+using com.sun.org.glassfish.gmbal;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +13,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
     public class StockController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
@@ -32,13 +33,21 @@ namespace API_ClayTrack.Controllers
 
             var stockDto = stock.Select(r => new StockDto
             {
+                //Recipe
                 idCatRecipe = r.idCatRecipe,
                 Name = r.name,
-                FkCatImage = r.fkCatImage,
                 Price = r.price,
                 QuantityStock = r.quantityStock,
-                Size = r.Size,
-                FilePath = r.Image.FilePath
+                status = r.status,
+
+                //Image
+                FkCatImage = r.fkCatImage,
+                FilePath = r.Image.FilePath,
+
+                //Size
+                FKCatSize = r.fkCatSize,
+                Description = r.Size.description,
+                Abbreviation = r.Size.abbreviation,
             }).ToList();
 
             return stockDto;
@@ -153,7 +162,6 @@ namespace API_ClayTrack.Controllers
                 }
             }
         }
-
 
         private void UpdateRecipeStock(int idCatRecipe, int totalRecipes)
         {

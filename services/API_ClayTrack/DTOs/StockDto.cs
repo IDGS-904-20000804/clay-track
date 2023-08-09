@@ -7,15 +7,17 @@ namespace API_ClayTrack.DTOs
     {
         public int idCatRecipe { get; set; }
         public string Name { get; set; }
-
-        public int? FkCatImage { get; set; }
-
         public int QuantityStock { get; set; }
-
-        public CatSize Size { get; set; }
-
         public float Price { get; set; }
         public bool status { get; set; }
+
+        //CatImage
+        public int? FkCatImage { get; set; }
         public string FilePath { get; set; }
+
+        //CatSize
+        public int FKCatSize { get; set; }
+        public string Description { get; set; }
+        public string Abbreviation { get; set; }
     }
 }

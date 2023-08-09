@@ -211,6 +211,7 @@ namespace API_ClayTrack.DataBase
         public DbSet<CatColor> CatColor { get; set; }
         public DbSet<DetailRecipeColor> DetailRecipeColor { get; set; }
         public DbSet<CatImage> CatImage { get; set; }
+        public DbSet<HelperDateToRecipe> HelperDateToRecipe { get; set; }
 
     }
 }
