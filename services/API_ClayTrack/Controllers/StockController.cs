@@ -22,36 +22,53 @@ namespace API_ClayTrack.Controllers
         {
             this.dbContext = dbContext;
         }
+
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult<List<StockDto>>> GetAll()
+        public async Task<ActionResult<List<StockWithColorsDto>>> GetAllWithColors()
         {
             var stock = await dbContext.CatRecipe
                 .Include(r => r.Size)
                 .Include(r => r.Image)
                 .ToListAsync();
 
-            var stockDto = stock.Select(r => new StockDto
+            var stockWithColorsDto = new List<StockWithColorsDto>();
+
+            foreach (var recipe in stock)
             {
-                //Recipe
-                idCatRecipe = r.idCatRecipe,
-                Name = r.name,
-                Price = r.price,
-                QuantityStock = r.quantityStock,
-                status = r.status,
+                var stockDto = new StockWithColorsDto
+                {
+                    //Recipe
+                    idCatRecipe = recipe.idCatRecipe,
+                    Name = recipe.name,
+                    Price = recipe.price,
+                    QuantityStock = recipe.quantityStock,
+                    status = recipe.status,
 
-                //Image
-                FkCatImage = r.fkCatImage,
-                FilePath = r.Image.FilePath,
+                    //Image
+                    FkCatImage = recipe.fkCatImage,
+                    FilePath = recipe.Image.FilePath,
 
-                //Size
-                FKCatSize = r.fkCatSize,
-                Description = r.Size.description,
-                Abbreviation = r.Size.abbreviation,
-            }).ToList();
+                    //Size
+                    FKCatSize = recipe.fkCatSize,
+                    Description = recipe.Size.description,
+                    Abbreviation = recipe.Size.abbreviation
+                };
 
-            return stockDto;
+                // Get colors for the current recipe
+                var detailColors = await dbContext.DetailRecipeColor
+                    .Include(d => d.Color)
+                    .Where(d => d.fkCatRecipe == recipe.idCatRecipe)
+                    .Select(d => d.Color.idCatColor)
+                    .ToListAsync();
+
+                stockDto.ColorIds = detailColors;
+                stockWithColorsDto.Add(stockDto);
+            }
+
+            return stockWithColorsDto;
         }
+
 
 
         [HttpGet]

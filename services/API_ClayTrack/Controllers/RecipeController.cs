@@ -31,8 +31,8 @@ namespace API_ClayTrack.Controllers
         public async Task<ActionResult<List<CatRecipe>>> GetAllRecipe()
         {
             return await dbContext.CatRecipe
-                .Include(r => r.fkCatSize)
-                .Include(r => r.fkCatImage)
+                .Include(r => r.Size)
+                .Include(r => r.Image)
                 .ToListAsync();
         }
 
@@ -42,8 +42,8 @@ namespace API_ClayTrack.Controllers
         public async Task<ActionResult<CatRecipe>> GetRecipe(int id)
         {
             var recipe = await dbContext.CatRecipe
-                .Include(r => r.fkCatSize)
-                .Include(r => r.fkCatImage)
+                .Include(r => r.Size)
+                .Include(r => r.Image)
                 .FirstOrDefaultAsync(s => s.idCatRecipe == id);
 
             if (recipe == null)
