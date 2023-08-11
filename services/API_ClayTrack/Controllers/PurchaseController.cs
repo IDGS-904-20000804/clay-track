@@ -66,116 +66,43 @@ namespace API_ClayTrack.Controllers
 
         /*[HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> AddPurchase([FromBody] PurchaseDto purchaseDto)
+        public async Task<ActionResult> AddPurchase([FromBody] CatPurchase purchase)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            var employeeId = GetEmployeeIdFromDatabase(userId);
-
-            purchaseDto.fkCatEmployee = employeeId;
-
-            var purchase = new CatPurchase
-            {
-                total = purchaseDto.total,
-                fkCatSupplier = purchaseDto.fkCatSupplier,
-                fkCatEmployee = employeeId
-            };
-            
-
             dbContext.Add(purchase);
             await dbContext.SaveChangesAsync();
-
             return Ok();
         }*/
 
-       /* [HttpPost]
+        [HttpPost]
         [Route("Add")]
         public async Task<ActionResult> AddPurchase([FromBody] CatPurchase purchase)
         {
             string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            int employeeId = GetEmployeeIdFromDatabase(userId);
+            var employee = GetEmployeeFromDatabase(userId);
 
+            if (employee != null)
+            {
+                purchase.fkCatEmployee = employee.idCatEmployee;
 
-            purchase.fkCatEmployee = employeeId;
+                dbContext.Add(purchase);
+                await dbContext.SaveChangesAsync();
 
-            purchase.Supplier = dbContext.CatSupplier.FirstOrDefault(s => s.idCatSupplier == purchase.fkCatSupplier);
-
-            dbContext.Add(purchase);
-            await dbContext.SaveChangesAsync();
-
-            return Ok();
+                return Ok();
+            }
+            else
+            {
+                return NotFound("Employee not found.");
+            }
         }
 
-
-
-
-        private int GetEmployeeIdFromDatabase(string userId)
+        private CatEmployee GetEmployeeFromDatabase(string userId)
         {
-            var employee = dbContext.CatEmployee.FirstOrDefault(e => e.fkUser == userId);
-            return employee?.idCatEmployee ?? 0;
-        }*/
+            var employee = dbContext.CatEmployee
+                .Include(e => e.Person)
+                .FirstOrDefault(e => e.fkUser == userId);
 
+            return employee;
+        }
 
-
-
-
-        /*[HttpPost]
-        [Route("Add")]
-        public async Task<ActionResult> AddPurchase([FromBody] CatPurchase purchase)
-        {
-
-            dbContext.Add(purchase);
-            await dbContext.SaveChangesAsync();
-            return Ok();
-        }*
-
-        /* [HttpGet]
-
-
-         [HttpPost]
-         [Route("Add")]
-         public async Task<ActionResult> AddPurchase([FromBody] CatPurchase purchase)
-         {
-
-             dbContext.Add(purchase);
-             await dbContext.SaveChangesAsync();
-             return Ok();
-         }
-
-
-         [HttpPut]
-         [Route("Update{id:int}")]
-         public async Task<ActionResult> UpdatePurchase(CatPurchase purchase, int id)
-         {
-             if (purchase.idCatPurchase != id)
-             {
-                 return BadRequest("Purchase id different from URL id");
-             }
-
-             var exist = await dbContext.CatPurchase.AnyAsync(x => x.idCatPurchase == id);
-             if (!exist)
-             {
-                 return NotFound();
-             }
-
-             dbContext.Update(purchase);
-             await dbContext.SaveChangesAsync();
-             return Ok();
-         }
-
-         [HttpDelete]
-         [Route("Delete{id:int}")]
-         public async Task<ActionResult> DeletePurchase(int id)
-         {
-             var exist = await dbContext.CatPurchase.AnyAsync(x => x.idCatPurchase == id);
-             if (!exist)
-             {
-                 return NotFound();
-             }
-
-             dbContext.Remove(new CatPurchase() { idCatPurchase = id });
-             await dbContext.SaveChangesAsync();
-             return Ok();
-         }*/
     }
 }
