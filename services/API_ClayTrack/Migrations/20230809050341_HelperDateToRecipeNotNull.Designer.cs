@@ -4,6 +4,7 @@ using API_ClayTrack.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_ClayTrack.Migrations
 {
     [DbContext(typeof(ClayTrackDbContext))]
-    partial class ClayTrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230809050341_HelperDateToRecipeNotNull")]
+    partial class HelperDateToRecipeNotNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,11 +43,6 @@ namespace API_ClayTrack.Migrations
                     b.Property<string>("fkUser")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
 
                     b.HasKey("idCatClient");
 
@@ -113,11 +111,6 @@ namespace API_ClayTrack.Migrations
                     b.Property<string>("fkUser")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
 
                     b.HasKey("idCatEmployee");
 
@@ -201,6 +194,11 @@ namespace API_ClayTrack.Migrations
 
                     b.Property<int>("postalCode")
                         .HasColumnType("int");
+
+                    b.Property<bool>("status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("street")
                         .IsRequired()
@@ -476,11 +474,6 @@ namespace API_ClayTrack.Migrations
 
                     b.Property<int>("fkCatPerson")
                         .HasColumnType("int");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
 
                     b.HasKey("idCatSupplier");
 

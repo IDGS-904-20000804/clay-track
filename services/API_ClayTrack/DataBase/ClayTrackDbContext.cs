@@ -94,7 +94,15 @@ namespace API_ClayTrack.DataBase
                 .HasDefaultValueSql("GETDATE()");
 
             //CatPerson status, creationDate and updateDate
-            modelBuilder.Entity<CatPerson>()
+            modelBuilder.Entity<CatEmployee>()
+                .Property(b => b.status)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<CatClient>()
+                .Property(b => b.status)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<CatSupplier>()
                 .Property(b => b.status)
                 .HasDefaultValue(true);
 

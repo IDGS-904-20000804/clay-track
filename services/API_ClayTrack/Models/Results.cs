@@ -13,8 +13,7 @@ namespace API_ClayTrack.Models
         [StringLength(255)]
         public string result { get; set; }
 
-        [Required]
-        public DateTime date { get; set; }
+        public DateTime? date { get; set; }
 
         [Required]
         [StringLength(255)]

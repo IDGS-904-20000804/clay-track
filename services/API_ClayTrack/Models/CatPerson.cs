@@ -45,9 +45,6 @@ namespace API_ClayTrack.Models
         public string neighborhood { get; set; }
 
         [Required]
-        public bool status { get; set; }
-
-        [Required]
         public DateTime creationDate { get; set; }
 
         [Required]

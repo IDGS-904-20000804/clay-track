@@ -14,6 +14,9 @@ namespace API_ClayTrack.Models
         public string email { get; set; }
 
         [Required]
+        public bool status { get; set; }
+
+        [Required]
         [ForeignKey("Person")]
         public int fkCatPerson { get; set; }
 

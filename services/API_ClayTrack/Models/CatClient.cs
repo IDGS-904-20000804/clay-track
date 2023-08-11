@@ -9,7 +9,10 @@ namespace API_ClayTrack.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int idCatClient { get; set; }
-        
+
+        [Required]
+        public bool status { get; set; }
+
         [Required]
         [ForeignKey("Person")]
         public int fkCatPerson { get; set; }

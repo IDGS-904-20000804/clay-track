@@ -133,8 +133,8 @@ namespace API_ClayTrack.Controllers
         public async Task<ActionResult> DeleteClient(int id)
         {
             var client = await dbContext.CatClient
-                .Include(c => c.Person)
-                .Include(c => c.User)
+                .Include(e => e.Person)
+                .Include(e => e.User)
                 .FirstOrDefaultAsync(c => c.idCatClient == id);
 
             if (client == null)
@@ -142,20 +142,7 @@ namespace API_ClayTrack.Controllers
                 return NotFound();
             }
 
-            var user = await userManager.FindByIdAsync(client.fkUser);
-            if (user != null)
-            {
-                var result = await userManager.DeleteAsync(user);
-                if (!result.Succeeded)
-                {
-                    var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
-                    return BadRequest(errorMessage);
-                }
-            }
-
-            dbContext.Remove(client.Person); 
-            dbContext.Remove(client);
-
+            client.status = false;
             await dbContext.SaveChangesAsync();
             return Ok();
         }

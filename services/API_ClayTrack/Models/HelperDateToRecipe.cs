@@ -15,8 +15,9 @@ namespace API_ClayTrack.Models
         [Required]
         public DateTime creationDate { get; set; }
 
+        [Required]
         [ForeignKey("Recipe")]
-        public int? fkCatRecipe { get; set; }
+        public int fkCatRecipe { get; set; }
 
         // Relaciones de llave foránea
         public CatRecipe Recipe { get; set; }

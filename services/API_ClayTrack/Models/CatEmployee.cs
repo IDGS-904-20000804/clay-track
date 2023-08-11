@@ -11,6 +11,9 @@ namespace API_ClayTrack.Models
         public int idCatEmployee { get; set; }
 
         [Required]
+        public bool status { get; set; }
+
+        [Required]
         [ForeignKey("Person")]
         public int fkCatPerson { get; set; }
 

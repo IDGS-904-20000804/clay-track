@@ -1,6 +1,8 @@
-﻿using API_ClayTrack.DataBase;
+﻿using System.Security.Claims;
+using API_ClayTrack.DataBase;
 using API_ClayTrack.DTOs;
 using API_ClayTrack.Models;
+using API_ClayTrack.Repositories.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,12 +19,15 @@ namespace API_ClayTrack.Controllers
     {
         private readonly ClayTrackDbContext dbContext;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly ITokenRepository tokenRepository;
 
         public PurchaseController(ClayTrackDbContext dbContext, 
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            ITokenRepository tokenRepository)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
+            this.tokenRepository = tokenRepository;
         }
 
         [HttpGet]
@@ -59,31 +64,58 @@ namespace API_ClayTrack.Controllers
             return purchaseDto;
         }
 
-        [HttpPost]
+        /*[HttpPost]
+        [Route("Add")]
+        public async Task<ActionResult> AddPurchase([FromBody] PurchaseDto purchaseDto)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            var employeeId = GetEmployeeIdFromDatabase(userId);
+
+            purchaseDto.fkCatEmployee = employeeId;
+
+            var purchase = new CatPurchase
+            {
+                total = purchaseDto.total,
+                fkCatSupplier = purchaseDto.fkCatSupplier,
+                fkCatEmployee = employeeId
+            };
+            
+
+            dbContext.Add(purchase);
+            await dbContext.SaveChangesAsync();
+
+            return Ok();
+        }*/
+
+       /* [HttpPost]
         [Route("Add")]
         public async Task<ActionResult> AddPurchase([FromBody] CatPurchase purchase)
         {
-            var user = await userManager.GetUserAsync(User);
+            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            int employeeId = GetEmployeeIdFromDatabase(userId);
 
-            if (user == null)
-            {
-                return Unauthorized();
-            }
 
-            var employee = dbContext.CatEmployee.FirstOrDefault(e => e.fkUser == user.Id);
+            purchase.fkCatEmployee = employeeId;
 
-            if (employee == null)
-            {
-                return NotFound("Employee not found.");
-            }
-
-            purchase.fkCatEmployee = employee.idCatEmployee;
+            purchase.Supplier = dbContext.CatSupplier.FirstOrDefault(s => s.idCatSupplier == purchase.fkCatSupplier);
 
             dbContext.Add(purchase);
             await dbContext.SaveChangesAsync();
 
             return Ok();
         }
+
+
+
+
+        private int GetEmployeeIdFromDatabase(string userId)
+        {
+            var employee = dbContext.CatEmployee.FirstOrDefault(e => e.fkUser == userId);
+            return employee?.idCatEmployee ?? 0;
+        }*/
+
+
 
 
 

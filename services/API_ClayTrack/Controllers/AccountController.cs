@@ -1,12 +1,14 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using API_ClayTrack.DataBase;
 using API_ClayTrack.DTOs;
 using API_ClayTrack.Repositories.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using static API_ClayTrack.Controllers.AccountController;
 using static com.sun.tools.@internal.xjc.reader.xmlschema.bindinfo.BIConversion;
@@ -19,11 +21,14 @@ namespace API_ClayTrack.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly ITokenRepository tokenRepository;
+        private readonly ClayTrackDbContext dbContext;
 
-        public AccountController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
+        public AccountController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository,
+            ClayTrackDbContext dbContext)
         {
             this.userManager = userManager;
             this.tokenRepository = tokenRepository;
+            this.dbContext = dbContext;
         }
 
 
@@ -57,7 +62,7 @@ namespace API_ClayTrack.Controllers
             return BadRequest("Something went wrong");
         }
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
@@ -69,13 +74,10 @@ namespace API_ClayTrack.Controllers
 
                 if (checkPasswordResult)
                 {
-                    // Get Roles for this user
                     var roles = await userManager.GetRolesAsync(user);
 
                     if (roles != null)
                     {
-                        // Create Token
-
                         var jwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
 
                         var response = new LoginResponseDto
@@ -87,8 +89,50 @@ namespace API_ClayTrack.Controllers
                     }
                 }
             }
+            return BadRequest("Username or password incorrect");
+        }*/
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
+        {
+            var user = await userManager.FindByEmailAsync(loginRequestDto.Username);
+
+            if (user != null)
+            {
+                var client = await dbContext.CatClient.FirstOrDefaultAsync(c => c.fkUser == user.Id);
+                var employee = await dbContext.CatEmployee.FirstOrDefaultAsync(e => e.fkUser == user.Id);
+
+                bool isClientEnabled = client?.status ?? false;
+                bool isEmployeeEnabled = employee?.status ?? false;
+
+                if (isClientEnabled || isEmployeeEnabled)
+                {
+                    var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+
+                    if (checkPasswordResult)
+                    {
+                        // Get Roles for this user
+                        var roles = await userManager.GetRolesAsync(user);
+
+                        if (roles != null)
+                        {
+                            // Create Token
+                            var jwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
+
+                            var response = new LoginResponseDto
+                            {
+                                JwtToken = jwtToken
+                            };
+
+                            return Ok(response);
+                        }
+                    }
+                }
+            }
 
             return BadRequest("Username or password incorrect");
         }
+
     }
 }

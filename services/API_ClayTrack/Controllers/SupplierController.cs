@@ -93,7 +93,7 @@ namespace API_ClayTrack.Controllers
                 return NotFound();
             }
 
-            supplier.Person.status = false;
+            supplier.status = false;
 
             await dbContext.SaveChangesAsync();
             return Ok();

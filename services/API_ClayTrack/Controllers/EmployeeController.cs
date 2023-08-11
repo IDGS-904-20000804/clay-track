@@ -136,19 +136,7 @@ namespace API_ClayTrack.Controllers
                 return NotFound();
             }
 
-            employee.Person.status = false;
-
-            var user = await userManager.FindByIdAsync(employee.fkUser);
-            if (user != null)
-            {
-                var result = await userManager.DeleteAsync(user);
-                if (!result.Succeeded)
-                {
-                    var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
-                    return BadRequest(errorMessage);
-                }
-            }
-
+            employee.status = false;
             await dbContext.SaveChangesAsync();
             return Ok();
         }
