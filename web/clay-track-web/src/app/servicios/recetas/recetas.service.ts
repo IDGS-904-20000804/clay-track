@@ -8,7 +8,7 @@ export interface RawMaterial {
   fkCatRawMaterial: number;
 }
 
-export interface Product {
+export interface Receta {
   name: string;
   price: number;
   fkCatImage: number;
@@ -39,30 +39,30 @@ export class RecetasService {
     return this.http.get<any>(url, { headers });
   }
 
-  guardarReceta(): Observable<any> {
+  guardarReceta(receta:Receta): Observable<any> {
     const url = `${this.baseUrl}api/Recipe/InsertRecipe`; // Ajusta la URL según la ruta de la https://accounts.google.com/b/0/AddMailServiceAPI para guardar provedors
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
-    const provedor = {
-      "name": "Nestor",
-      "price": 0,
-      "fkCatSize": 1,
-      "fkCatImage": 1,
-      "colorIds": [
-        3, 4, 5
-      ],
-      "rawMaterials": [
-        {
-          "idCatalog": 0,
-          "quantity": 3,
-          "fkCatRawMaterial": 3
-        }
-      ]
-    }
-    return this.http.post<Product>(url, provedor, { headers }).pipe(
+    // const provedor = {
+    //   "name": "Nestor",
+    //   "price": 0,
+    //   "fkCatSize": 1,
+    //   "fkCatImage": 1,
+    //   "colorIds": [
+    //     3, 4, 5
+    //   ],
+    //   "rawMaterials": [
+    //     {
+    //       "idCatalog": 0,
+    //       "quantity": 3,
+    //       "fkCatRawMaterial": 3
+    //     }
+    //   ]
+    // }
+    return this.http.post<Receta>(url, receta, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
@@ -99,7 +99,7 @@ export class RecetasService {
     const url = `${this.baseUrl}api/Recipe/Upload`;
     const formData = new FormData();
     formData.append('File', file, file.name);
-    formData.append('FileName', 'FotoLuisA');
+    formData.append('FileName', file.name);
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,

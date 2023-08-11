@@ -20,11 +20,13 @@ import { ComprasComponent } from './modulos/compras/compras/compras.component';
 import { EnviosComponent } from './modulos/envios/envios/envios.component';
 import { StockComponent } from './modulos/stock/stock/stock.component';
 import { HttpClientModule } from '@angular/common/http';
+import { InicioComponent } from './inicio/inicio.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegistroComponent,
+    InicioComponent,
     
    
   ],

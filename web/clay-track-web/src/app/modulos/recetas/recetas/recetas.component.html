@@ -168,18 +168,18 @@
                                 </p-table><br>
                             </div>
                             <div class="col-12" >
-                                <p-fileUpload name="demo[]" (onUpload)="onUpload($event)"  [(ngModel)]="foto"   accept="image/*" [chooseLabel]="'Agregar'" [showUploadButton]="false" [showCancelButton]="false">
+                                <p-fileUpload name="demo[]" (change)="obtenerFoto($event)"  [(ngModel)]="foto"   accept="image/*" [chooseLabel]="'Agregar'" [showUploadButton]="false" [showCancelButton]="false">
                                     <ng-template pTemplate="content">
                                         <ul *ngIf="uploadedFiles.length">
                                             <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
                                         </ul>
                                     </ng-template>
                                 </p-fileUpload>
-                                <input type="file" (change)="onFileSelected($event)">
+                                <input type="file" (change)="obtenerFoto($event)"> <!-- 
 
                                 <button type="button" class="boton-standar-rw icon input form-control">{{idFileJson | slice:-27}}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-file-import"></i></button>
                                         <input class="form-control input " type="file" [(ngModel)]="idFileJson"  (change)="uploadJsonFile($event)" kendoTooltip title="Ingresa el archivo (.json)"/>
-                                
+                                 -->
 
                                     </div>
                             <div class="col-12 text-center mt-4">

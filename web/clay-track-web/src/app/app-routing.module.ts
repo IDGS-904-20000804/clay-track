@@ -13,6 +13,7 @@ import { ProveedoresComponent } from './modulos/proveedores/proveedores/proveedo
 import { ComprasComponent } from './modulos/compras/compras/compras.component';
 import { EnviosComponent } from './modulos/envios/envios/envios.component';
 import { GraficasComponent } from './modulos/graficas/graficas.component';
+import { InicioComponent } from './inicio/inicio.component';
 
 const routes: Routes = [
   { path: 'Inicio', component: MenuComponent },
@@ -31,7 +32,8 @@ const routes: Routes = [
   { path: 'Compras', component: ComprasComponent },
   { path: 'Envios', component: EnviosComponent },
   { path: 'Dashboard', component: GraficasComponent },
-  { path: '**', redirectTo: 'InicioSesion' }
+  { path: 'Inicial', component: InicioComponent },
+  { path: '**', redirectTo: 'Inicial' }
 ];
 
 @NgModule({
