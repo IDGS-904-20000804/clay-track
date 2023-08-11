@@ -61,6 +61,7 @@
                 <pre>{{receta | json}}</pre>
                 <pre>{{coloresObtenidos | json}}</pre>
                 <pre>{{arrayMateriaPrimaSelector | json}}</pre>
+                <pre>{{unidadMedida | json}}</pre>
             </div>
         </div>
     </div>
@@ -110,13 +111,25 @@
                             </div>
                             <div class="col-6">
                                 <div class="row">
+                                    
                                     <div class="col-12">
                                         <label for="unidadMedida">Materia Prima:</label>
+                                        <!-- <select (change)="seleccionarMateriaPrima($event)">
+                                            <option *ngFor="let receta of arrayMateriaPrimaSelector; let i = index"
+                                                    [value]="i">{{receta.name}}</option>
+                                          </select>
+                                          
+                                          <div *ngIf="selectedObject">
+                                            <h2>Detalles de la materia prima</h2>
+                                            <pre>{{ selectedObject | json }}</pre>
+                                          </div> -->
+                                          
+                                          
                                         <select class="form-select" [(ngModel)]="unidadMedida"
                                             aria-label="Default select example">
                                             <option selected>Selecciona una opcion</option>
-                                            <option *ngFor="let receta of arrayMateriaPrimaSelector"
-                                                value="{{receta.idCatRawMaterial}}">{{receta.name}}</option>
+                                            <option *ngFor="let receta of arrayMateriaPrimaSelector; let i =index"
+                                                value="{{receta.idCatRawMaterial}}" >{{receta.name}}</option>
                                             <input class="form-control" [(ngModel)]="idMateriaP">
                                         </select>
                                     </div>
@@ -152,8 +165,23 @@
                                             </td>
                                         </tr>
                                     </ng-template>
-                                </p-table>
+                                </p-table><br>
                             </div>
+                            <div class="col-12" >
+                                <p-fileUpload name="demo[]" (onUpload)="onUpload($event)"  [(ngModel)]="foto"   accept="image/*" [chooseLabel]="'Agregar'" [showUploadButton]="false" [showCancelButton]="false">
+                                    <ng-template pTemplate="content">
+                                        <ul *ngIf="uploadedFiles.length">
+                                            <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+                                        </ul>
+                                    </ng-template>
+                                </p-fileUpload>
+                                <input type="file" (change)="onFileSelected($event)">
+
+                                <button type="button" class="boton-standar-rw icon input form-control">{{idFileJson | slice:-27}}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-file-import"></i></button>
+                                        <input class="form-control input " type="file" [(ngModel)]="idFileJson"  (change)="uploadJsonFile($event)" kendoTooltip title="Ingresa el archivo (.json)"/>
+                                
+
+                                    </div>
                             <div class="col-12 text-center mt-4">
                                 <p-button label="Guardar" icon="pi pi-save" (click)="agregarReceta()"
                                     styleClass="p-button-outlined p-button-success  mx-5"></p-button>

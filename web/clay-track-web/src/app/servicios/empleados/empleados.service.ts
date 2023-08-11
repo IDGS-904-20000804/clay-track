@@ -86,6 +86,20 @@ export class EmpleadosService {
     );
   }
 
+  actualizarEmpleado(empleado: Empleado,id:number): Observable<any> {
+    const url = `${this.baseUrl}api/Employee/Update${id}`; // Ajusta la URL según la ruta de la API para guardar empleados
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Empleado>(url, empleado, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
   eliminarEmpleado(id:string): Observable<any> {
     const url = `${this.baseUrl}api/Employee/Delete${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
     const token = this.token;

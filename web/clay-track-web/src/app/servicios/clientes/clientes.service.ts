@@ -118,7 +118,7 @@ export class ClientesService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.put<Client>(url, null, { headers }).pipe(
+    return this.http.put<Client>(url,  { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.

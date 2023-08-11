@@ -23,18 +23,18 @@ export interface Product {
 })
 export class RecetasService {
   private baseUrl = 'https://localhost:7106/';
-  private token=localStorage.getItem("token");
+  private token = localStorage.getItem("token");
 
   constructor(private http: HttpClient) {
-   }
+  }
 
-   obtenerColor(): Observable<any> {
+  obtenerColor(): Observable<any> {
     const url = `${this.baseUrl}api/Colors/GetAll`;
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    
+
     console.log('ESTE ES EL TOKEN', token)
     return this.http.get<any>(url, { headers });
   }
@@ -46,19 +46,19 @@ export class RecetasService {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
-    const provedor ={
+    const provedor = {
       "name": "Nestor",
       "price": 0,
       "fkCatSize": 1,
       "fkCatImage": 1,
       "colorIds": [
-        0
+        3, 4, 5
       ],
       "rawMaterials": [
         {
           "idCatalog": 0,
-          "quantity": 0,
-          "fkCatRawMaterial": 0
+          "quantity": 3,
+          "fkCatRawMaterial": 3
         }
       ]
     }
@@ -69,5 +69,54 @@ export class RecetasService {
       })
     );
   }
+
+  guardarRecetaFoto(file: File): Observable<any> {
+    const url = `${this.baseUrl}api/Recipe/Upload`;
+    const token = this.token;
+    const boundary = '--------------------------' + new Date().getTime(); // Genera el límite único
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': `multipart/form-data; boundary=${boundary}`,
+      'Accept': '*/*'
+        });
+  
+    let formData = new FormData();
+    formData.append('File', file);
+    formData.append('FileName', 'FotoLuisA');
+  
+    return this.http.post<any>(url, formData, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+
+  uploadRecipeFile(file: File): any {
+    const token = this.token;
+    const url = `${this.baseUrl}api/Recipe/Upload`;
+    const formData = new FormData();
+    formData.append('File', file, file.name);
+    formData.append('FileName', 'FotoLuisA');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+
+    return this.http.post(url, formData, { headers });
+  }
+  
+
+
+  // importar(file:File){
+  //   const headers = new HttpHeaders().set('content-type', 'application/json');
+  //   headers.append('Content-Type', 'multipart/form-data');
+  //   let formData = new FormData(); 
+  //   formData.append('file', file);
+  //   const url=`${baseUrl}/importar`;
+  //   return this.http.post(url,formData)
+  // }
 
 }

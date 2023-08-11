@@ -150,7 +150,7 @@ export class ClientesComponent {
   
   agregarCliente() {
     if(this.cliente.idCatClient>0){
-      this.modificarProvedor()
+      this.modificarClientes()
     }else{
     this._servicioClientes.guardarCliente(this.cliente).subscribe(
       (response) => {
@@ -168,7 +168,7 @@ export class ClientesComponent {
     }
   }
 
-  modificarProvedor() {
+  modificarClientes() {
     this._servicioClientes.actualizarCliente(this.cliente,this.cliente.idCatClient).subscribe(
       (response) => {
         // Cliente guardado con éxito, realizar acciones adicionales si es necesario

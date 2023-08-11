@@ -12,6 +12,11 @@ interface Color {
   updateDate: string;
 }
 
+interface UploadEvent {
+  originalEvent: Event;
+  files: File[];
+}
+
 @Component({
   selector: 'app-recetas',
   templateUrl: './recetas.component.html',
@@ -44,6 +49,7 @@ export class RecetasComponent {
   arrayMateriaPrimaSelector: any[]= new Array();
   arrayColores: any[]= new Array();
   coloresObtenidos: any[]= new Array();
+  foto!:File;
 
   // {
   //   "name": "string",
@@ -91,6 +97,8 @@ export class RecetasComponent {
   constructor( private messageService: MessageService, private _servicioMateriaP: MateriaPrimaService, private _servicioReceta: RecetasService) { 
     this.obtenerMateriaPrima();
     this.obtenerColores();
+  
+
   }
 
   agregarEmpleado() {
@@ -104,6 +112,7 @@ export class RecetasComponent {
   }
 
   agregarMateria() {
+    console.log(this.unidadMedida)
     const recetaExistente = this.arrayMateriaPrima.find(
       (materiaPrima) => materiaPrima.materia === this.unidadMedida
     );
@@ -164,19 +173,98 @@ export class RecetasComponent {
   }
 
   agregarReceta() {
-    this._servicioReceta.guardarReceta().subscribe(
-      (response) => {
-        // Cliente guardado con éxito, realizar acciones adicionales si es necesario
-        this.visible = false;
-        this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
-        console.log('Receta guardado exitosamente:', response);
-      },
-      (error) => {
-        // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
-        console.error('Error al guardar la receta:', error);
-      }
-    );
+    console.log(this.foto)
+    this.guardarFotoReceta(this.selectedfileJson)
+    // this._servicioReceta.guardarReceta().subscribe(
+    //   (response) => {
+    //     // Cliente guardado con éxito, realizar acciones adicionales si es necesario
+    //     this.visible = false;
+    //     this.guardarFotoReceta(this.foto)
+    //     this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
+    //     console.log('Receta guardado exitosamente:', response);
+    //   },
+    //   (error) => {
+    //     // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+    //     console.error('Error al guardar la receta:', error);
+    //   }
+    // );
+    
     }
-  
+
+  guardarFotoReceta(file: File){
+    this._servicioReceta.guardarRecetaFoto(file).subscribe((foto)=>{
+      this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se cargo la foto correctamente.' });
+    },(error)=>{
+      console.error('Error al cargar la foto:', error);
+    })
+  }
+
+
+    selectedObject: any = null;
+
+  seleccionarMateriaPrima(event: any) {
+    const index = event.target.value;
+    if (index >= 0 && index < this.arrayMateriaPrimaSelector.length) {
+      this.selectedObject = this.arrayMateriaPrimaSelector[index];
+    } else {
+      this.selectedObject = null;
+    }
+  }
+
+  uploadedFiles: any[] = [];
+
+
+  onUpload(event: any) {
+    this.uploadedFiles = []; // Limpia la lista de archivos subidos
+
+    // Agregar la foto cargada a la variable 'foto'
+    this.foto = event.files[0];
+
+    // Agregar los archivos subidos a la lista 'uploadedFiles'
+    for (let file of event.files) {
+      this.uploadedFiles.push(file);
+    }
+  }
+
+  selectedFile!: File ;
+
+  onFileChange(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    if (inputElement.files && inputElement.files.length > 0) {
+      this.selectedFile = inputElement.files[0];
+    }
+  }
+
+  idFile: string = "";
+  idFileJson: any;
+  selectedfileJson: any;
+
+
+  uploadJsonFile(event: any) {
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if (target.files.length !== 1) {
+      throw new Error('Cannot use multiple files');
+    }
+    this.selectedfileJson = event.target.files[0];
+    console.log('FOTO',this.idFileJson)
+  }
+
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this._servicioReceta.uploadRecipeFile(file).subscribe(
+        (response:any) => {
+          console.log('File uploaded successfully:', response);
+          // Puedes realizar acciones adicionales después de cargar el archivo.
+        },
+        (error:any) => {
+          console.error('Error uploading file:', error);
+        }
+      );
+    }
+  }
+
+
 
 }

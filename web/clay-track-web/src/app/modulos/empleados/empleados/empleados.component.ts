@@ -84,13 +84,35 @@ export class EmpleadosComponent {
      }
 
      agregarEmpleado() {
-      this._servicioEmpleados.guardarEmpleado(this.empleado).subscribe(
+      if(this.empleado.idCatEmployee>0){
+        this.modificarEmpleado()
+      }else{
+        this._servicioEmpleados.guardarEmpleado(this.empleado).subscribe(
+          (response) => {
+            
+              this.visible = false;
+              this.messageService.add({key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se guardó el cliente correctamente.' });
+              console.log('Empleado guardado exitosamente:', response.error.text); // Acceder al mensaje de éxito
+            
+          },
+          (error) => {
+            // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+            console.error('Error al guardar el empleado:', error);
+          }
+        );
+
+      }
+      
+    }
+
+    modificarEmpleado() {
+      this._servicioEmpleados.actualizarEmpleado(this.empleado,this.empleado.idCatEmployee).subscribe(
         (response) => {
-          
-            this.visible = false;
-            this.messageService.add({key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se guardó el cliente correctamente.' });
-            console.log('Empleado guardado exitosamente:', response.error.text); // Acceder al mensaje de éxito
-          
+          // Cliente guardado con éxito, realizar acciones adicionales si es necesario
+          this.visible = false;
+          this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo el empleado correctamente.' });
+          console.log('Empleado guardado exitosamente:', response);
+          this.obtenerEmpleados();
         },
         (error) => {
           // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
