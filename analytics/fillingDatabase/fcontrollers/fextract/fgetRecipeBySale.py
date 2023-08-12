@@ -2,7 +2,7 @@
 from databases.databaseMain import DatabaseMain
 
 
-def getRecipeBySale(allTime):
+def getRecipeBySale(month):
   try:
     db = DatabaseMain()
     query = f"""
@@ -25,9 +25,7 @@ def getRecipeBySale(allTime):
       FROM DetailSale dse
       INNER JOIN CatSale cse
         ON dse.fkCatSale = cse.idCatSale 
-      {'' if allTime
-        else 'WHERE cse.creationDate >= DATEADD(DAY, -30, GETDATE())'
-      }
+      WHERE MONTH(cse.creationDate) = {month}
       GROUP BY dse.fkCatRecipe
     ) AS queryTotals
     INNER JOIN (

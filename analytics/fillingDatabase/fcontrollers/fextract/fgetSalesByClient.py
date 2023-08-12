@@ -1,7 +1,7 @@
 
 from databases.databaseMain import DatabaseMain
 
-def getSalesByClient(allTime):
+def getSalesByClient(month):
   try:
     db = DatabaseMain()
     query = f"""
@@ -31,10 +31,8 @@ def getSalesByClient(allTime):
     INNER JOIN CatPerson cpn
       ON csr.fkCatPerson = cpn.idCatPerson
     INNER JOIN AspNetUsers aspnetu
-      ON aspnetu.Id = csr.fkUser 
-    {'' if allTime
-      else 'WHERE cse.creationDate >= DATEADD(DAY, -30, GETDATE());'
-    }
+      ON aspnetu.Id = csr.fkUser
+    WHERE MONTH(cse.creationDate) = {month}
     """
     results = db.execute_query(query)
     result_list = []

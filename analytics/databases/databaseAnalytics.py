@@ -43,6 +43,14 @@ class DatabaseAnalytics:
     cursor.close()
 
 
+  def executeProcedure(self, storedProc, params):
+    conn = self.connect()
+    cursor = conn.cursor()
+    cursor.execute(storedProc, params)
+    conn.commit()
+    cursor.close()
+
+
   def commit(self):
     conn = self.connect()
     conn.commit()

@@ -2,7 +2,7 @@
 from databases.databaseMain import DatabaseMain
 
 
-def getRawMaterialByRecipe(allTime):
+def getRawMaterialByRecipe(month):
   try:
     db = DatabaseMain()
     query = f"""
@@ -29,10 +29,8 @@ def getRawMaterialByRecipe(allTime):
       INNER JOIN CatRecipe cre
         ON drrml.fkCatRecipe = cre.idCatRecipe
       INNER JOIN HelperDateToRecipe hdtre
-        ON hdtre.fkCatRecipe = cre.idCatRecipe 
-      {'' if allTime
-        else 'WHERE hdtre.creationDate >= DATEADD(DAY, -30, GETDATE());'
-      };
+        ON hdtre.fkCatRecipe = cre.idCatRecipe
+      WHERE MONTH(hdtre.creationDate) = {month}
     """
     results = db.execute_query(query)
     result_list = []

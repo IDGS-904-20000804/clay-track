@@ -2,14 +2,14 @@
 from databases.databaseAnalytics import DatabaseAnalytics
 
 
-def saveRecipeBySale(json, allTime):
+def saveRecipeBySale(json, month):
   try:
     db = DatabaseAnalytics()
-    storedProc = "EXEC procedureGraphic @json = ?, @type = ?, @allTime = ?"
-    params = (json, 'RecipesBySale', allTime)
+    storedProc = "EXEC procedureGraphicFilling @json = ?, @type = ?, @month = ?"
+    params = (json, 'RecipesBySale', month)
     db.executeProcedure(storedProc, params)
     db.commit()
-    print('Saved RecipesBySale ' + ('by all time' if allTime else 'by month'))
+    print('Saved RecipesBySale')
   except Exception as e:
     print(f"Error - saveRecipeBySale: {e}")
   finally:
