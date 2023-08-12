@@ -12,7 +12,7 @@ def filterSalesByClient(rows):
     purchase_count = len(group_list)
     first_row = group_list[0]
     result_row = {
-      'purchaseCount': purchase_count,
+      'salesCount': purchase_count,
       'totalSales': total_sales,
       'UserName': first_row['UserName'],
       'name': first_row['name'],

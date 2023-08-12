@@ -2,10 +2,10 @@
 from databases.databaseMain import DatabaseMain
 
 
-def getRecipeBySale():
+def getRecipeBySale(allTime):
   try:
     db = DatabaseMain()
-    query = """
+    query = f"""
     SELECT
       queryTotals.totalRecipes,
       queryTotals.totalProfit,
@@ -24,8 +24,10 @@ def getRecipeBySale():
         dse.fkCatRecipe
       FROM DetailSale dse
       INNER JOIN CatSale cse
-        ON dse.fkCatSale = cse.idCatSale
-      WHERE cse.creationDate >= DATEADD(DAY, -30, GETDATE())
+        ON dse.fkCatSale = cse.idCatSale 
+      {'' if allTime
+        else 'WHERE cse.creationDate >= DATEADD(DAY, -30, GETDATE())'
+      }
       GROUP BY dse.fkCatRecipe
     ) AS queryTotals
     INNER JOIN (
@@ -51,7 +53,7 @@ def getRecipeBySale():
       LEFT JOIN CatImage cia
         ON cia.IdCatImage = subQueryRecipe.fkCatImage
     ) AS queryRecipe
-      ON queryTotals.fkCatRecipe = queryRecipe.idCatRecipe;
+      ON queryTotals.fkCatRecipe = queryRecipe.idCatRecipe
     """
     results = db.execute_query(query)
     result_list = []

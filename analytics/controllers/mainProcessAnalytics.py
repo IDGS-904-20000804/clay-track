@@ -16,31 +16,31 @@ from controllers.load.saveRecipeBySale import saveRecipeBySale
 
 
 # Best client
-def startProcessSalesByClient():
-  result_get = getSalesByClient()
+def startProcessSalesByClient(allTime = False):
+  result_get = getSalesByClient(allTime)
   result_filter = filterSalesByClient(result_get)
-  saveSalesByClient(result_filter)
+  saveSalesByClient(result_filter, allTime)
 
 
 # Best supplier
-def startProcessPurchasesBySupplier():
-  result_get = getPurchasesBySupplier()
+def startProcessPurchasesBySupplier(allTime = False):
+  result_get = getPurchasesBySupplier(allTime)
   result_filter = filterPurchasesBySupplier(result_get)
-  savePurchasesBySupplier(result_filter)
+  savePurchasesBySupplier(result_filter, allTime)
 
 
 # Best raw material
-def startProcessRawMaterialsByRecipe():
-  result_get = getRawMaterialByRecipe()
+def startProcessRawMaterialsByRecipe(allTime = False):
+  result_get = getRawMaterialByRecipe(allTime)
   result_filter = filterRawMaterialsByRecipe(result_get)
-  saveRawMaterialsByRecipe(result_filter)
+  saveRawMaterialsByRecipe(result_filter, allTime)
 
 
 # Best recipe
-def startProcessRecipeBySale():
-  result_get = getRecipeBySale()
+def startProcessRecipeBySale(allTime = False):
+  result_get = getRecipeBySale(allTime)
   result_filter = filterRecipeBySale(result_get)
-  saveRecipeBySale(result_filter)
+  saveRecipeBySale(result_filter, allTime)
 
 
 def mainProcessAnalytics():
@@ -48,3 +48,8 @@ def mainProcessAnalytics():
   startProcessPurchasesBySupplier()
   startProcessRawMaterialsByRecipe()
   startProcessRecipeBySale()
+  
+  startProcessSalesByClient(True)
+  startProcessPurchasesBySupplier(True)
+  startProcessRawMaterialsByRecipe(True)
+  startProcessRecipeBySale(True)

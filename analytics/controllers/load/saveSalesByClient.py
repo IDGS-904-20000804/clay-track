@@ -2,12 +2,14 @@
 from databases.databaseAnalytics import DatabaseAnalytics
 
 
-def saveSalesByClient(json):
+def saveSalesByClient(json, allTime):
   try:
     db = DatabaseAnalytics()
-    query = f"INSERT INTO Graphic (result, type, date) VALUES ('{json}', 'SalesByClient', GETDATE());"
-    db.manipulate_data(query)
+    storedProc = "EXEC procedureGraphic @json = ?, @type = ?, @allTime = ?"
+    params = (json, 'SalesByClient', allTime)
+    db.executeProcedure(storedProc, params)
     db.commit()
+    print('saved SalesByClient')
   except Exception as e:
     print(f"Error - saveSalesByClient: {e}")
   finally:

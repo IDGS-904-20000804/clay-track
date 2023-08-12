@@ -2,10 +2,10 @@
 from databases.databaseMain import DatabaseMain
 
 
-def getRawMaterialByRecipe():
+def getRawMaterialByRecipe(allTime):
   try:
     db = DatabaseMain()
-    query = """
+    query = f"""
     SELECT
       hdtre.quantity AS quantityRecipesCreated,
       drrml.quantity AS quantityRawMaterialUsed,
@@ -29,8 +29,10 @@ def getRawMaterialByRecipe():
       INNER JOIN CatRecipe cre
         ON drrml.fkCatRecipe = cre.idCatRecipe
       INNER JOIN HelperDateToRecipe hdtre
-        ON hdtre.fkCatRecipe = cre.idCatRecipe
-      WHERE hdtre.creationDate >= DATEADD(DAY, -30, GETDATE());
+        ON hdtre.fkCatRecipe = cre.idCatRecipe 
+      {'' if allTime
+        else 'WHERE hdtre.creationDate >= DATEADD(DAY, -30, GETDATE());'
+      };
     """
     results = db.execute_query(query)
     result_list = []

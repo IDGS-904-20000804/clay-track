@@ -1,13 +1,17 @@
 
 import time
 from controllers.mainProcessAnalytics import mainProcessAnalytics
+from databases.fillDatabase import fillDatabase
 
 
 def main():
-  mainProcessAnalytics()
-  # while True:
-  #   print("Executing code every hour...")
-  #   time.sleep(30)
+  seconds = 30
+  fillDatabase()
+  # mainProcessAnalytics()
+  while True:
+    print(f"Executing code every {seconds} seconds")
+    mainProcessAnalytics()
+    time.sleep(seconds)
 
 
 if __name__ == "__main__":

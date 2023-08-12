@@ -3,10 +3,7 @@ from itertools import groupby
 from operator import itemgetter
 import json
 
-# idCatPurchase
-# total
-# idCatSupplier
-# name lastName middleName
+
 def filterPurchasesBySupplier(rows):
   grouped_results = []
   for key, group in groupby(rows, key=itemgetter('idCatSupplier')):

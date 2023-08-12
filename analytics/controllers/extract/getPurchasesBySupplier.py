@@ -2,10 +2,10 @@
 from databases.databaseMain import DatabaseMain
 
 
-def getPurchasesBySupplier():
+def getPurchasesBySupplier(allTime):
   try:
     db = DatabaseMain()
-    query = """
+    query = f"""
     SELECT 
       cpe.idCatPurchase,
       cpe.total,
@@ -29,8 +29,10 @@ def getPurchasesBySupplier():
     INNER JOIN CatSupplier csr
       ON cpe.fkCatSupplier = csr.idCatSupplier
     INNER JOIN CatPerson cpn
-      ON csr.fkCatPerson = cpn.idCatPerson
-    WHERE cpe.creationDate >= DATEADD(DAY, -30, GETDATE());
+      ON csr.fkCatPerson = cpn.idCatPerson 
+    {'' if allTime
+      else 'WHERE cpe.creationDate >= DATEADD(DAY, -30, GETDATE());'
+    };
     """
     results = db.execute_query(query)
     result_list = []
