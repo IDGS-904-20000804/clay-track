@@ -13,7 +13,42 @@
             </div>
             
             <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
+                <label for="materia" class="mt-4"><b>INFORMACION DE</b></label>
                 <p-chart type="line" [data]="data" [options]="options"></p-chart>
+            </div>
+            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
+                <label for="materia" class="mt-4"><b>INFORMACION DE VENTAS POR CLIENTE</b></label>
+                <p-chart type="bar" [data]="getChartData()"[options]="options" width="800" height="400"></p-chart>
+
+            </div>
+            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
+                <label for="materia" class="mt-4"><b>INFORMACION COMPRAS POR PROVEEDOR</b></label>
+                <p-table [value]="arrayComprasp" [paginator]="true" [rows]="10">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cantidad en Almacén</th>
+                            <th>Cantidad por Paquete</th>
+                            <th>Descripción</th>
+                            <th>Cantidad Total Utilizada</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr>
+                            <td>{{ rowData.name }}</td>
+                            <td>{{ rowData.quantityWarehouse }}</td>
+                            <td>{{ rowData.quantityPackage }}</td>
+                            <td>{{ rowData.description }}</td>
+                            <td>{{ rowData.totalQuantityRawMaterialUsed }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <p-chart type="bar" [data]="chartDataPay" [options]="optionsBarras"></p-chart>
+            </div>
+            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
+                <label for="materia" class="mt-4"><b>INFORMACION DE MATERIAS PRIMAS POR RECETAS</b></label>
+                <p-chart type="bar" [data]="chartDataR" [options]="chartOptionsR"></p-chart>
+
             </div>
         </div>
     </div>

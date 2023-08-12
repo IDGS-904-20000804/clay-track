@@ -64,10 +64,10 @@
     margin-bottom: 16px;
     background-color: rgba(255, 255, 255, 0.5);
   } */
-  .vertical-nav {
+  .vertical-nav { 
     min-width: 17rem;
     width: 17rem;
-    height: 100vh;
+    height: 110vh;
     position: fixed;
     top: 0;
     left: 0;
@@ -90,6 +90,11 @@
   #content.active {
     width: 100%;
     margin: 0;
+  }
+
+  .nav{
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   
   @media (max-width: 768px) {
@@ -146,3 +151,4 @@
     height: 100vh;
     width: 100vw;
   }
+

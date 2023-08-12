@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { MateriaPrimaService } from 'src/app/servicios/materiaPrima/materia-prima.service';
 import {  Receta, RecetasService } from 'src/app/servicios/recetas/recetas.service';
@@ -50,6 +50,18 @@ export class RecetasComponent {
   arrayColores: any[]= new Array();
   coloresObtenidos: any[]= new Array();
   foto!:File;
+  idImagen:string='';
+  idImagen2:number=0;
+  arrayReceta: any[]=  new Array();
+  tamanios = [
+    { nombre: 'Chico', valor: 1 },
+    { nombre: 'Mediano', valor: 2 },
+    { nombre: 'Grande', valor: 3 }
+  ];
+  idTamanio:number=0;
+  loading: boolean = true;
+
+
 
   // {
   //   "name": "string",
@@ -71,12 +83,11 @@ export class RecetasComponent {
   receta: Receta = {
     name: "",
     price: 0,
-    fkCatImage: 1,
     fkCatSize: 1,
+    fkCatImage: 2,
     colorIds: this.coloresObtenidos,
     rawMaterials: 
       this.arrayMateriaPrima
-    ,
   };
   
   
@@ -94,11 +105,26 @@ export class RecetasComponent {
     }
     
   }
-  constructor( private messageService: MessageService, private _servicioMateriaP: MateriaPrimaService, private _servicioReceta: RecetasService) { 
+  constructor( private cdr: ChangeDetectorRef, private messageService: MessageService, private _servicioMateriaP: MateriaPrimaService, private _servicioReceta: RecetasService) { 
     this.obtenerMateriaPrima();
     this.obtenerColores();
+    this.obtenerReceta();
   
 
+  }
+
+  obtenerReceta(){
+    this.loading = true; 
+    this._servicioReceta.obtenerReceta().subscribe((receta)=>{
+      this.arrayReceta=receta;
+      console.log('RECEYA',this.arrayReceta)
+      this.loading = false; 
+    }, (err)=>{
+      console.log(err)
+      this.messageService.add({key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener la Receta' });
+      this.loading = false; 
+
+    })
   }
 
   agregarEmpleado() {
@@ -125,12 +151,10 @@ export class RecetasComponent {
       } else {
         this.arrayMateriaPrima.push({
           idCatalog: 0,
-          materia: this.unidadMedida,
-          cantidad: cantidadNueva
+          quantity: cantidadNueva,
+          fkCatRawMaterial: this.unidadMedida,
         });
       }
-      this.unidadMedida = 0;
-      this.cantidad = '';
     } else {
       this.messageService.add({ key: 'tc',severity: 'info', summary: 'Verifica', detail: 'La cantidad debe ser un número válido mayor que cero.' });
     }
@@ -173,19 +197,20 @@ export class RecetasComponent {
   }
 
   agregarReceta() {
-    this._servicioReceta.guardarReceta(this.receta).subscribe(
-      (response) => {
-        // Cliente guardado con éxito, realizar acciones adicionales si es necesario
-        this.visible = false;
-        this.guardarFotoReceta(this.datoFoto)
-        this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
-        console.log('Receta guardado exitosamente:', response);
-      },
-      (error) => {
-        // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
-        console.error('Error al guardar la receta:', error);
-      }
-    );
+  this.guardarFotoReceta(this.datoFoto)
+
+    // this._servicioReceta.guardarReceta(this.receta).subscribe(
+    //   (response) => {
+    //     // Cliente guardado con éxito, realizar acciones adicionales si es necesario
+    //     this.visible = false;
+    //     this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
+    //     console.log('Receta guardado exitosamente:', response);
+    //   },
+    //   (error) => {
+    //     // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+    //     console.error('Error al guardar la receta:', error);
+    //   }
+    // );
     
     }
 
@@ -193,7 +218,32 @@ export class RecetasComponent {
     this._servicioReceta.uploadRecipeFile(file).subscribe(
           (response:any) => {
             this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se cargo la foto correctamente.' });
-            console.log('File uploaded successfully:', response);
+            this.idImagen=response.idCatImage
+            console.log('File uploaded successfully:', this.idImagen);
+            this.idImagen2=parseInt(this.idImagen)
+            if(this.idImagen2>0){
+              this.receta = {
+                name: "",
+                price: 0,
+                fkCatSize: 1,
+                fkCatImage: this.idImagen2,
+                colorIds: this.coloresObtenidos,
+                rawMaterials: 
+                  this.arrayMateriaPrima
+              };
+              this._servicioReceta.guardarReceta(this.receta).subscribe(
+                (response) => {
+                  // Cliente guardado con éxito, realizar acciones adicionales si es necesario
+                  this.visible = false;
+                  this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
+                  console.log('Receta guardado exitosamente:', response);
+                },
+                (error) => {
+                  // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+                  console.error('Error al guardar la receta:', error);
+                }
+              );
+            }
           },
           (error:any) => {
             console.error('Error uploading file:', error);
@@ -252,20 +302,12 @@ export class RecetasComponent {
   // }
 
 
-  obtenerFoto(event: any): void {
-    this.datoFoto = event.target.files[0];
-    // if (file) {
-    //   this._servicioReceta.uploadRecipeFile(file).subscribe(
-    //     (response:any) => {
-    //       console.log('File uploaded successfully:', response);
-    //       // Puedes realizar acciones adicionales después de cargar el archivo.
-    //     },
-    //     (error:any) => {
-    //       console.error('Error uploading file:', error);
-    //     }
-    //   );
-    // }
+  obtenerFoto(files: File[]) {
+    this.datoFoto = files[0]; // Obtener el archivo del evento
+    this.cdr.detectChanges(); // Forzar la detección de cambios
   }
+
+  
 
 
 

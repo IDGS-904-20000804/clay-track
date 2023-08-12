@@ -1,145 +1,145 @@
 <p-toast position="top-center" key="tc"></p-toast>
-<div class="row" class="background-image" >
-    <div   [@fadeInOut] [hidden]="navBar" class="col-3">
+<div class="row" class="background-image">
+    <div [@fadeInOut] [hidden]="navBar" class="col-3">
         <app-menu></app-menu>
-      </div>      
-    <div [class]="columna" >
+    </div>
+    <div [class]="columna">
         <div class="row " style="margin-top: 6%; ">
             <div class="col-6">
-                    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"
-                      (click)="toggleNavBar()">
-                      <i class="fa fa-bars mr-2"></i>
-                      <small class="text-uppercase font-weight-bold">MODULOS</small>
-                    </button>
+                <button id="sidebarCollapse" type="button"
+                    class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4" (click)="toggleNavBar()">
+                    <i class="fa fa-bars mr-2"></i>
+                    <small class="text-uppercase font-weight-bold">MODULOS</small>
+                </button>
             </div>
             <div class="col-6 text-end">
                 <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
 
             </div>
-        <div class="col-12 mt-3">
-            <p-table #dt1 [value]="arrayEmpleados" dataKey="idCatSupplier" [rows]="10"
-            [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
-            [paginator]="true"
-            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-            filterMode="global">
-            <ng-template pTemplate="caption">
-            </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>
-                        <div class="flex align-items-center">
-                            Nombre
-                            <p-columnFilter type="text" field="person.name" display="menu" filterHeader="Nombre"
-                                filterMatchMode="contains"></p-columnFilter>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="flex align-items-center">
-                            Teléfono
-                            <p-columnFilter type="text" field="person.phone" display="menu"
-                                filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="flex align-items-center">
-                            Dirección
-                            <p-columnFilter type="text" field="person.street" display="menu"
-                                filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
-                        </div>
-                    </th>
-                    <th>Acciones</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-empleado>
-                <tr>
-                    <td>{{ empleado.person.name }} {{ empleado.person.lastName }}</td>
-                    <td>{{ empleado.person.phone }}</td>
-                    <td>{{ empleado.person.street }}, {{ empleado.person.neighborhood }}</td>
-                    <td>
-                            <p-button icon="pi pi-pencil" (click)="obtenerIdEmpleado(empleado.idCatEmployee)"
-                                styleClass="p-button-rounded p-button-warning p-button-outlined p-button-sm" ></p-button>
-                        &nbsp;&nbsp;
-                        <p-button icon="pi pi-times" (click)="eliminarEmpleado(empleado.idCatEmployee)"
-                            styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"></p-button>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="4">No hay empleados disponibles.</td>
-                </tr>
-            </ng-template>
-        </p-table>
-        </div>
-        </div>
-    </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class=" flex justify-content-center">
-                <p-toast></p-toast>
-                <div class=" flex justify-content-center">
-                        <p-dialog
-                        header="INFORMACION EMPLEADO"
-                        [(visible)]="visible"
-                        [style]="{ width: '60vw' }"
-                        [maximizable]="true"
-                        headerStyleClass="custom-dialog-header"
-                        >       
-                        <div class="row">
-                            <input type="text" class="form-control" hidden [(ngModel)]="empleado.idCatEmployee" />
-                            <div class="col-6">
-                                <label for="Nombre">Nombre:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.person.name" />
-                            </div>
-                            <div class="col-6">
-                                <label for="apaterno">Apellido Paterno:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.person.lastName" />
-                            </div>
-                            <div class="col-6">
-                                <label for="amaterno">Apellido Materno:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.person.middleName" />
-                            </div>
-                            <div class="col-6">
-                                <label for="telefono">Telefono:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.person.phone" />
-                            </div>
-                            <div class="col-6">
-                                <label for="calle">Calle:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.person.street" />
-                            </div>
-                            <div class="col-6">
-                                <label for="Colonia">Colonia:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.person.neighborhood" />
-                            </div>
-                            <div class="col-3">
-                                <label for="numE">Numero Exterior:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.person.streetNumber" />
-                            </div>
-                            <div class="col-3">
-                                <label for="numI">Numero Interior:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.person.apartmentNumber" />
-                            </div>
-                            <div class="col-6">
-                                <label for="cp">Codigo Postal:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.person.postalCode" />
-                            </div>
-                            <div class="col-6">
-                                <label for="correo">Correo:</label>
-                                <input type="text" class="form-control" [(ngModel)]="empleado.user.email" />
-                            </div>
-                            <div class="col-6">
-                                <label for="contrasenia">Contraseña:</label>
-                                <input type="password" class="form-control" [(ngModel)]="empleado.user.passwordHash" />
-                            </div>
-                            
-                            <div class="col-12 text-center mt-4">
-                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()" styleClass="p-button-outlined p-button-success  mx-5"></p-button>
-                                <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
-                            </div>
-                        </div>
-                    </p-dialog>
+            <div class="col-12 mt-3">
+                <div class="tabla">
+                    <p-table #dt1 [value]="arrayEmpleados" dataKey="idCatSupplier" [rows]="5"
+                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 15, 50]" [loading]="loading"
+                    [paginator]="true"
+                    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                    filterMode="global"
+                    [style]="{'font-size': '14px'}">
+                        <ng-template pTemplate="header" >
+                            <tr >
+                                <th >
+                                    <div class="flex align-items-center">
+                                        Nombre
+                                        <p-columnFilter type="text" field="person.name" display="menu"
+                                            filterHeader="Nombre" filterMatchMode="contains"></p-columnFilter>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="flex align-items-center">
+                                        Teléfono
+                                        <p-columnFilter type="text" field="person.phone" display="menu"
+                                            filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="flex align-items-center">
+                                        Dirección
+                                        <p-columnFilter type="text" field="person.street" display="menu"
+                                            filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
+                                    </div>
+                                </th>
+                                <th>Acciones</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-empleado>
+                            <tr >
+                                <td>{{ empleado.person.name }} {{ empleado.person.lastName }}</td>
+                                <td>{{ empleado.person.phone }}</td>
+                                <td>{{ empleado.person.street }}, {{ empleado.person.neighborhood }}</td>
+                                <td>
+                                    <button class="btn custom-small-button btn-outline-warning" (click)="obtenerIdEmpleado(empleado.idCatEmployee)">
+                                      <i class="pi pi-pencil"></i>
+                                    </button>
+                                    <button class="btn custom-small-button btn-outline-danger" (click)="eliminarEmpleado(empleado.idCatEmployee)">
+                                      <i class="pi pi-times"></i>
+                                    </button>
+                                  </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="4">No hay empleados disponibles.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
                 </div>
+
             </div>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class=" flex justify-content-center">
+            <p-toast></p-toast>
+            <div class=" flex justify-content-center">
+                <p-dialog header="INFORMACION EMPLEADO" [(visible)]="visible" [style]="{ width: '60vw' }"
+                    [maximizable]="true" headerStyleClass="custom-dialog-header">
+                    <div class="row">
+                        <input type="text" class="form-control" hidden [(ngModel)]="empleado.idCatEmployee" />
+                        <div class="col-6">
+                            <label for="Nombre">Nombre:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.name" />
+                        </div>
+                        <div class="col-6">
+                            <label for="apaterno">Apellido Paterno:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.lastName" />
+                        </div>
+                        <div class="col-6">
+                            <label for="amaterno">Apellido Materno:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.middleName" />
+                        </div>
+                        <div class="col-6">
+                            <label for="telefono">Telefono:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.phone" />
+                        </div>
+                        <div class="col-6">
+                            <label for="calle">Calle:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.street" />
+                        </div>
+                        <div class="col-6">
+                            <label for="Colonia">Colonia:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.neighborhood" />
+                        </div>
+                        <div class="col-3">
+                            <label for="numE">Numero Exterior:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.streetNumber" />
+                        </div>
+                        <div class="col-3">
+                            <label for="numI">Numero Interior:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.apartmentNumber" />
+                        </div>
+                        <div class="col-6">
+                            <label for="cp">Codigo Postal:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.postalCode" />
+                        </div>
+                        <div class="col-6">
+                            <label for="correo">Correo:</label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.user.email" />
+                        </div>
+                        <div class="col-6">
+                            <label for="contrasenia">Contraseña:</label>
+                            <input type="password" class="form-control" [(ngModel)]="empleado.user.passwordHash" />
+                        </div>
+
+                        <div class="col-12 text-center mt-4">
+                            <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()"
+                                styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                            <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger"
+                                (click)="cancelar()"></p-button>
+                        </div>
+                    </div>
+                </p-dialog>
+            </div>
+        </div>
+    </div>
+</div>

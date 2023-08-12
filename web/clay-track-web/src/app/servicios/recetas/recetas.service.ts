@@ -2,19 +2,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 
-export interface RawMaterial {
-  idCatalog: number;
-  quantity: string;
-  fkCatRawMaterial: number;
-}
-
 export interface Receta {
   name: string;
   price: number;
-  fkCatImage: number;
   fkCatSize: number;
-  colorIds: any[];
+  fkCatImage: number;
+  colorIds: number[];
   rawMaterials: RawMaterial[];
+}
+
+export interface RawMaterial {
+  idCatalog: number;
+  quantity: number;
+  fkCatRawMaterial: number;
 }
 
 
@@ -26,6 +26,17 @@ export class RecetasService {
   private token = localStorage.getItem("token");
 
   constructor(private http: HttpClient) {
+  }
+
+  obtenerReceta(): Observable<any> {
+    const url = `${this.baseUrl}api/Recipe/GetAll`;
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    
+    console.log('ESTE ES EL TOKEN', token)
+    return this.http.get<any>(url, { headers });
   }
 
   obtenerColor(): Observable<any> {
