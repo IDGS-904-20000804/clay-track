@@ -1,3 +1,27 @@
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('azulejo', 'jpg', 57692, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\azulejo.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('bide', 'jpg', 84157, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\bide.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('cacerola', 'jpg', 10029, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\cacerola.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('candelabro', 'jpg', 108705, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\candelabro.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('cuenco', 'jpg', 3984, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\cuenco.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('ensaladera', 'jpg', 42234, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\ensaladera.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('florero', 'jpg', 25088, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\florero.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('fregadero', 'jpg', 5358, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\fregadero.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('inodoro', 'jpg', 10468, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\inodoro.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('jarra', 'jpg', 58172, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\jarra.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('jarron', 'jpg', 66794, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\jarron.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('ladrillo', 'jpg', 38802, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\ladrillo.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('lavabo', 'jpg', 30200, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\lavabo.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('maceta', 'jpg', 34786, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\maceta.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('mosaico', 'jpg', 58426, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\mosaico.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('pimentero', 'jpg', 50308, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\pimentero.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('platillo', 'jpg', 46505, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\platillo.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('plato', 'jpg', 41898, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\plato.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('salero', 'jpg', 5245, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\salero.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('taza', 'jpg', 17902, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\taza.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('tazon', 'jpg', 138988, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\tazon.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('tetera', 'jpg', 18170, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\tetera.jpg');
+INSERT INTO CatImage (FileName, FileExtension, FileSizeInBytes, FilePath) VALUES ('vaso', 'jpg', 14924, 'C:\\Users\\user\\Git_Workspace\\school\\clay-track\\database\\generator\\python\\downloaded_images\\vaso.jpg');
+GO
 
 CREATE PROCEDURE procedureInsertSize (@description VARCHAR(255), @abbreviation VARCHAR(255))
 AS
@@ -237,43 +261,100 @@ UPDATE CatPerson SET creationDate = DATEADD(DAY, 1, '2023/05/10'), updateDate = 
 WHERE idCatPerson IN (SELECT fkCatPerson FROM CatSupplier);
 GO
 
-EXEC procedureInsertEmployee 'Olatz','Puerto','Trujillo','+514778852126','37138','704',null,'Lucita','Gran Jardín', '50a3f9d36ea0861814a23fdc43920051cff0b59cb795eb16415806b113f85cb9', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Raúl','Avila','Palacios','+514771181062','37353','821','B','Calle Efraín Calderón','Pedregal del Sol', 'bfc2408c333e94b735a91a3b63c6309a5a0c192cc552999affe3039b3170d6c9', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Neus','Villar','Villar','+514775395135','37548','548','B','Calle Sarmiento','Luz del Refugio', '98ff97384a632e49ca6c02e8725e8e663772902b395e7ac3195f6e7b24a0ce80', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Rachid','Ubeda','Mosquera','+514771985903','37550','188','B','Lucita','Cumbres de la Pradera', 'd201ab2221e2949924fa203c2dffa67cf8f6e4ecaa67ef3ea826e495ff128dd4', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Claudio','Leon','Alcantara','+514778900172','37295','696',null,'Calle Bosque Del Carajonai','Jardines de San Juan', '1567daad1a425bee640f6b0942465012297c97817bb44ad836962d81c364065e', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Manel','Cardona','Moyano','+514778148765','37530','243',null,'Calle Parque Guatemala','Residencial San Isidro', 'df4f3d120f452990d80f20fd9b56a49c8b911d3088e5e61ecd35ce542da7e008', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Catalina','Guevara','Quiroga','+514770482841','37210','200','A','Calle San Matías','Praderas de Santa Rosa', '3a21ea49046b54dcac3a6d9c14a34c74bcff15c1761879e5bd1ffcd5696e2ba7', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Aurea','Lazaro','Miranda','+514773943080','37280','220','B','Calle Bosque Del Carajonai','Arboledas de San Pedro', '1df7e29248cf987ab712aacd6e7e01385738db0fdab854b3607025cee89f6e60', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Gumersindo','Moro','Peiro','+514778190823','37680','291',null,'Calle Campo Verde','Álvaro Obregón (Santa Ana del Conde)', 'd4d5564c62419324e29301842f3e7a51e7d3c52d020eb07c67e7d596eac3c44e', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Josefa','Robledo','Robledo','+514773750303','37238','778','C','Calle Mar Jónico','Prado Hermoso', 'ebff2ad0da0d0ed2be1deb5836f9f8f0c98a9e4e4e36b329454e703081626b2a', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Eladio','Peiro','Tirado','+514775263673','37357','272',null,'Andador De La Esponja','Centro Familiar Soledad', '123d31a0639324348c2b61e28699f8b14bbd6fb3cab0e7c22dbf5babb6300a30', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Alain','Grande','Fernández','+514777837646','37207','230',null,'Calle Noria De Los Pedregales','El Consuelo', 'da541298ffa159a20db4df19e3472cc66c94d91490f4fdc752767a427d2590d1', 'c309fa92-2123-47be-b397-a1c77adb502c';
-EXEC procedureInsertEmployee 'Marcial','García','Puerto','+514775653880','37538','916','B','Privada San Anselmo','Loma Hermosa', '89f0d5655a5d85d7632fa47b17f002920d222db87c0ae797c2405808ac896fa7', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Izaskun','Sanchez','Grande','+514775519653','37299','712','A','Privada Cervera','Soberna', '3d6c5363b544e27f33aeff4f30c0e7ebd495db85e66e16851f5891c4534af090', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Montse','Cantero','Herranz','+514777954784','37204','840',null,'Calle 18','Cibeles', '624f0b127561bf588125873ddecb705ab105a6217e50e67cb476dcfc6d90e759', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Sagrario','Moyano','Martin','+514777834299','37419','329',null,'Calle De La Col','Las Mandarinas', 'b9d744b646ef3f9e4c1abc5f917ff8e9210a612abbed5a3fc605299b9f90fab7', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Zaida','Cuadrado','Garrido','+514776424326','37669','134','B','León','Los Laureles', '19bbd834f49c0e647dfa7460bc40fad4d3d383083c3e700d4ba548585a8606d1', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Cayetano','Estrada','Sanchez','+514778884326','37287','610',null,'Lucita','Residencial San Ángel', 'dd679497960a49da0415736ebbd93e5af662b1967332f4ff3d64c7cf02e1d9a7', 'c309fa92-2123-47be-b397-adfdgdfg3344';
-EXEC procedureInsertEmployee 'Iris','Marin','Ubeda','+514771149094','37549','265',null,'San Carlos','Unión Obrera', '8c795d965ce76402440904b5298c6beeb0ce4beeea7d960871f92b65889a7717', 'c309fa92-2123-47be-b397-adfdgdfg3344';
+
+
+EXEC procedureInsertEmployee 'Olatz','Puerto','Trujillo','+514778852126','37138','704',null,'Lucita','Gran Jardín',
+'AMmAWUeqhXPmdD97QBTn5GmGnDrwAoaEym8sk5niig8SIoF/FTKQHn/EHYX3te0KwQ==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Raúl','Avila','Palacios','+514771181062','37353','821','B','Calle Efraín Calderón','Pedregal del Sol',
+'ABwI89M9WSSdxmFZnY6bWwq4IaDERWRJVs8z7M0jj5EcKhjBFHFxvRaELfbFzzLjvA==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Neus','Villar','Villar','+514775395135','37548','548','B','Calle Sarmiento','Luz del Refugio',
+'AB0qjBdQ2lNe1Lhp/5N//edUiqK7sATmo3Bv+9YqAPY+IY/XwHIcjSmQt8/5dijLDQ==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Rachid','Ubeda','Mosquera','+514771985903','37550','188','B','Lucita','Cumbres de la Pradera',
+'AL+Me//qUmC3vdccx5gIlAoMJO3pJlvTI7bUK1Ztx/z75cOROFWwWAT+WzrE+NYy+w==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Claudio','Leon','Alcantara','+514778900172','37295','696',null,'Calle Bosque Del Carajonai','Jardines de San Juan',
+'ALk6z9zy3ZJrPVeXQmLz+cu3nlNJS549gYnqcxS14v6Hjl6gh8KaJU11vFIcm+8/YA==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Manel','Cardona','Moyano','+514778148765','37530','243',null,'Calle Parque Guatemala','Residencial San Isidro',
+'AM6MXii+5IVIX2RFQtnO6gJbRQaBxT6nQ4A2DEyP3ughjk7o2CSO2m8sPaRdYYw1Xw==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Catalina','Guevara','Quiroga','+514770482841','37210','200','A','Calle San Matías','Praderas de Santa Rosa',
+'AFlCWIYpCz2EiJLcJvxBjh+K9nxZOY/qNJGR0sdbScHIEhkAfIfmMdhZjOo8z4rBIg==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Aurea','Lazaro','Miranda','+514773943080','37280','220','B','Calle Bosque Del Carajonai','Arboledas de San Pedro',
+'AN+hXbArLloy4xzbdROIjQUq4+BNbCwGNieCdF93X78xYg2qdrsDwMSaeTxnkYcJDw==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Gumersindo','Moro','Peiro','+514778190823','37680','291',null,'Calle Campo Verde','Álvaro Obregón (Santa Ana del Conde)',
+'AA9eMWHV7zHpwhXq7vcQHvnaDB/qyct0+Bvc8x0Fg+UufoG3IWJuuyD+30uSOhrIbw==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Josefa','Robledo','Robledo','+514773750303','37238','778','C','Calle Mar Jónico','Prado Hermoso',
+'ABc53ZVxy/XqMTm5NKBP9URi4jN1VlR5hikrDc59l71CM8UP525KWWuS7Qk0SIzxxA==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Eladio','Peiro','Tirado','+514775263673','37357','272',null,'Andador De La Esponja','Centro Familiar Soledad',
+'AJlGIzWVgYsa4G/rSxp5MUtBsf8Wc5FneCma8sGTigpIPcS1NQcEOviHqkZDgIrcqg==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Alain','Grande','Fernández','+514777837646','37207','230',null,'Calle Noria De Los Pedregales','El Consuelo',
+'AGWtyK6neuTgLSOS4mlp3MIk64nztwwg1BE0bOpK2lkLXZWQQAzlx360I6l63Ndqhg==', -- paswordshashes 'c309fa92-2123-47be-b397-a1c77adb502c';
+EXEC procedureInsertEmployee 'Marcial','García','Puerto','+514775653880','37538','916','B','Privada San Anselmo','Loma Hermosa',
+'AJN0lP8bw/3lildKNNeL7hAsn94jWqGIypucdzJH8bUJ7RJ754UjeKands/mWjDLnQ==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Izaskun','Sanchez','Grande','+514775519653','37299','712','A','Privada Cervera','Soberna',
+'ALk0N4KysLM7UYI+96wI3pNMSiUzcEJ7GvE09ZAZGoD4wWQEB3Qf3ol+mD71ob0atw==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Montse','Cantero','Herranz','+514777954784','37204','840',null,'Calle 18','Cibeles',
+'AFhvWm5rSZjg26q3rWm+n/sLtWN0mXGUQkhPVMZrWM/Srgd6276xcNZ0xL2VPo2PdQ==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Sagrario','Moyano','Martin','+514777834299','37419','329',null,'Calle De La Col','Las Mandarinas',
+'AEImwHapXb7Lv+3yTzQuz+GpfbNJ/U0s7A/Y7S6fZ9VkcXq4N+nc5LXJhiZCDlIkww==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Zaida','Cuadrado','Garrido','+514776424326','37669','134','B','León','Los Laureles',
+'APH/afT0AT3OTrarF5GJgdFdio8qg9j0CbYsyl/kbYZXdfkXs761SyeUDGeezwMGeg==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Cayetano','Estrada','Sanchez','+514778884326','37287','610',null,'Lucita','Residencial San Ángel',
+'AFRx494nOFzHt4RY3W2Q1dJVxD6GYcMZ3j/erYCI4+6FKs0VXCImrDWDF7ym1iGWqA==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
+EXEC procedureInsertEmployee 'Iris','Marin','Ubeda','+514771149094','37549','265',null,'San Carlos','Unión Obrera',
+'ADMcD5v2Xf/XQtBrLy4h79GnK0UK9AGvAx/xSa2p7DPa/V1j4wowzyaJ+7+SO81ETQ==', -- paswordshashes
+'c309fa92-2123-47be-b397-adfdgdfg3344';
 GO
 
-EXEC procedureInsertClient 'Francisco','Gaspar','Avila','+514777710708','37128','773',null,'Mayorazgo De Taboalapa','Misión La Cañada', 'FRANCISCO_la332@gmail.com', '372610e2d4453cd1ab2505493a6054ef6e57d263d331b8cdb50dc2363460647c';
-EXEC procedureInsertClient 'Iryna','Fernández','Valero','+514775088347','37555','547','B','Boulevard Paseo De Los Insurgentes','San José de Cementos', 'IRYNA_ro349@gmail.com', '5ee35a3e0896a1baa0376087042955e25ada5978352dd7e11e3837716a365194';
-EXEC procedureInsertClient 'Noel','Mosquera','Estrada','+514772665826','37670','142','C','Calle Parque La Granada','La Laborcita', 'NOEL_da366@gmail.com', 'db48160161c633a31ea0c331a80ff84e535b19c8950bcd36c637812d126fd47d';
-EXEC procedureInsertClient 'Hilario','Alcantara','Moyano','+514773103141','37210','873',null,'Calle San Florencio','Residencial Villa Contemporánea', 'HILARIO_no383@gmail.com', 'a0fe3b2f6769128e47392f3d14da4f7f93367f22c313aadaae6e266cd729f8c6';
-EXEC procedureInsertClient 'Florin','Beltran','Rivera','+514772280363','37689','402',null,'Ramal A San Pedro Del Monte','Capellanía de San Sebastián', 'FLORIN_ra400@gmail.com', 'ea4e44b03ebd9d4eaec7e4da14dc18bfef308e9b79ca50443052f0435121b9d6';
-EXEC procedureInsertClient 'German','Rivera','Alcantara','+514777270751','37669','453','A','Boulevard Delta','Katania', 'GERMAN_ra417@gmail.com', '9fe974386cd19b5c10e68d275b5be73689ac2a804be7dd1966c1fd53d00bae30';
-EXEC procedureInsertClient 'Unax','Verdu','Yañez','+514772750921','37355','784','C','Calle Mezquite De Jerez','Real 2000', 'UNAX_ez434@gmail.com', 'f29b5da297e7bf6f3c82595ab18cd6515f2b4e91255cc4afb70c715033993beb';
-EXEC procedureInsertClient 'Unai','Hidalgo','Felipe','+514774175683','37278','839',null,'Calle Bosque Del Ocote','Popular Inca', 'UNAI_pe451@gmail.com', '303f9424a30f98bcdf90e5da8f5d19e07eee0a94e53a1398a187c451520456e8';
-EXEC procedureInsertClient 'Fabian','Quiroga','Ubeda','+514771294823','37288','207','C','Calle Santa Crocce','Villa Verde', 'FABIAN_da468@gmail.com', 'd4dd9fd93f1db62534866eb66d5461fcfc94c8e23ab9fe52e7b8a0831cdcdc9e';
-EXEC procedureInsertClient 'Maria','Cabanillas','García','+514775152672','37259','751',null,'Calle Paseo De Los Verdines','San Manuel', 'MARIA_ia485@gmail.com', '6266007c91f4ce368b51ca9764f2e1195d04d1504de98ebd8c19e9f681d05775';
-EXEC procedureInsertClient 'Narciso','Reyes','Verdu','+514775894018','37687','516','C','Chupicuaro','La Estancia de la Sandía', 'NARCISO_du502@gmail.com', 'cbffd43b968d3e8878a2c268000f169541b7bd34215d0d41a39dab01038a2a1a';
-EXEC procedureInsertClient 'Anibal','Garrido','Valero','+514773509338','37125','452',null,'Calle Paraíso','Fracciones del Rosario', 'ANIBAL_ro519@gmail.com', '843cd336076647686f2c5072074467f8f48736453bead24586d7c2c8c9e200f5';
-EXEC procedureInsertClient 'Jeronima','Tirado','Martorell','+514775794020','37118','357','A','Calle Del Narciso','Jardines del Valle', 'JERONIMA_ll536@gmail.com', 'f5fea9fe0313ee884469731b80f71d1ac2ded75634f1f5380ad643130f9a1c8a';
-EXEC procedureInsertClient 'Segundo','Martin','Gaspar','+514773680309','37555','126',null,'Calle Industrial Morelos','Praderas del Bosque', 'SEGUNDO_ar553@gmail.com', 'b88ceaa467812d2b91a93b36eb037fad1dd3677626b25e5e3e86fd3f92ffb03d';
-EXEC procedureInsertClient 'Julia','Yañez','Gaspar','+514779839014','37328','756',null,'Valeriana','Moderna', 'JULIA_ar570@gmail.com', '0af8adb1453571a6cd49dae54e30e0689d99e03128655b8d68f60daf9cecdd63';
-EXEC procedureInsertClient 'Leire','Martorell','Fernández','+514777531816','37100','836',null,'Boulevard Antonio Martínez Aguayo','Privada Echeveste', 'LEIRE_ez587@gmail.com', '0ecda67e82742d4fa262635e95b1faebd9f7fc96a004ffb9ffdb062f6492d32a';
+
+
+EXEC procedureInsertClient 'Francisco','Gaspar','Avila','+514777710708','37128','773',null,'Mayorazgo De Taboalapa','Misión La Cañada', 'FRANCISCO_la332@gmail.com',
+'AFRp5PihLF+zbkFYSn2lCmkaSJlnGNHgIwQj70U5UsOQAlKmYx4IoB/jrYb1uISheQ=='; -- paswordshashes
+EXEC procedureInsertClient 'Iryna','Fernández','Valero','+514775088347','37555','547','B','Boulevard Paseo De Los Insurgentes','San José de Cementos', 'IRYNA_ro349@gmail.com',
+'AOuXcTvE4W3XUzHP8WsaxeB12vH4pihsWlrZa+s0/jHR2/Ky3H8l7Y1cBJc3Un/ZIg=='; -- paswordshashes
+EXEC procedureInsertClient 'Noel','Mosquera','Estrada','+514772665826','37670','142','C','Calle Parque La Granada','La Laborcita', 'NOEL_da366@gmail.com',
+'AK0vlKnYG7RNKFvdUDzCd8YXqPqOagCqnNRh4blq5iwtz7vRBdMgpZi49syKN6YowA=='; -- paswordshashes
+EXEC procedureInsertClient 'Hilario','Alcantara','Moyano','+514773103141','37210','873',null,'Calle San Florencio','Residencial Villa Contemporánea', 'HILARIO_no383@gmail.com',
+'AHGS02kkUtEVSQ4H7qX/l8ChLOWL4Uup++PknLQpUzHcLFuVH9CJ9O1EMK4m1iR8jQ=='; -- paswordshashes
+EXEC procedureInsertClient 'Florin','Beltran','Rivera','+514772280363','37689','402',null,'Ramal A San Pedro Del Monte','Capellanía de San Sebastián', 'FLORIN_ra400@gmail.com',
+'AH30onoKyaLQq6VowD/XbGQ9a0TxGI9oyipt7vbXoyYyGSWZx6RX4x6f2trXG+szOQ=='; -- paswordshashes
+EXEC procedureInsertClient 'German','Rivera','Alcantara','+514777270751','37669','453','A','Boulevard Delta','Katania', 'GERMAN_ra417@gmail.com',
+'AAdI08V8pYYaYV7XZlfMJpN73OCU6FSoVsQ2ZWZkQiqfqjN4vbwQZETbWdiOcbRDWA=='; -- paswordshashes
+EXEC procedureInsertClient 'Unax','Verdu','Yañez','+514772750921','37355','784','C','Calle Mezquite De Jerez','Real 2000', 'UNAX_ez434@gmail.com',
+'AHWcqK4XojxArAMOBGR35TeIj//S8Z3vj3C7AUquJ6SPMjWil39Jzc99EcbQ7i3KxA=='; -- paswordshashes
+EXEC procedureInsertClient 'Unai','Hidalgo','Felipe','+514774175683','37278','839',null,'Calle Bosque Del Ocote','Popular Inca', 'UNAI_pe451@gmail.com',
+'ADeasR6iUctuUigaDIH2cyV7RjnmzVCQou5iYqNp2lBIFfIGYuZVizM/rlsr2A7umg=='; -- paswordshashes
+EXEC procedureInsertClient 'Fabian','Quiroga','Ubeda','+514771294823','37288','207','C','Calle Santa Crocce','Villa Verde', 'FABIAN_da468@gmail.com',
+'AMZwzhLgcaVrH+dNCBGZZI8edfSM9CW0jZovkdxYbJ0GOAHIVjQHu2S25iID+1L0Dg=='; -- paswordshashes
+EXEC procedureInsertClient 'Maria','Cabanillas','García','+514775152672','37259','751',null,'Calle Paseo De Los Verdines','San Manuel', 'MARIA_ia485@gmail.com',
+'AGRNuWVkRjSCzMTfJ8P5qceS7qeLeC+vcPpGx3qN4nNadbhaKZnUb7/BfOEJjTJluA=='; -- paswordshashes
+EXEC procedureInsertClient 'Narciso','Reyes','Verdu','+514775894018','37687','516','C','Chupicuaro','La Estancia de la Sandía', 'NARCISO_du502@gmail.com',
+'ALkCjnsMLkV1ZHMONXaUuDK10TMC9H6y6zya0CJt5Xwincm/iWXGeiSe8Sci6Fj81g=='; -- paswordshashes
+EXEC procedureInsertClient 'Anibal','Garrido','Valero','+514773509338','37125','452',null,'Calle Paraíso','Fracciones del Rosario', 'ANIBAL_ro519@gmail.com',
+'AIL8ZQEXO7dDDDSi+N8ZxQqSFfP0oy9U0ILfWZNNVwnCVLKsVuxRRi/1BJyYdZxn/Q=='; -- paswordshashes
+EXEC procedureInsertClient 'Jeronima','Tirado','Martorell','+514775794020','37118','357','A','Calle Del Narciso','Jardines del Valle', 'JERONIMA_ll536@gmail.com',
+'ALzmsEtdqlnekV58XM6l0Ck2PeG0XHcMfmTioyoutom+QfqbEGIKNUS0IFXztC3C7Q=='; -- paswordshashes
+EXEC procedureInsertClient 'Segundo','Martin','Gaspar','+514773680309','37555','126',null,'Calle Industrial Morelos','Praderas del Bosque', 'SEGUNDO_ar553@gmail.com',
+'AKJdPFzt3K8+dBSEv3tk+bgO71/f1+zCkoUd7mCYHhtDA+rBSHatqkLwgxVxeA4HrA=='; -- paswordshashes
+EXEC procedureInsertClient 'Julia','Yañez','Gaspar','+514779839014','37328','756',null,'Valeriana','Moderna', 'JULIA_ar570@gmail.com',
+'APGBsDf8cG8jqpaTAzLSNZo5eEOfIFrS23dHaSs0CC5/Ajp7Ev1CyTt5VheijgZjxg=='; -- paswordshashes
+EXEC procedureInsertClient 'Leire','Martorell','Fernández','+514777531816','37100','836',null,'Boulevard Antonio Martínez Aguayo','Privada Echeveste', 'LEIRE_ez587@gmail.com',
+'ALZfSozQTvxBrrx95ScdN43fcJcn+sE/LbIfYI/hCwpjsm1mE89URU2gAwQVCUpsWQ=='; -- paswordshashes
 GO
 
 EXEC procedureInsertSupplier 'Estibaliz','Iglesias','Guevara','+514779590896','37438','675',null,'Calle Mayorazgo Del Moral','Industrial Pamplona', 'ESTIBALIZ_ra604@gmail.com';
@@ -428,12 +509,13 @@ CREATE PROCEDURE procedureInsertRecipe (
   @price FLOAT,
   @fkCatSize INT,
   @jsonColors NVARCHAR(MAX),
-  @jsonRawMaterial NVARCHAR(MAX)
+  @jsonRawMaterial NVARCHAR(MAX),
+  @idCatImage INT
 )
 AS
 BEGIN
   DECLARE @idCatRecipe INT;
-  INSERT INTO CatRecipe (name, price, fkCatSize) VALUES (@name, @price, @fkCatSize);
+  INSERT INTO CatRecipe (name, price, fkCatSize, fkCatImage) VALUES (@name, @price, @fkCatSize, @idCatImage);
   SET @idCatRecipe = SCOPE_IDENTITY();
   EXEC procedureInsertDetailColors @idCatRecipe, @jsonColors;
   EXEC procedureInsertDetailRawMaterial @idCatRecipe, @jsonRawMaterial;
@@ -474,7 +556,8 @@ GO
 
 CREATE PROCEDURE procedureFillingInsertRecipe (
   @nameBase VARCHAR(255),
-  @jsonIdRawMaterial NVARCHAR(MAX)
+  @jsonIdRawMaterial NVARCHAR(MAX),
+  @idCatImage INT
 )
 AS
 BEGIN
@@ -487,144 +570,178 @@ BEGIN
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[1]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[1]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[1]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":31},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[2]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[2]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[2]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[2]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[2]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[2]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[3]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[3]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[3]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[3]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[3]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[3]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[4]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[4]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[4]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[4]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[4]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[4]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":34},{"quantity":1,"fkCatRawMaterial":35},{"quantity":1,"fkCatRawMaterial":36}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[5]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[5]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[5]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[5]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[5]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[5]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":37},{"quantity":1,"fkCatRawMaterial":36},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[6]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[6]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[6]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[6]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[6]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[6]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":29}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[7]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[7]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[7]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[7]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[7]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[7]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":36},{"quantity":1,"fkCatRawMaterial":32}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[8]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[8]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[8]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":38},{"quantity":1,"fkCatRawMaterial":39}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[9]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[9]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[9]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":38}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[10]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[10]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[10]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[10]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[10]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[10]', @mergedJson, @idCatImage;
 
   SET @name = CONCAT(@nameBase, ' colores');
 
   SET @jsonData = '[{"quantity":3,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":31},{"quantity":1,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":33},{"quantity":1,"fkCatRawMaterial":38}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[2,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[2,4,9]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[2,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[2,4,9]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[2,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[2,4,9]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30},{"quantity":2,"fkCatRawMaterial":32},{"quantity":1,"fkCatRawMaterial":36}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[1,3,8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[1,3,8]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[1,3,8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[1,3,8]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[1,3,8]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[1,3,8]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":30},{"quantity":1,"fkCatRawMaterial":34},{"quantity":1,"fkCatRawMaterial":35},{"quantity":2,"fkCatRawMaterial":36},{"quantity":1,"fkCatRawMaterial":37}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[5,6,1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[5,6,1]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[5,6,1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[5,6,1]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[5,6,1]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[5,6,1]', @mergedJson, @idCatImage;
 
   SET @jsonData = '[{"quantity":2,"fkCatRawMaterial":29},{"quantity":1,"fkCatRawMaterial":32},{"quantity":2,"fkCatRawMaterial":33},{"quantity":2,"fkCatRawMaterial":38}]';
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 1, '[10,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 1, '[10,4,9]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 2, '[10,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 2, '[10,4,9]', @mergedJson, @idCatImage;
   SET @mergedJson = dbo.mergeJsonWithIdsAndData(@jsonIdRawMaterial, @jsonData);
-  EXEC procedureInsertRecipe @name, 0, 3, '[10,4,9]', @mergedJson;
+  EXEC procedureInsertRecipe @name, 0, 3, '[10,4,9]', @mergedJson, @idCatImage;
 
   END;
 GO
 
-EXEC procedureFillingInsertRecipe 'Azulejo', '[6,13,16,19,44]';
-EXEC procedureFillingInsertRecipe 'Bidé', '[8,14,17,20,44]';
-EXEC procedureFillingInsertRecipe 'Cacerola', '[9,15,18,22,45]';
-EXEC procedureFillingInsertRecipe 'Candelabro', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Cuenco', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Ensaladera', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Florero', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Fregadero', '[9,15,18,19,45]';
-EXEC procedureFillingInsertRecipe 'Inodoro', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Jarra', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Jarrón', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Ladrillo', '[9,18,22]';
-EXEC procedureFillingInsertRecipe 'Lavabo', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Maceta', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Mosaico', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Pimentero', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Platillo', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Plato', '[7,15,18]';
-EXEC procedureFillingInsertRecipe 'Salero', '[6,13,16,19,44]';
-EXEC procedureFillingInsertRecipe 'Taza', '[8,14,16,20,44]';
-EXEC procedureFillingInsertRecipe 'Tazón', '[6,13,18]';
-EXEC procedureFillingInsertRecipe 'Tetera', '[8,13,18]';
-EXEC procedureFillingInsertRecipe 'Vaso', '[7,15,18]';
+
+CREATE PROCEDURE procedureInsertAllFillingInsertRecipe
+AS
+BEGIN
+  DECLARE @idCatImage INT;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'azulejo';
+  EXEC procedureFillingInsertRecipe 'Azulejo', '[6,13,16,19,44]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'bide';
+  EXEC procedureFillingInsertRecipe 'Bidé', '[8,14,17,20,44]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'cacerola';
+  EXEC procedureFillingInsertRecipe 'Cacerola', '[9,15,18,22,45]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'candelabro';
+  EXEC procedureFillingInsertRecipe 'Candelabro', '[7,15,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'cuenco';
+  EXEC procedureFillingInsertRecipe 'Cuenco', '[6,13,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'ensaladera';
+  EXEC procedureFillingInsertRecipe 'Ensaladera', '[8,13,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'florero';
+  EXEC procedureFillingInsertRecipe 'Florero', '[6,13,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'fregadero';
+  EXEC procedureFillingInsertRecipe 'Fregadero', '[9,15,18,19,45]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'inodoro';
+  EXEC procedureFillingInsertRecipe 'Inodoro', '[8,14,16,20,44]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'jarra';
+  EXEC procedureFillingInsertRecipe 'Jarra', '[7,15,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'jarron';
+  EXEC procedureFillingInsertRecipe 'Jarrón', '[6,13,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'ladrillo';
+  EXEC procedureFillingInsertRecipe 'Ladrillo', '[9,18,22]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'lavabo';
+  EXEC procedureFillingInsertRecipe 'Lavabo', '[8,14,16,20,44]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'maceta';
+  EXEC procedureFillingInsertRecipe 'Maceta', '[6,13,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'mosaico';
+  EXEC procedureFillingInsertRecipe 'Mosaico', '[7,15,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'pimentero';
+  EXEC procedureFillingInsertRecipe 'Pimentero', '[6,13,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'platillo';
+  EXEC procedureFillingInsertRecipe 'Platillo', '[8,13,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'plato';
+  EXEC procedureFillingInsertRecipe 'Plato', '[7,15,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'salero';
+  EXEC procedureFillingInsertRecipe 'Salero', '[6,13,16,19,44]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'taza';
+  EXEC procedureFillingInsertRecipe 'Taza', '[8,14,16,20,44]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'tazon';
+  EXEC procedureFillingInsertRecipe 'Tazón', '[6,13,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'tetera';
+  EXEC procedureFillingInsertRecipe 'Tetera', '[8,13,18]', @idCatImage;
+  SELECT TOP 1 @idCatImage = IdCatImage FROM CatImage WHERE FileName = 'vaso';
+  EXEC procedureFillingInsertRecipe 'Vaso', '[7,15,18]', @idCatImage;
+
+END;
+GO
+
+
+EXEC procedureInsertAllFillingInsertRecipe;
 GO
 
 

@@ -124,13 +124,13 @@ CREATE TABLE CatPerson (
   apartmentNumber VARCHAR(255),
   street VARCHAR(255) NOT NULL,
   neighborhood VARCHAR(255) NOT NULL,
-  status BIT DEFAULT 1 NOT NULL,
   creationDate DATETIME NOT NULL DEFAULT GETDATE(),
   updateDate DATETIME NOT NULL DEFAULT GETDATE()
 );
 GO
 CREATE TABLE CatClient (
   idCatClient INT IDENTITY(1,1) PRIMARY KEY,
+  status BIT DEFAULT 1 NOT NULL,
   fkCatPerson INT NOT NULL,
   fkRol nvarchar(450) COLLATE Modern_Spanish_CI_AS NOT NULL,
   fkUser nvarchar(450) COLLATE Modern_Spanish_CI_AS NOT NULL
@@ -139,11 +139,13 @@ GO
 CREATE TABLE CatSupplier (
   idCatSupplier INT IDENTITY(1,1) PRIMARY KEY,
   email VARCHAR(255) NOT NULL,
+  status BIT DEFAULT 1 NOT NULL,
   fkCatPerson INT NOT NULL
 );
 GO
 CREATE TABLE CatEmployee (
   idCatEmployee INT IDENTITY(1,1) PRIMARY KEY,
+  status BIT DEFAULT 1 NOT NULL,
   fkCatPerson INT NOT NULL,
   fkRol nvarchar(450) COLLATE Modern_Spanish_CI_AS NOT NULL,
   fkUser nvarchar(450) COLLATE Modern_Spanish_CI_AS NOT NULL
