@@ -38,7 +38,7 @@ namespace API_ClayTrack
                 });
                 options.AddPolicy("AllowFlutterApp", builder =>
                 {
-                    builder.WithOrigins("http://localhost:5500")
+                    builder.WithOrigins("http://localhost:4444")
                            .AllowAnyHeader()
                            .AllowAnyMethod();
                 });
