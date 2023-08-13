@@ -64,46 +64,6 @@ namespace API_ClayTrack.Controllers
 
         /*[HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> AddPurchase([FromBody] CatPurchase purchase)
-        {
-            dbContext.Add(purchase);
-            await dbContext.SaveChangesAsync();
-            return Ok();
-        }*/
-
-        /*[HttpPost]
-        [Route("Add")]
-        public async Task<ActionResult> AddPurchase([FromBody] CatPurchase purchase)
-        {
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var employee = GetEmployeeFromDatabase(userId);
-
-            if (employee != null)
-            {
-                purchase.fkCatEmployee = employee.idCatEmployee;
-
-                dbContext.Add(purchase);
-                await dbContext.SaveChangesAsync();
-
-                return Ok();
-            }
-            else
-            {
-                return NotFound("Employee not found.");
-            }
-        }
-
-        private CatEmployee GetEmployeeFromDatabase(string userId)
-        {
-            var employee = dbContext.CatEmployee
-                .Include(e => e.Person)
-                .FirstOrDefault(e => e.fkUser == userId);
-
-            return employee;
-        }*/
-
-        /*[HttpPost]
-        [Route("Add")]
         public async Task<IActionResult> AddPurchase([FromBody] PurchaseJsonDto purchaseJsonDto)
         {
             // Check if the purchase JSON is valid
@@ -112,10 +72,31 @@ namespace API_ClayTrack.Controllers
                 return BadRequest("The recipe JSON is invalid or empty.");
             }
 
-            // Insert the recipe
+            // Calculate the total value
+            float total = 0.0f;
+            if (purchaseJsonDto.RawMaterials != null && purchaseJsonDto.RawMaterials.Count > 0)
+            {
+                foreach (var rawMaterial in purchaseJsonDto.RawMaterials)
+                {
+                    total += rawMaterial.Price * rawMaterial.Quantity;
+
+                    // Update quantityWarehouse and status of the raw material
+                    var rawMaterialEntity = await dbContext.CatRawMaterial.FirstOrDefaultAsync(r => r.idCatRawMaterial == rawMaterial.FkCatRawMaterial);
+                    if (rawMaterialEntity != null)
+                    {
+                        rawMaterialEntity.quantityWarehouse += rawMaterial.Quantity;
+                        if (rawMaterialEntity.status == false)
+                        {
+                            rawMaterialEntity.status = true;
+                        }
+                    }
+                }
+            }
+
+            // Insert the purchase
             var purchase = new CatPurchase
             {
-                total = purchaseJsonDto.total,
+                total = total,
                 fkCatSupplier = purchaseJsonDto.fkCatSupplier,
                 fkCatEmployee = purchaseJsonDto.fkCatEmployee
             };
@@ -140,11 +121,6 @@ namespace API_ClayTrack.Controllers
 
                 await InsertDetailRawMaterial(rawMaterialJsonList);
             }
-
-            await UpdateTotalPurchase();
-            await UpdateTotalRawMaterial(purchase.idCatPurchase);
-            UpdateRawMaterialQuantity(purchase.idCatPurchase, totalPurchase);
-
             return Ok("Purchase add successfully.");
         }*/
 
@@ -158,71 +134,60 @@ namespace API_ClayTrack.Controllers
                 return BadRequest("The recipe JSON is invalid or empty.");
             }
 
-            // Insert the recipe
+            // Calculate the total value
+            float total = 0.0f;
+            if (purchaseJsonDto.RawMaterials != null && purchaseJsonDto.RawMaterials.Count > 0)
+            {
+                foreach (var rawMaterial in purchaseJsonDto.RawMaterials)
+                {
+                    total += rawMaterial.Price * rawMaterial.Quantity;
+
+                    // Update quantityWarehouse and status of the raw material
+                    var rawMaterialEntity = await dbContext.CatRawMaterial.FirstOrDefaultAsync(r => r.idCatRawMaterial == rawMaterial.FkCatRawMaterial);
+                    if (rawMaterialEntity != null)
+                    {
+                        rawMaterialEntity.quantityWarehouse += rawMaterial.Quantity;
+                        if (rawMaterialEntity.status == false)
+                        {
+                            rawMaterialEntity.status = true;
+                        }
+                    }
+                }
+            }
+
+            // Create the purchase entity
             var purchase = new CatPurchase
             {
-                total = purchaseJsonDto.total,
+                total = total,
                 fkCatSupplier = purchaseJsonDto.fkCatSupplier,
                 fkCatEmployee = purchaseJsonDto.fkCatEmployee
             };
 
+            // Add the purchase to the context and save changes to get the ID
             dbContext.CatPurchase.Add(purchase);
             await dbContext.SaveChangesAsync();
 
-            // Insert raw material details
+            // Use the ID of the inserted purchase to associate details
             if (purchaseJsonDto.RawMaterials != null && purchaseJsonDto.RawMaterials.Count > 0)
             {
-                var rawMaterialJsonList = new List<RawMaterialJsonDto>();
                 foreach (var rawMaterial in purchaseJsonDto.RawMaterials)
                 {
-                    rawMaterialJsonList.Add(new RawMaterialJsonDto
+                    var detailRawMaterial = new DetailPurchase
                     {
-                        IdCatalog = purchase.idCatPurchase,
-                        Quantity = rawMaterial.Quantity,
-                        FkCatRawMaterial = rawMaterial.FkCatRawMaterial,
-                        Price = rawMaterial.Price
-                    });
-
+                        fkCatPurchase = purchase.idCatPurchase,
+                        quantity = rawMaterial.Quantity,
+                        fkCatRawMaterial = rawMaterial.FkCatRawMaterial,
+                        price = rawMaterial.Price
+                    };
+                    dbContext.DetailPurchase.Add(detailRawMaterial);
                 }
-
-                await InsertDetailRawMaterial(rawMaterialJsonList);
+                await dbContext.SaveChangesAsync();
             }
 
-            await UpdateTotalPurchase();
-            await UpdateTotalRawMaterial(purchase.idCatPurchase);
-
-            /*var totalPurchase = 0;
-            if (purchaseJsonDto.RawMaterials != null && purchaseJsonDto.RawMaterials.Count > 0)
-            {
-                foreach (var rawMaterial in purchaseJsonDto.RawMaterials)
-                {
-                    totalPurchase += rawMaterial.Quantity;
-                }
-            }
-            UpdateRawMaterialQuantity(purchase.idCatPurchase, totalPurchase);*/
-
-            /*var purchaseRawMaterials = dbContext.DetailPurchase
-                .Where(drrm => drrm.fkCatPurchase == idCatPurchase)
-                .Select(drrm => new
-                {
-                    drrm.fkCatRawMaterial,
-                    RequiredQuantity = drrm.quantity * rawMaterial.Quantity
-                })
-                .ToList();
-
-            foreach (var purchaseRawMaterial in purchaseRawMaterials)
-            {
-                var rawMaterial = dbContext.CatRawMaterial
-                    .FirstOrDefault(rm => rm.idCatRawMaterial == purchaseRawMaterial.fkCatRawMaterial);
-
-                if (rawMaterial != null)
-                {
-                    rawMaterial.quantityWarehouse += purchaseRawMaterial.RequiredQuantity;
-                }
-            }*/
-
-            return Ok("Purchase add successfully.");
+            return Ok("Purchase added successfully.");
         }
+
+
 
 
         [HttpPost]
@@ -263,80 +228,5 @@ namespace API_ClayTrack.Controllers
 
             return Ok("Details of raw materials inserted correctly.");
         }
-
-        private async Task UpdateTotalRawMaterial(int purchaseId)
-        {
-            var subquery = dbContext.DetailPurchase
-                .Where(dp => dp.fkCatPurchase == purchaseId)
-                .GroupBy(dp => dp.fkCatRawMaterial)
-                .Select(g => new
-                {
-                    fkCatRawMaterial = g.Key,
-                    sum_quantity = g.Sum(dp => dp.quantity)
-                });
-
-            var rawMaterialToUpdate = await dbContext.CatRawMaterial
-                .Join(subquery,
-                    rawMaterial => rawMaterial.idCatRawMaterial,
-                    sub => sub.fkCatRawMaterial,
-                    (rawMaterial, sub) => new { RawMaterial = rawMaterial, Sub = sub })
-                .ToListAsync();
-
-            foreach (var rawMaterialInfo in rawMaterialToUpdate)
-            {
-                rawMaterialInfo.RawMaterial.quantityWarehouse = rawMaterialInfo.Sub.sum_quantity;
-            }
-
-            await dbContext.SaveChangesAsync();
-        }
-
-        private async Task UpdateTotalPurchase()
-        {
-            var subquery = dbContext.DetailPurchase
-                .GroupBy(dp => dp.fkCatPurchase)
-                .Select(g => new
-                {
-                    fkCatPurchase = g.Key,
-                    sum_quantity = g.Sum(dp => dp.price)
-                });
-
-
-            var purchasesToUpdate = await dbContext.CatPurchase
-                .Join(subquery,
-                    purchase => purchase.idCatPurchase,
-                    sub => sub.fkCatPurchase,
-                    (purchase, sub) => new { Purchase = purchase, Sub = sub })
-                .ToListAsync();
-
-            foreach (var purchaseInfo in purchasesToUpdate)
-            {
-                purchaseInfo.Purchase.total = purchaseInfo.Sub.sum_quantity;
-            }
-
-            await dbContext.SaveChangesAsync();
-        }
-
-        /*private void UpdateRawMaterialQuantity(int idCatPurchase, int additionalQuantity)
-        {
-            var purchaseRawMaterials = dbContext.DetailPurchase
-                .Where(drrm => drrm.fkCatPurchase == idCatPurchase)
-                .Select(drrm => new
-                {
-                    drrm.fkCatRawMaterial,
-                    RequiredQuantity = drrm.quantity * additionalQuantity
-                })
-                .ToList();
-
-            foreach (var purchaseRawMaterial in purchaseRawMaterials)
-            {
-                var rawMaterial = dbContext.CatRawMaterial
-                    .FirstOrDefault(rm => rm.idCatRawMaterial == purchaseRawMaterial.fkCatRawMaterial);
-
-                if (rawMaterial != null)
-                {
-                    rawMaterial.quantityWarehouse += purchaseRawMaterial.RequiredQuantity;
-                }
-            }
-        }*/
     }
 }

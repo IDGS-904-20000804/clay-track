@@ -28,7 +28,7 @@ namespace API_ClayTrack.Controllers.ControllersDB2
                             b.date.HasValue &&
                             b.date.Value.Year == targetDate.Year &&
                             b.date.Value.Month == targetDate.Month)
-                .Select(b => new { b.date, b.result }) // Seleccionar la fecha y el resultado
+                .Select(b => new { b.date, b.result })
                 .ToListAsync();
 
             return Ok(graphic);

@@ -18,12 +18,10 @@ namespace API_ClayTrack.Controllers
     public partial class RecipeController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
-        private readonly IImageRepository imageRepository;
 
-        public RecipeController(ClayTrackDbContext dbContext, IImageRepository imageRepository)
+        public RecipeController(ClayTrackDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.imageRepository = imageRepository;
         }
 
         [HttpGet]
@@ -242,49 +240,6 @@ namespace API_ClayTrack.Controllers
             await dbContext.SaveChangesAsync();
 
             return Ok("Details of raw materials inserted correctly.");
-        }
-
-        [HttpPost]
-        [Route("Upload")]
-        public async Task<IActionResult> Upload([FromForm] ImageUploadRequestDto request)
-        {
-            ValidateFileUpload(request);
-
-            if (ModelState.IsValid)
-            {
-                // convert DTO to Domain model
-                var imageDomainModel = new CatImage
-                {
-                    File = request.File,
-                    FileExtension = Path.GetExtension(request.File.FileName),
-                    FileSizeInBytes = request.File.Length,
-                    FileName = request.FileName
-                };
-
-
-                // User repository to upload image
-                await imageRepository.Upload(imageDomainModel);
-
-                return Ok(imageDomainModel);
-
-            }
-
-            return BadRequest(ModelState);
-        }
-
-        private void ValidateFileUpload(ImageUploadRequestDto request)
-        {
-            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
-
-            if (!allowedExtensions.Contains(Path.GetExtension(request.File.FileName)))
-            {
-                ModelState.AddModelError("file", "Unsupported file extension");
-            }
-
-            if (request.File.Length > 10485760)
-            {
-                ModelState.AddModelError("file", "File size more than 10MB, please upload a smaller size file.");
-            }
         }
     }
 }
