@@ -62,36 +62,6 @@ namespace API_ClayTrack.Controllers
             return BadRequest("Something went wrong");
         }
 
-        /*[HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
-        {
-            var user = await userManager.FindByEmailAsync(loginRequestDto.Username);
-
-            if (user != null)
-            {
-                var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginRequestDto.Password);
-
-                if (checkPasswordResult)
-                {
-                    var roles = await userManager.GetRolesAsync(user);
-
-                    if (roles != null)
-                    {
-                        var jwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
-
-                        var response = new LoginResponseDto
-                        {
-                            JwtToken = jwtToken
-                        };
-
-                        return Ok(response);
-                    }
-                }
-            }
-            return BadRequest("Username or password incorrect");
-        }*/
-
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)

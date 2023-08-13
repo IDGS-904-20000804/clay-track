@@ -1,5 +1,6 @@
 using API_ClayTrack;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);

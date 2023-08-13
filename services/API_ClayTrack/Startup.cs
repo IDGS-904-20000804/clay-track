@@ -11,6 +11,7 @@ using API_ClayTrack.Repositories.Token;
 using Microsoft.Extensions.Configuration;
 using API_ClayTrack.Repositories.IImageRepository;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.FileProviders;
 
 namespace API_ClayTrack
 {
@@ -31,12 +32,13 @@ namespace API_ClayTrack
                 options.AddPolicy("AllowOrigin", builder =>
                 {
                     builder.WithOrigins("http://localhost:4200")
-                           .AllowAnyHeader()
-                           .AllowAnyMethod();
+                        .AllowAnyOrigin()                           
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
                 options.AddPolicy("AllowFlutterApp", builder =>
                 {
-                    builder.WithOrigins("http://localhost:57783")
+                    builder.WithOrigins("http://localhost:5500")
                            .AllowAnyHeader()
                            .AllowAnyMethod();
                 });
@@ -137,6 +139,11 @@ namespace API_ClayTrack
                 endpoints.MapControllers();
             });
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+                RequestPath = "/Images"
+            });
 
         }
     }

@@ -93,7 +93,7 @@ namespace API_ClayTrack.DataBase
                 .Property(c => c.updateDate)
                 .HasDefaultValueSql("GETDATE()");
 
-            //CatPerson status, creationDate and updateDate
+            //CatEmployee, CatClient, CatSupplier status
             modelBuilder.Entity<CatEmployee>()
                 .Property(b => b.status)
                 .HasDefaultValue(true);
@@ -106,6 +106,7 @@ namespace API_ClayTrack.DataBase
                 .Property(b => b.status)
                 .HasDefaultValue(true);
 
+            //CatPerson status, creationDate and updateDate
             modelBuilder.Entity<CatPerson>()
                 .Property(c => c.creationDate)
                 .HasDefaultValueSql("GETDATE()");
@@ -148,6 +149,10 @@ namespace API_ClayTrack.DataBase
             modelBuilder.Entity<CatRecipe>()
                 .Property(c => c.updateDate)
                 .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<CatRecipe>()
+                .Property(s => s.quantityStock)
+                .HasDefaultValue(0);
 
             //CatSale status, creationDate and updateDate
             modelBuilder.Entity<CatSale>()
