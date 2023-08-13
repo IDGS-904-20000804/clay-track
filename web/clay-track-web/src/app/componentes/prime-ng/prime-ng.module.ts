@@ -32,6 +32,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ChartModule } from 'primeng/chart';
 import { GraficasComponent } from 'src/app/modulos/graficas/graficas.component';
 import { FileUploadModule } from 'primeng/fileupload';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { FileUploadModule } from 'primeng/fileupload';
     InputNumberModule,
     MultiSelectModule,
     ChartModule,
-    FileUploadModule
+    FileUploadModule,
+    PaginatorModule
     
     
   ],
@@ -91,7 +93,8 @@ import { FileUploadModule } from 'primeng/fileupload';
     MenuComponent,
     MultiSelectModule,
     ChartModule,
-    FileUploadModule
+    FileUploadModule,
+    PaginatorModule
   ]
 })
 export class PrimeNgModule { }

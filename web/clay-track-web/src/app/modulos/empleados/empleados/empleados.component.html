@@ -16,38 +16,35 @@
                 <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
 
             </div>
-            <div class="col-12 mt-3">
-                <div class="tabla">
-                    <p-table #dt1 [value]="arrayEmpleados" dataKey="idCatSupplier" [rows]="5"
-                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 15, 50]" [loading]="loading"
+            <div class="col-12 mt-3" >
+                <div >
+                    <p-table #dt1 [value]="arrayEmpleados" dataKey="idCatSupplier" [rows]="15"
+                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[ 15, 50]" [loading]="loading"
                     [paginator]="true"
                     currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
                     filterMode="global"
-                    [style]="{'font-size': '14px'}">
+                    styleClass="p-datatable-sm "
+                    [tableStyle]="{ 'min-width': '50rem' }"
+                    [style]="{'font-size': '15px'}"
+                    [scrollable]="true" scrollHeight="340px"  [virtualScrollItemSize]="60">
                         <ng-template pTemplate="header" >
-                            <tr >
+                            <tr>
                                 <th >
-                                    <div class="flex align-items-center">
+                                    <div class="flex align-items-center mt-4">
                                         Nombre
-                                        <p-columnFilter type="text" field="person.name" display="menu"
-                                            filterHeader="Nombre" filterMatchMode="contains"></p-columnFilter>
                                     </div>
                                 </th>
                                 <th>
-                                    <div class="flex align-items-center">
+                                    <div class="flex align-items-center mt-4">
                                         Teléfono
-                                        <p-columnFilter type="text" field="person.phone" display="menu"
-                                            filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
                                     </div>
                                 </th>
                                 <th>
-                                    <div class="flex align-items-center">
+                                    <div class="flex align-items-center mt-4" >
                                         Dirección
-                                        <p-columnFilter type="text" field="person.street" display="menu"
-                                            filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
                                     </div>
                                 </th>
-                                <th>Acciones</th>
+                                <th  class="flex align-items-center mt-4">Acciones</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-empleado>
@@ -58,8 +55,8 @@
                                 <td>
                                     <button class="btn custom-small-button btn-outline-warning" (click)="obtenerIdEmpleado(empleado.idCatEmployee)">
                                       <i class="pi pi-pencil"></i>
-                                    </button>
-                                    <button class="btn custom-small-button btn-outline-danger" (click)="eliminarEmpleado(empleado.idCatEmployee)">
+                                    </button>&nbsp; &nbsp; 
+                                    <button class="btn custom-small-button btn-outline-danger"  (click)="eliminarEmpleado(empleado.idCatEmployee)">
                                       <i class="pi pi-times"></i>
                                     </button>
                                   </td>

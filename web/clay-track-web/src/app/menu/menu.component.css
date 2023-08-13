@@ -67,7 +67,7 @@
   .vertical-nav { 
     min-width: 17rem;
     width: 17rem;
-    height: 110vh;
+    height: 97vh;
     position: fixed;
     top: 0;
     left: 0;
@@ -150,5 +150,11 @@
     background-repeat: no-repeat;
     height: 100vh;
     width: 100vw;
+  }
+
+  .navbar{
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 75vh;
   }
 
