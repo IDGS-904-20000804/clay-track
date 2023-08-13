@@ -117,7 +117,7 @@ namespace API_ClayTrack.Controllers
                 return NotFound();
             }
 
-            bool isEnough = CheckRawMaterialByRecipe(idCatRecipe, totalRecipes);
+            var (isEnough, shortageDetails) = CheckRawMaterialByRecipe(idCatRecipe, totalRecipes);
 
             if (isEnough)
             {
@@ -128,11 +128,14 @@ namespace API_ClayTrack.Controllers
 
                 return Ok("Stock inserted successfully.");
             }
-
-            return BadRequest("Not enough raw material to produce the recipes.");
+            else
+            {
+                var shortageMessage = GetShortageMessage(shortageDetails);
+                return BadRequest($"Not enough raw material to produce the recipes. {shortageMessage}");
+            }
         }
 
-        private bool CheckRawMaterialByRecipe(int idCatRecipe, int totalRecipes)
+        private (bool isEnough, Dictionary<string, int> shortageDetails) CheckRawMaterialByRecipe(int idCatRecipe, int totalRecipes)
         {
             var recipeRawMaterials = dbContext.DetailRecipeRawMaterial
                 .Where(drrm => drrm.fkCatRecipe == idCatRecipe)
@@ -143,6 +146,8 @@ namespace API_ClayTrack.Controllers
                 })
                 .ToList();
 
+            var shortageDetails = new Dictionary<string, int>();
+
             foreach (var recipeRawMaterial in recipeRawMaterials)
             {
                 var rawMaterial = dbContext.CatRawMaterial
@@ -150,11 +155,33 @@ namespace API_ClayTrack.Controllers
 
                 if (rawMaterial == null || rawMaterial.quantityWarehouse < recipeRawMaterial.RequiredQuantity)
                 {
-                    return false;
+                    if (rawMaterial != null)
+                    {
+                        var shortageQuantity = recipeRawMaterial.RequiredQuantity - rawMaterial.quantityWarehouse;
+                        shortageDetails.Add(rawMaterial.name, shortageQuantity);
+                    }
+                    return (false, shortageDetails);
                 }
             }
 
-            return true;
+            return (true, shortageDetails);
+        }
+
+        private string GetShortageMessage(Dictionary<string, int> shortageDetails)
+        {
+            if (shortageDetails.Count == 0)
+            {
+                return "No shortage details available.";
+            }
+
+            var shortageMessage = "Shortage details: ";
+            foreach (var shortageDetail in shortageDetails)
+            {
+                shortageMessage += $"{shortageDetail.Key} ({shortageDetail.Value} units), ";
+            }
+            shortageMessage = shortageMessage.TrimEnd(',', ' ');
+
+            return shortageMessage;
         }
 
         private void UpdateRawMaterialQuantity(int idCatRecipe, int totalRecipes)
@@ -176,9 +203,14 @@ namespace API_ClayTrack.Controllers
                 if (rawMaterial != null)
                 {
                     rawMaterial.quantityWarehouse -= recipeRawMaterial.RequiredQuantity;
+                    if (rawMaterial.quantityWarehouse <= 0)
+                    {
+                        rawMaterial.status = false;
+                    }
                 }
             }
         }
+
 
         private void UpdateRecipeStock(int idCatRecipe, int totalRecipes)
         {
