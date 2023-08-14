@@ -1,6 +1,9 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { RecetasService } from 'src/app/servicios/recetas/recetas.service';
+import { VentasService } from 'src/app/servicios/ventas/ventas.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-ventas',
@@ -28,11 +31,21 @@ export class VentasComponent {
   productosAgregar: any[] = [];
   columna:string='col-9';
   navBar:boolean=false;
-
+  arrayStock:any[]= new Array();
+  arrayReceta: any[]=new Array()
   visible: boolean = false;
+  visibleOnlyStock:boolean=false;
+  idReceta:number=0
+  totalReceta:number=0
+  arrayStockPorId:any[]=new Array();
+  infomacionProducto:any=[]
 
   showDialog() {
     this.visible = true;
+  }
+
+  showDialogStock() {
+    this.visibleOnlyStock = true;
   }
   toggleNavBar() {
     if(this.navBar==false){
@@ -44,8 +57,12 @@ export class VentasComponent {
     }
     
   }
-  constructor( private messageService: MessageService) { }
+  constructor( private messageService: MessageService, private _servicioVentas: VentasService, private _servicioReceta: RecetasService) { 
+    this.obtenerStock();
+    this.obtenerReceta();
+  }
 
+ 
   agregarEmpleado() {
     this.visible=false;
     this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo el cliente correctamente.' });
@@ -140,6 +157,78 @@ export class VentasComponent {
   }
 
   agregarStock(){
+    this._servicioVentas.agregarStock(this.idReceta, this.totalReceta).subscribe((receta:any)=>{
+      this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo el stock correctamente.' });
+      console.log(receta)
+      this.obtenerStock()
+    },(err:any)=>{
+      console.log(err)
+      this.messageService.add({key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al guardar el Stock' });
 
+    })
   }
+
+  obtenerStock(){
+    // this.loading = true; 
+    this._servicioVentas.obtenerStock().subscribe((stock)=>{
+      this.arrayStock=stock;
+      console.log('Stock',this.arrayStock)
+      // this.loading = false; 
+    }, (err)=>{
+      console.log(err)
+      this.messageService.add({key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener el Stock' });
+      // this.loading = false; 
+
+    })
+  }
+
+  obtenerReceta(){
+    this._servicioReceta.obtenerReceta().subscribe((receta)=>{
+      this.arrayReceta=receta;
+      console.log('RECEYA',this.arrayReceta)
+    }, (err)=>{
+      console.log(err)
+      this.messageService.add({key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener la Receta' });
+
+    })
+  }
+
+  obtenerIdEmpleado(id:string){
+    this._servicioVentas.obtenerStockPorId(id).subscribe((datosStock)=>{
+      this.arrayStockPorId= datosStock;
+      console.log('DATOS Stock',datosStock )
+    })
+  }
+
+  eliminarEmpleado(id: string) {
+    // Mostrar SweetAlert de confirmación antes de eliminar el proveedor
+    Swal.fire({
+      title: 'Confirmación',
+      text: '¿Estás seguro de eliminar este Producto?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // El usuario ha confirmado la eliminación
+        this._servicioVentas.eliminarStock(id).subscribe(
+          (response) => {
+            // Proveedor eliminado con éxito, realizar acciones adicionales si es necesario
+            this.messageService.add({ key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se eliminó el Producto correctamente.' });
+            console.log('Stock eliminado exitosamente:', response);
+            this.obtenerStock(); 
+          },
+          (error) => {
+            // Ocurrió un error al eliminar el proveedor, manejar el error apropiadamente
+            this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al eliminar el Stock' });
+            console.error('Error al eliminar el apropiadamente:', error);
+          }
+        );
+      }
+    });
+  }
+
 }

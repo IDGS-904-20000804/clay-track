@@ -13,66 +13,68 @@
                 </button>
             </div>
             <div class="col-6 text-end">
+                <button type="button" class="btn btn-outline-light" (click)="showDialogImagen()">INFORMACION IMAGEN</button>&nbsp;&nbsp;
                 <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
 
             </div>
             <div class="col-12 mt-3">
-                <p-table #dt1 [value]="arrayReceta" dataKey="idCatSupplier" [rows]="10" [showCurrentPageReport]="true"  [loading]="loading"
-                    [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
-                    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-                    filterMode="global">
-                    <ng-template pTemplate="caption">
-                    </ng-template>
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>
-                                <div class="flex align-items-center">
-                                    Receta
-                                    <p-columnFilter type="text" field="receta.name" display="menu" filterHeader="Nombre"
-                                        filterMatchMode="contains"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="flex align-items-center">
-                                    Precio
-                                    <p-columnFilter type="text" field="person.phone" display="menu"
-                                        filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="flex align-items-center">
-                                    Cantidad
-                                    <p-columnFilter type="text" field="person.street" display="menu"
-                                        filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th>Imagen</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-receta>
-                        <tr >
-                            <td>{{ receta.name }} </td>
-                            <td>{{ receta.price }}</td>
-                            <td>{{ receta.fkCatSize }}</td>
-                            <td><img [src]="receta.image.filePath"></td>
-                            <td>
-                                <button class="btn custom-small-button btn-outline-warning" >
-                                  <i class="pi pi-pencil"></i>
-                                </button>
-                                <button class="btn custom-small-button btn-outline-danger">
-                                  <i class="pi pi-times"></i>
-                                </button>
-                              </td>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td colspan="4">No hay recetas disponibles.</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-                
+                <p-table #dt1 [value]="arrayReceta" dataKey="idCatSupplier" [rows]="10"
+  [showCurrentPageReport]="true" [loading]="loading" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
+  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+  filterMode="global" styleClass="p-datatable-sm"
+  [tableStyle]="{ 'min-width': '50rem' }" [style]="{ 'font-size': '15px' }"
+  [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+  <ng-template pTemplate="caption"></ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>
+        <div class="flex align-items-center">
+          Receta
+          <p-columnFilter type="text" field="receta.name" display="menu" filterHeader="Nombre"
+            filterMatchMode="contains"></p-columnFilter>
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center">
+          Precio
+          <p-columnFilter type="text" field="receta.price" display="menu" filterHeader="Precio"
+            filterMatchMode="contains"></p-columnFilter>
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center">
+          Cantidad
+          <p-columnFilter type="text" field="receta.fkCatSize" display="menu" filterHeader="Cantidad"
+            filterMatchMode="contains"></p-columnFilter>
+        </div>
+      </th>
+      <th>Imagen</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-receta>
+    <tr>
+      <td>{{ receta.name }}</td>
+      <td>${{ receta.price }}MXM</td>
+      <td>{{ receta.fkCatSize }}</td>
+      <td><img [src]="receta.image.filePath"></td>
+      <td>
+        <button class="btn custom-small-button btn-outline-warning">
+          <i class="pi pi-pencil"></i>
+        </button>
+        <button class="btn custom-small-button btn-outline-danger">
+          <i class="pi pi-times"></i>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5">No hay recetas disponibles.</td>
+    </tr>
+  </ng-template>
+</p-table>
+
             </div>
         </div>
     </div>
@@ -90,17 +92,23 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-6">
                                         <label for="Nombre">Nombre:</label>
-                                        <input type="text" class="form-control" [(ngModel)]="receta.name" />
+                                        <input type="text" class="form-control" [(ngModel)]="nombre" />
                                     </div>
                                     <div class="col-6">
                                         <label for="precio">Precio:</label>
-                                        <input type="text" class="form-control" [(ngModel)]="receta.price" />
+                                        <input type="text" class="form-control" [(ngModel)]="precio" />
                                     </div>
                                     <div class="col-6">
                                         <label for="cantidad">Cantidad:</label>
-                                        <input type="text" class="form-control" [(ngModel)]="receta.fkCatSize" />
+                                        <input type="text" class="form-control" [(ngModel)]="cantidadReceta" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="colo">Tamaño:</label><br>
+                                        <select  class="form-select" [(ngModel)]="idTamanio">
+                                            <option *ngFor="let t of tamanios" [value]="t.valor">{{ t.nombre }}</option>
+                                          </select>                                          
                                     </div>
                                     <div class="col-6 ">
                                         <label for="colo">Color:</label><br>
@@ -117,11 +125,12 @@
                                         </p-multiSelect>
                                     </div>
                                     <div class="col-6">
-                                        <label for="colo">Tamaño:</label><br>
-                                        <select  class="form-select" [(ngModel)]="idTamanio">
-                                            <option *ngFor="let t of tamanios" [value]="t.valor">{{ t.nombre }}</option>
-                                          </select>                                          
+                                        <label for="colo">Imagen:</label><br>
+                                        <select  class="form-select" [(ngModel)]="idFoto">
+                                            <option *ngFor="let fotos of arrayFotos" [value]="fotos.idCatImage">{{ fotos.fileName }}</option>
+                                          </select>     
                                     </div>
+                                   
                                 </div>
                             </div>
                             <div class="col-12">
@@ -182,6 +191,32 @@
                                     </ng-template>
                                 </p-table><br>
                             </div>
+                        
+                            <div class="col-12 text-center mt-4">
+                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarReceta()"
+                                    styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                                <p-button label="Cancelar" icon="pi pi-times"
+                                    styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class=" flex justify-content-center">
+                <p-toast></p-toast>
+                <div class=" flex justify-content-center">
+                    <p-dialog header="INFORMACION RECETA" [(visible)]="visibleImagen" [style]="{ width: '60vw' }"
+                        [maximizable]="true" headerStyleClass="custom-dialog-header">
+                        <div class="row">
+                            
                             <div class="col-12" >
                                 <!-- <input type="file" (change)="obtenerFoto($event)" style="display: none;">  -->
                                 <!-- Input nativo oculto -->
@@ -210,7 +245,7 @@
 
                                     </div>
                             <div class="col-12 text-center mt-4">
-                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarReceta()"
+                                <p-button label="Guardar" icon="pi pi-save" (click)="guardarFoto()"
                                     styleClass="p-button-outlined p-button-success  mx-5"></p-button>
                                 <p-button label="Cancelar" icon="pi pi-times"
                                     styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>

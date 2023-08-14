@@ -18,61 +18,57 @@
             </div>
             <div class="col-12 mt-3">
                 <p-table #dt1 [value]="arrayProveedor" dataKey="idCatSupplier" [rows]="10"
-                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
-                    [paginator]="true"
-                    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-                    filterMode="global">
-                    <ng-template pTemplate="caption">
-                        <!-- Aquí puedes agregar algún contenido adicional para la cabecera de la tabla si lo deseas -->
-                    </ng-template>
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>
-                                <div class="flex align-items-center">
-                                    Nombre
-                                    <p-columnFilter type="text" field="person.name" display="menu" filterHeader="Nombre"
-                                        filterMatchMode="contains"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="flex align-items-center">
-                                    Teléfono
-                                    <p-columnFilter type="text" field="person.phone" display="menu"
-                                        filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="flex align-items-center">
-                                    Dirección
-                                    <p-columnFilter type="text" field="person.street" display="menu"
-                                        filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
-                                </div>
-                            </th>
-                            <th>Acciones</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-proveedor>
-                        <tr [hidden]="proveedor.person.status==false">
-                            <td>{{ proveedor.person.name }} {{ proveedor.person.lastName }}</td>
-                            <td>{{ proveedor.person.phone }}</td>
-                            <td>{{ proveedor.person.street }}, {{ proveedor.person.neighborhood }}</td>
-                            <td>
-                                <a [routerLink]="['/EditarProveedores', proveedor.idCatSupplier]">
-                                    <p-button icon="pi pi-pencil"
-                                        styleClass="p-button-rounded p-button-warning p-button-outlined p-button-sm" (click)="obtenerIdProvedor()"></p-button>
-                                </a>
-                                &nbsp;&nbsp;
-                                <p-button icon="pi pi-times" (click)="eliminarProvedor(proveedor.idCatSupplier)"
-                                    styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"></p-button>
-                            </td>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td colspan="4">No hay proveedores disponibles.</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
+  [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
+  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" filterMode="global"
+  styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [style]="{ 'font-size': '15px' }"
+  [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+  <ng-template pTemplate="caption"></ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>
+        <div class="flex align-items-center mt-4">
+          Nombre
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center mt-4">
+          Teléfono
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center mt-4">
+          Dirección
+        </div>
+      </th>
+      <th class="flex align-items-center mt-4">Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-proveedor>
+    <tr [hidden]="proveedor.person.status == false">
+      <td>{{ proveedor.person.name }} {{ proveedor.person.lastName }}</td>
+      <td>{{ proveedor.person.phone }}</td>
+      <td>{{ proveedor.person.street }}, {{ proveedor.person.neighborhood }}</td>
+      <td>
+        <a [routerLink]="['/EditarProveedores', proveedor.idCatSupplier]">
+          <button class="btn custom-small-button btn-outline-warning">
+            <i class="pi pi-pencil"></i>
+          </button>
+        </a>
+        &nbsp;&nbsp;
+        <button class="btn custom-small-button btn-outline-danger"
+          (click)="eliminarProvedor(proveedor.idCatSupplier)">
+          <i class="pi pi-times"></i>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="4">No hay proveedores disponibles.</td>
+    </tr>
+  </ng-template>
+</p-table>
+
             </div>
         </div>
     </div>

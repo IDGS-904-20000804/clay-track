@@ -14,23 +14,93 @@
       </div>
       <div class="col-6 text-end">
         <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
-
       </div>
       <div class="col-12 mt-3">
-        <div class="product-list">
-          <div class="product-item" *ngFor="let product of products">
-            <div class="product-image">
-              <img [src]="product.image" [alt]="product.name" />
-            </div>
-            <div class="product-details">
-              <h3 class="product-name">{{ product.name }}</h3>
-              <p class="product-description">{{ product.description }}</p>
-              <div class="product-price">{{ '$' + product.price }}</div>
-              <button class="add-to-cart-btn" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"
-                (click)="agregarCarrito(product)">Add to Cart</button>
-            </div>
+      <main>
+        <section class="job-section recent-jobs-section section-padding">
+          <div class="container">
+            
+              <div class="row align-items-center">
+
+                  <div class="clearfix"></div>
+
+                  <div class="col-lg-4 col-md-6 col-12" *ngFor="let stock of arrayStock" [hidden]="stock.status==false">
+                      <div class="job-thumb job-thumb-box">
+                          <div class="job-image-box-wrap">
+                              <a href="job-details.html">
+                                  <img [src]="stock.filePath" class="job-image img-fluid" alt="">
+                              </a>
+
+                              <div class="job-image-box-wrap-info d-flex align-items-center">
+                              
+
+                                <p class="mb-0">
+                                    <a type="submit" class="badge" (click)="eliminarEmpleado(stock.idCatRecipe)">Informacion de {{ stock.name}}</a>
+                                </p>
+                            </div>
+
+                            
+                          </div>
+
+                          <div class="job-body">
+                              <h4 class="job-title">
+                                  <a href="job-details.html" class="job-title-link">{{ stock.name }}</a>
+                              </h4>
+
+                              <div class="d-flex align-items-center">
+                                  <div class="job-image-wrap d-flex align-items-center bg-white shadow-lg mt-2 mb-4">
+                                      <img src="/assets/logotipo.png" class="job-image me-3 img-fluid" alt="">
+
+                                      <p class="mb-0">ClayTrack</p>
+                                  </div>
+
+                                  <a href="#" class="bi-bookmark ms-auto me-2">
+                                  </a>
+
+                                  <a href="#" class="bi-heart">
+                                  </a>
+                              </div>
+
+                              <div class="d-flex align-items-center">
+                                  <p class="job-location">
+                                      <i class="custom-icon bi-geo-alt me-1"></i>
+                                      {{ stock.description }}
+                                  </p>
+                              </div>
+
+                              <div class="d-flex align-items-center border-top pt-3">
+                                  <p class="job-price mb-0">
+                                      <i class="custom-icon bi-cash me-1"></i>
+                                      {{ '$' + stock.price }}MXM
+                                  </p>
+
+                                  <a type="submit" class="custom-btn btn ms-auto"   (click)="agregarCarrito(stock)">Apply now</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              
+                 
+              </div>
           </div>
-        </div>
+      </section>
+      
+      </main>
+        
+          <!-- <div class="product-list">
+            <div class="product-item" *ngFor="let product of products">
+              <div class="product-image">
+                <img [src]="product.image" [alt]="product.name" />
+              </div>
+              <div class="product-details">
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-description">{{ product.description }}</p>
+                <div class="product-price">{{ '$' + product.price }}</div>
+                <button class="add-to-cart-btn" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"
+                  (click)="agregarCarrito(product)">Add to Cart</button>
+              </div>
+            </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -38,7 +108,7 @@
 
 <h2>Carrito de Compras</h2>
 <div class="cart-list" *ngIf="productosAgregar.length > 0">
-  <p-table [value]="productosAgregar" [tableStyle]="{ 'min-width': '50rem' }">
+    <p-table [value]="productosAgregar" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
         <th>Producto</th>
@@ -83,21 +153,33 @@
           <p-dialog header="INFORMACION STOCK" [(visible)]="visible" [style]="{ width: '60vw' }" [maximizable]="true"
             headerStyleClass="custom-dialog-header">
             <div class="row">
-              <div class="col-12">
-                <label for="Nombre">Nombre Producto:</label>
-                <input type="text" class="form-control" />
-              </div>
               <div class="col-6">
-                <label for="apaterno">Cantidad:</label>
-                <input type="text" class="form-control" />
-              </div>
+                <label for="unidadMedida">Receta:</label>
+                <!-- <select (change)="seleccionarMateriaPrima($event)">
+                    <option *ngFor="let receta of arrayMateriaPrimaSelector; let i = index"
+                            [value]="i">{{receta.name}}</option>
+                  </select>
+                  
+                  <div *ngIf="selectedObject">
+                    <h2>Detalles de la materia prima</h2>
+                    <pre>{{ selectedObject | json }}</pre>
+                  </div> -->
+                  
+                  
+                <select class="form-select" [(ngModel)]="idReceta"
+                    aria-label="Default select example">
+                    <option selected>Selecciona una opcion</option>
+                    <option *ngFor="let receta of arrayReceta; let i =index"
+                        value="{{receta.idCatRecipe}}" >{{receta.name}}</option>
+                </select>
+            </div>
               <div class="col-6">
-                <label for="amaterno">Precio:</label>
-                <input type="text" class="form-control" />
+                <label for="apaterno">Total Receta:</label>
+                <input type="text" class="form-control" [(ngModel)]="totalReceta" />
               </div>
 
               <div class="col-12 text-center mt-4">
-                <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()"
+                <p-button label="Guardar" icon="pi pi-save" (click)="agregarStock()"
                   styleClass="p-button-outlined p-button-success  mx-5"></p-button>
                 <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger"
                   (click)="cancelar()"></p-button>
@@ -109,3 +191,52 @@
     </div>
   </div>
 </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class=" flex justify-content-center">
+        <p-toast></p-toast>
+        <div class=" flex justify-content-center">
+          <p-dialog header="INFORMACION STOCK" [(visible)]="visible" [style]="{ width: '60vw' }" [maximizable]="true"
+            headerStyleClass="custom-dialog-header">
+            <div class="row">
+              <div class="col-6">
+                <label for="unidadMedida">Receta:</label>
+                <!-- <select (change)="seleccionarMateriaPrima($event)">
+                    <option *ngFor="let receta of arrayMateriaPrimaSelector; let i = index"
+                            [value]="i">{{receta.name}}</option>
+                  </select>
+                  
+                  <div *ngIf="selectedObject">
+                    <h2>Detalles de la materia prima</h2>
+                    <pre>{{ selectedObject | json }}</pre>
+                  </div> -->
+                  
+                  
+                <select class="form-select" [(ngModel)]="idReceta"
+                    aria-label="Default select example">
+                    <option selected>Selecciona una opcion</option>
+                    <option *ngFor="let receta of arrayReceta; let i =index"
+                        value="{{receta.idCatRecipe}}" >{{receta.name}}</option>
+                </select>
+            </div>
+              <div class="col-6">
+                <label for="apaterno">Total Receta:</label>
+                <input type="text" class="form-control" [(ngModel)]="totalReceta" />
+              </div>
+
+              <div class="col-12 text-center mt-4">
+                <p-button label="Guardar" icon="pi pi-save" (click)="agregarStock()"
+                  styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger"
+                  (click)="cancelar()"></p-button>
+              </div>
+            </div>
+          </p-dialog>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

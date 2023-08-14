@@ -17,60 +17,58 @@
 
       </div>
       <div class="col-12 mt-3">
-        <p-table #dt1 [value]="arrayMateriaPrima" dataKey="idCatSupplier" [rows]="10"
-        [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
-        [paginator]="true"
-        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-        filterMode="global">
-        <ng-template pTemplate="caption">
-            <!-- Aquí puedes agregar algún contenido adicional para la cabecera de la tabla si lo deseas -->
-        </ng-template>
-        <ng-template pTemplate="header">
-            <tr>
-                <th>
-                    <div class="flex align-items-center">
-                        Nombre Materia Prima
-                        <p-columnFilter type="text" field="person.name" display="menu" filterHeader="Nombre"
-                            filterMatchMode="contains"></p-columnFilter>
-                    </div>
-                </th>
-                <th>
-                    <div class="flex align-items-center">
-                        Unidad de Medida
-                        <p-columnFilter type="text" field="person.phone" display="menu"
-                            filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
-                    </div>
-                </th>
-                <th>
-                    <div class="flex align-items-center">
-                        Creacion
-                        <p-columnFilter type="text" field="person.street" display="menu"
-                            filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
-                    </div>
-                </th>
-                <th>Acciones</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-materiaPrima>
-            <tr>
-                <td>{{ materiaPrima.name }}</td>
-                <td>{{ materiaPrima.unitMeasure.description }}</td>
-                <td>{{materiaPrima.creationDate}}</td>
-                <td>
-                        <p-button icon="pi pi-pencil" (click)="obtenerIdMateriaP(materiaPrima.idCatRawMaterial)"
-                            styleClass="p-button-rounded p-button-warning p-button-outlined p-button-sm" ></p-button>
-                    &nbsp;&nbsp;
-                    <p-button icon="pi pi-times"  (click)="eliminarMateriaP(materiaPrima.idCatRawMaterial)"
-                        styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"></p-button>
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td colspan="4">No hay materia prima disponibles.</td>
-            </tr>
-        </ng-template>
-    </p-table>
+        <p-table #dt1 [value]="arrayMateriaPrima" dataKey="idCatSupplier" [rows]="15"
+  [showCurrentPageReport]="true" [rowsPerPageOptions]="[15, 25, 50]" [loading]="loading"
+  [paginator]="true"
+  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+  filterMode="global" styleClass="p-datatable-sm"
+  [tableStyle]="{ 'min-width': '50rem' }" [style]="{ 'font-size': '15px' }"
+  [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>
+        <div class="flex align-items-center mt-4">
+          Nombre Materia Prima
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center mt-4">
+          Unidad de Medida
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center mt-4">
+          Creación
+        </div>
+      </th>
+      <th class="flex align-items-center mt-4">Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-materiaPrima>
+    <tr>
+      <td>{{ materiaPrima.name }}</td>
+      <td>{{ materiaPrima.unitMeasure.description }}</td>
+      <td>{{ materiaPrima.creationDate }}</td>
+      <td>
+        <button class="btn custom-small-button btn-outline-warning"
+          (click)="obtenerIdMateriaP(materiaPrima.idCatRawMaterial)">
+          <i class="pi pi-pencil"></i>
+        </button>&nbsp; &nbsp;
+        <button class="btn custom-small-button btn-outline-danger"
+          (click)="eliminarMateriaP(materiaPrima.idCatRawMaterial)">
+          <i class="pi pi-times"></i>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="4">No hay materia prima disponibles.</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+      
         </div>
     </div>
 </div>

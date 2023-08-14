@@ -40,10 +40,12 @@ interface UploadEvent {
 export class RecetasComponent {
 
   visible: boolean = false;
+  visibleImagen: boolean= false;
   unidadMedida!:number;
   idMateriaP!:string;
   cantidad!:string;
   arrayMateriaPrima: any[]=  new Array();
+  arrayFotos: any[]= new Array();
   columna:string='col-9';
   navBar:boolean=false;
   arrayMateriaPrimaSelector: any[]= new Array();
@@ -60,7 +62,10 @@ export class RecetasComponent {
   ];
   idTamanio:number=0;
   loading: boolean = true;
-
+  idFoto:number=0;
+  nombre:string=''
+  precio:number=0
+  cantidadReceta:number=0
 
 
   // {
@@ -80,19 +85,17 @@ export class RecetasComponent {
   //   ]
   // }
 
-  receta: Receta = {
-    name: "",
-    price: 0,
-    fkCatSize: 1,
-    fkCatImage: 2,
-    colorIds: this.coloresObtenidos,
-    rawMaterials: 
-      this.arrayMateriaPrima
-  };
+  receta!: Receta
+
+  
   
   
   showDialog() {
     this.visible = true;
+  }
+
+  showDialogImagen(){
+    this.visibleImagen=true;
   }
 
   toggleNavBar() {
@@ -109,6 +112,7 @@ export class RecetasComponent {
     this.obtenerMateriaPrima();
     this.obtenerColores();
     this.obtenerReceta();
+    this.obtenerFotos();
   
 
   }
@@ -134,6 +138,7 @@ export class RecetasComponent {
 
   cancelar() {
     this.visible=false;
+    this.visibleImagen=false;
     this.messageService.add({ key: 'tc',severity: 'error', summary: 'Error', detail: 'Ha anulado el guardado del empleado.' });
   }
 
@@ -197,53 +202,42 @@ export class RecetasComponent {
   }
 
   agregarReceta() {
-  this.guardarFotoReceta(this.datoFoto)
-
-    // this._servicioReceta.guardarReceta(this.receta).subscribe(
-    //   (response) => {
-    //     // Cliente guardado con éxito, realizar acciones adicionales si es necesario
-    //     this.visible = false;
-    //     this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
-    //     console.log('Receta guardado exitosamente:', response);
-    //   },
-    //   (error) => {
-    //     // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
-    //     console.error('Error al guardar la receta:', error);
-    //   }
-    // );
+    this.receta = {
+      name: this.nombre,
+      price:this.precio,
+      fkCatSize: this.cantidadReceta,
+      fkCatImage: this.idFoto,
+      colorIds: this.coloresObtenidos,
+      rawMaterials: 
+        this.arrayMateriaPrima
+    };
+    this._servicioReceta.guardarReceta(this.receta).subscribe(
+      (response) => {
+        // Cliente guardado con éxito, realizar acciones adicionales si es necesario
+        this.visible = false;
+        this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
+        console.log('Receta guardado exitosamente:', response);
+        this.obtenerReceta()
+      },
+      (error) => {
+        // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+        console.error('Error al guardar la receta:', error);
+      }
+    );
+  
     
     }
+
+  guardarFoto(){
+    this.guardarFotoReceta(this.datoFoto)
+  }
+
 
   guardarFotoReceta(file: File){
     this._servicioReceta.uploadRecipeFile(file).subscribe(
           (response:any) => {
             this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se cargo la foto correctamente.' });
             this.idImagen=response.idCatImage
-            console.log('File uploaded successfully:', this.idImagen);
-            this.idImagen2=parseInt(this.idImagen)
-            if(this.idImagen2>0){
-              this.receta = {
-                name: "",
-                price: 0,
-                fkCatSize: 1,
-                fkCatImage: this.idImagen2,
-                colorIds: this.coloresObtenidos,
-                rawMaterials: 
-                  this.arrayMateriaPrima
-              };
-              this._servicioReceta.guardarReceta(this.receta).subscribe(
-                (response) => {
-                  // Cliente guardado con éxito, realizar acciones adicionales si es necesario
-                  this.visible = false;
-                  this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
-                  console.log('Receta guardado exitosamente:', response);
-                },
-                (error) => {
-                  // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
-                  console.error('Error al guardar la receta:', error);
-                }
-              );
-            }
           },
           (error:any) => {
             console.error('Error uploading file:', error);
@@ -308,6 +302,19 @@ export class RecetasComponent {
   }
 
   
+  obtenerFotos(){
+    this.loading = true; 
+    this._servicioReceta.obtenerFotos().subscribe((fotos)=>{
+      this.arrayFotos=fotos;
+      console.log('FOTOS',this.arrayFotos)
+      this.loading = false; 
+    }, (err)=>{
+      console.log(err)
+      this.messageService.add({key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener las Fotos' });
+      this.loading = false; 
+
+    })
+  }
 
 
 

@@ -13,53 +13,47 @@
         </button>
       </div>
         <div class="col-12 mt-3">
-        <p-table #dt1 [value]="arrayAlmacen" dataKey="idCatSupplier" [rows]="10"
-            [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
-            [paginator]="true"
-            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-            filterMode="global">
-            <ng-template pTemplate="caption">
-            </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>
-                        <div class="flex align-items-center">
-                            Nombre
-                            <p-columnFilter type="text" field="person.name" display="menu" filterHeader="Nombre"
-                                filterMatchMode="contains"></p-columnFilter>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="flex align-items-center">
-                            Teléfono
-                            <p-columnFilter type="text" field="person.phone" display="menu"
-                                filterHeader="Teléfono" filterMatchMode="contains"></p-columnFilter>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="flex align-items-center">
-                            Dirección
-                            <p-columnFilter type="text" field="person.street" display="menu"
-                                filterHeader="Dirección" filterMatchMode="contains"></p-columnFilter>
-                        </div>
-                    </th>
-                    <th>Acciones</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-clientes>
-                <tr>
-                    <td>{{ clientes.person.name }} {{ clientes.person.lastName }}</td>
-                    <td>{{ clientes.person.phone }}</td>
-                    <td>{{ clientes.person.street }}, {{ clientes.person.neighborhood }}</td>
-                   
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="4">No hay clientes disponibles.</td>
-                </tr>
-            </ng-template>
+          <p-table #dt1 [value]="arrayAlmacen" dataKey="idCatSupplier" [rows]="15"
+          [showCurrentPageReport]="true" [rowsPerPageOptions]="[15, 25, 50]" [loading]="loading"
+          [paginator]="true"
+          currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+          filterMode="global" styleClass="p-datatable-sm"
+          [tableStyle]="{ 'min-width': '50rem' }" [style]="{ 'font-size': '15px' }"
+          [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                <div class="flex align-items-center mt-4">
+                  Nombre
+                </div>
+              </th>
+              <th>
+                <div class="flex align-items-center mt-4">
+                  Cantidad
+                </div>
+              </th>
+              <th>
+                <div class="flex align-items-center mt-4">
+                  Unidad de Medida
+                </div>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-almacen>
+            <tr>
+              <td>{{ almacen.name }}</td>
+              <td>{{ almacen.quantityWarehouse }}</td>
+              <td>{{ almacen.unitMeasure.description }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="3">No hay productos disponibles.</td>
+            </tr>
+          </ng-template>
         </p-table>
+        
+        
       </div>
     </div>
   </div>

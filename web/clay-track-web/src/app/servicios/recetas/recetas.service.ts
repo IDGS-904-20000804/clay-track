@@ -107,7 +107,7 @@ export class RecetasService {
 
   uploadRecipeFile(file: File): any {
     const token = this.token;
-    const url = `${this.baseUrl}api/Recipe/Upload`;
+    const url = `${this.baseUrl}api/Image/Upload`;
     const formData = new FormData();
     formData.append('File', file, file.name);
     formData.append('FileName', file.name);
@@ -119,6 +119,18 @@ export class RecetasService {
     return this.http.post(url, formData, { headers });
   }
   
+
+  obtenerFotos(): Observable<any> {
+    const url = `${this.baseUrl}api/Image/GetAll`;
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    console.log('ESTE ES EL TOKEN', token)
+    return this.http.get<any>(url, { headers });
+  }
+
 
 
   // importar(file:File){

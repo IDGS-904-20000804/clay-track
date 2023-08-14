@@ -17,21 +17,59 @@
 
             </div>
             <div class="col-12 mt-3">
-                <p-table [tableStyle]="{ 'min-width': '50rem' }">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Correo</th>
-                            <th>Telefono</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-product>
-                        <tr>
-
-                        </tr>
-                    </ng-template>
+                <p-table #dt1 [value]="arrarCompraServicio" dataKey="idCatPurchase" [rows]="15"
+                  [showCurrentPageReport]="true" [rowsPerPageOptions]="[ 15, 50]" [loading]="loading"
+                  [paginator]="true"
+                  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                  filterMode="global"
+                  styleClass="p-datatable-sm"
+                  [tableStyle]="{ 'min-width': '50rem' }"
+                  [style]="{ 'font-size': '15px' }"
+                  [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>
+                        <div class="flex align-items-center mt-4">
+                          Nombre del Proveedor
+                        </div>
+                      </th>
+                      <th>
+                        <div class="flex align-items-center mt-4">
+                          Teléfono del Proveedor
+                        </div>
+                      </th>
+                      <th>
+                        <div class="flex align-items-center mt-4">
+                          Correo Electrónico del Proveedor
+                        </div>
+                      </th>
+                      <!-- <th class="flex align-items-center mt-4">Acciones</th> -->
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-compra>
+                    <tr>
+                      <td>{{ compra.nameSupplier }} {{ compra.lastNameSupplier }} {{ compra.middleNameSupplier }}</td>
+                      <td>{{ compra.phoneSupplier }}</td>
+                      <td>{{ compra.email }}</td>
+                      <!-- <td>
+                        <button class="btn custom-small-button btn-outline-warning" (click)="obtenerIdEmpleado(compra.fkCatEmployee)">
+                          <i class="pi pi-pencil"></i>
+                        </button>&nbsp; &nbsp;
+                        <button class="btn custom-small-button btn-outline-danger" (click)="eliminarEmpleado(compra.fkCatEmployee)">
+                          <i class="pi pi-times"></i>
+                        </button>
+                      </td> -->
+                    </tr>
+                  </ng-template>
+                  
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="4">No hay compras disponibles.</td>
+                    </tr>
+                  </ng-template>
                 </p-table>
+                
+                
             </div>
         </div>
     </div>
@@ -51,22 +89,22 @@
                                     <div class="col-12">
                                         <label for="proveedor">Proveedor:</label>
                                         <select class="form-select" [(ngModel)]="provedor"
-                                            aria-label="Default select example">
-                                            <option selected>Open this select menu</option>
-                                            <option value="Uno">One</option>
-                                            <option value="Dos">Two</option>
-                                            <option value="Tres">Three</option>
-                                        </select>
+                                        aria-label="Default select example">
+                                        <option selected>Selecciona una opcion</option>
+                                        <option *ngFor="let provedor of arrayProveedor; let i =index"
+                                            value="{{provedor.idCatSupplier}}" >{{provedor.person.name}} {{provedor.person.lastName}} {{provedor.person.middleName}}</option>
+                                    </select>
                                     </div>
                                     <div class="col-12">
                                         <label for="empleado">Empleado:</label>
+                                       
                                         <select class="form-select" [(ngModel)]="empleado"
-                                            aria-label="Default select example">
-                                            <option selected>Open this select menu</option>
-                                            <option value="Uno">One</option>
-                                            <option value="Dos">Two</option>
-                                            <option value="Tres">Three</option>
-                                        </select><br><br>
+                                        aria-label="Default select example">
+                                        <option selected>Selecciona una opcion</option>
+                                        <option *ngFor="let empleado of arrayEmpleados; let i =index"
+                                            value="{{empleado.idCatEmployee}}" >{{empleado.person.name}} {{empleado.person.lastName}} {{empleado.person.middleName}}</option>
+                                    </select>
+                                       <br><br>
                                     </div>
                                 </div>
                             </div>
@@ -74,13 +112,13 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="materiap">Materia Prima:</label>
+                                        
                                         <select class="form-select" [(ngModel)]="materiaP"
-                                            aria-label="Default select example">
-                                            <option selected>Open this select menu</option>
-                                            <option value="Uno">One</option>
-                                            <option value="Dos">Two</option>
-                                            <option value="Tres">Three</option>
-                                        </select>
+                                        aria-label="Default select example">
+                                        <option selected>Selecciona una opcion</option>
+                                        <option *ngFor="let receta of arrayMateriaPrimaSelector; let i =index"
+                                            value="{{receta.idCatRawMaterial}}" >{{receta.name}}</option>
+                                    </select>
                                     </div>
                                     <div class="col-6">
                                         <label for="cantidad">Cantidad:</label>
@@ -91,8 +129,8 @@
                                         <input type="text" [(ngModel)]="precio" class="form-control" />
                                     </div>
                                     <div class="col-6">
-                                        <label for="precio">Fecha Caducidad:</label>
-                                        <input type="date" [(ngModel)]="fechaC" class="form-control" /><br>
+                                        <label for="precio">Total:</label>
+                                        <input type="text" disabled [(ngModel)]="fechaC" class="form-control" /><br>
                                     </div>
                                     <div class="col-12 text-center">
                                         <p-button label="Agregar" icon="pi pi-plus" (click)="agregarCompra()"
@@ -117,20 +155,20 @@
                                     <ng-template pTemplate="body" let-materiaP let-rowIndex="rowIndex">
                                         <tr>
                                             <td>{{rowIndex + 1}}</td>
-                                            <td>{{materiaP.materia}}</td>
-                                            <td>{{materiaP.cantidad}}</td>
-                                            <td>{{materiaP.precio}}</td>
+                                            <td>{{materiaP.fkCatRawMaterial}}</td>
+                                            <td>{{materiaP.quantity}}</td>
+                                            <td>{{materiaP.price}}</td>
                                             <td>{{materiaP.fechaC}}</td>
-                                            <td> <p-button icon="pi pi-times"
+                                            <!-- <td> <p-button icon="pi pi-times"
                                                     styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"
                                                     (click)="eliminarCompra(rowIndex)"></p-button>
-                                            </td>
+                                            </td> -->
                                         </tr>
                                     </ng-template>
                                 </p-table>
                             </div>
                             <div class="col-12 text-center mt-4">
-                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()"
+                                <p-button label="Guardar" icon="pi pi-save" (click)="guardarCompra()"
                                     styleClass="p-button-outlined p-button-success  mx-5"></p-button>
                                 <p-button label="Cancelar" icon="pi pi-times"
                                     styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>

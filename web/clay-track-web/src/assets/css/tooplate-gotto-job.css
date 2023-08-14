@@ -100,11 +100,11 @@ p {
   font-weight: var(--font-weight-light);
 }
 
-ul li {
+/* ul li {
   color: var(--p-color);
   font-size: var(--p-font-size);
   font-weight: var(--font-weight-light);
-}
+} */
 
 a, 
 button {
