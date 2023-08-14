@@ -610,9 +610,6 @@ namespace API_ClayTrack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idDetailSale"));
 
-                    b.Property<int>("RecipeidCatRecipe")
-                        .HasColumnType("int");
-
                     b.Property<int>("fkCatRecipe")
                         .HasColumnType("int");
 
@@ -627,7 +624,7 @@ namespace API_ClayTrack.Migrations
 
                     b.HasKey("idDetailSale");
 
-                    b.HasIndex("RecipeidCatRecipe");
+                    b.HasIndex("fkCatRecipe");
 
                     b.HasIndex("fkCatSale");
 
@@ -1082,7 +1079,7 @@ namespace API_ClayTrack.Migrations
                 {
                     b.HasOne("API_ClayTrack.Models.CatRecipe", "Recipe")
                         .WithMany()
-                        .HasForeignKey("RecipeidCatRecipe")
+                        .HasForeignKey("fkCatRecipe")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

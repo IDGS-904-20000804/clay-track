@@ -22,22 +22,107 @@ namespace API_ClayTrack.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult<List<CatShipment>>> GetAll()
+        public async Task<ActionResult<List<ShipmentDto>>> GetAll()
         {
-            var shipment = await dbContext.CatShipment
+            var shipments = await dbContext.CatShipment
                 .Include(s => s.Sale)
                 .Include(s => s.Employee)
-                .Where(s => s.delivered == true)
+                .Where(s => !s.delivered)
+                .Select(s => new ShipmentDto
+                {
+                    //Shipment
+                    idCatShipment = s.idCatShipment,
+                    delivered = s.delivered,
+                    creationDate = s.creationDate,
+                    updateDate = s.updateDate,
+
+                    //Sale
+                    fkCatSale = s.fkCatSale,
+                    total = s.Sale.total,
+
+                    //Employee
+                    fkCatEmployee = s.fkCatEmployee,
+                    EmployeeName = s.Employee.Person.name,
+                    EmployeeEmail = s.Employee.User.Email,
+                    EmployeelastName = s.Employee.Person.lastName,
+                    EmployeePhone = s.Employee.Person.phone,
+
+                    //Client
+                    fkCatClient = s.Sale.fkCatClient,
+                    ClientName = s.Sale.Client.Person.name,
+                    ClientlastName = s.Sale.Client.Person.lastName,
+                    ClientPhone = s.Sale.Client.Person.phone,
+                    ClientEmail = s.Sale.Client.User.Email,
+                    postalCode = s.Sale.Client.Person.postalCode,
+                    streetNumber = s.Sale.Client.Person.streetNumber,
+                    apartmentNumber = s.Sale.Client.Person.apartmentNumber,
+                    street = s.Sale.Client.Person.street,
+                    neighborhood = s.Sale.Client.Person.neighborhood,
+                })
                 .ToListAsync();
 
-            return shipment;
+            return shipments;
         }
 
-        [HttpPost]
-        [Route("Add")]
-        public async Task<ActionResult> AddSupplier([FromBody] CatShipment shipment)
+        [HttpGet]
+        [Route("GetAllDelivered")]
+        public async Task<ActionResult<List<ShipmentDto>>> GetAllDelivered()
         {
-            dbContext.Add(shipment);
+            var shipments = await dbContext.CatShipment
+                .Include(s => s.Sale)
+                .Include(s => s.Employee)
+                .Where(s => s.delivered)
+                .Select(s => new ShipmentDto
+                {
+                    //Shipment
+                    idCatShipment = s.idCatShipment,
+                    delivered = s.delivered,
+                    creationDate = s.creationDate,
+                    updateDate = s.updateDate,
+
+                    //Sale
+                    fkCatSale = s.fkCatSale,
+                    total = s.Sale.total,
+
+                    //Employee
+                    fkCatEmployee = s.fkCatEmployee,
+                    EmployeeName = s.Employee.Person.name,
+                    EmployeeEmail = s.Employee.User.Email,
+                    EmployeelastName = s.Employee.Person.lastName,
+                    EmployeePhone = s.Employee.Person.phone,
+
+                    //Client
+                    fkCatClient = s.Sale.fkCatClient,
+                    ClientName = s.Sale.Client.Person.name,
+                    ClientlastName = s.Sale.Client.Person.lastName,
+                    ClientPhone = s.Sale.Client.Person.phone,
+                    ClientEmail = s.Sale.Client.User.Email,
+                    postalCode = s.Sale.Client.Person.postalCode,
+                    streetNumber = s.Sale.Client.Person.streetNumber,
+                    apartmentNumber = s.Sale.Client.Person.apartmentNumber,
+                    street = s.Sale.Client.Person.street,
+                    neighborhood = s.Sale.Client.Person.neighborhood,
+                })
+                .ToListAsync();
+
+            return shipments;
+        }
+
+        [HttpPut]
+        [Route("Delivered{id:int}")]
+        public async Task<ActionResult> Delivered(int id)
+        {
+            var shipment = await dbContext.CatShipment
+                .Include(s => s.Employee)
+                .Include(s => s.Sale)
+                .FirstOrDefaultAsync(c => c.idCatShipment == id);
+
+            if (shipment == null)
+            {
+                return NotFound();
+            }
+
+            shipment.delivered = true;
             await dbContext.SaveChangesAsync();
             return Ok();
         }

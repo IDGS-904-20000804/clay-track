@@ -211,13 +211,17 @@ namespace API_ClayTrack.Controllers
             }
         }
 
-
         private void UpdateRecipeStock(int idCatRecipe, int totalRecipes)
         {
             var recipe = dbContext.CatRecipe.FirstOrDefault(r => r.idCatRecipe == idCatRecipe);
             if (recipe != null)
             {
                 recipe.quantityStock += totalRecipes;
+
+                if (!recipe.status)
+                {
+                    recipe.status = true;
+                }
             }
         }
 

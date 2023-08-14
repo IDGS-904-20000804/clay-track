@@ -16,7 +16,7 @@ namespace API_ClayTrack.Models
         public float price { get; set; }
 
         [Required]
-        [ForeignKey("Stock")]
+        [ForeignKey("Recipe")]
         public int fkCatRecipe { get; set; }
 
         [Required]

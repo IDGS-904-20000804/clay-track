@@ -62,68 +62,7 @@ namespace API_ClayTrack.Controllers
             return purchaseDto;
         }
 
-        /*[HttpPost]
-        [Route("Add")]
-        public async Task<IActionResult> AddPurchase([FromBody] PurchaseJsonDto purchaseJsonDto)
-        {
-            // Check if the purchase JSON is valid
-            if (purchaseJsonDto == null)
-            {
-                return BadRequest("The recipe JSON is invalid or empty.");
-            }
-
-            // Calculate the total value
-            float total = 0.0f;
-            if (purchaseJsonDto.RawMaterials != null && purchaseJsonDto.RawMaterials.Count > 0)
-            {
-                foreach (var rawMaterial in purchaseJsonDto.RawMaterials)
-                {
-                    total += rawMaterial.Price * rawMaterial.Quantity;
-
-                    // Update quantityWarehouse and status of the raw material
-                    var rawMaterialEntity = await dbContext.CatRawMaterial.FirstOrDefaultAsync(r => r.idCatRawMaterial == rawMaterial.FkCatRawMaterial);
-                    if (rawMaterialEntity != null)
-                    {
-                        rawMaterialEntity.quantityWarehouse += rawMaterial.Quantity;
-                        if (rawMaterialEntity.status == false)
-                        {
-                            rawMaterialEntity.status = true;
-                        }
-                    }
-                }
-            }
-
-            // Insert the purchase
-            var purchase = new CatPurchase
-            {
-                total = total,
-                fkCatSupplier = purchaseJsonDto.fkCatSupplier,
-                fkCatEmployee = purchaseJsonDto.fkCatEmployee
-            };
-
-            dbContext.CatPurchase.Add(purchase);
-            await dbContext.SaveChangesAsync();
-
-            // Insert raw material details
-            if (purchaseJsonDto.RawMaterials != null && purchaseJsonDto.RawMaterials.Count > 0)
-            {
-                var rawMaterialJsonList = new List<RawMaterialJsonDto>();
-                foreach (var rawMaterial in purchaseJsonDto.RawMaterials)
-                {
-                    rawMaterialJsonList.Add(new RawMaterialJsonDto
-                    {
-                        IdCatalog = purchase.idCatPurchase,
-                        Quantity = rawMaterial.Quantity,
-                        FkCatRawMaterial = rawMaterial.FkCatRawMaterial,
-                        Price = rawMaterial.Price
-                    });
-                }
-
-                await InsertDetailRawMaterial(rawMaterialJsonList);
-            }
-            return Ok("Purchase add successfully.");
-        }*/
-
+       
         [HttpPost]
         [Route("Add")]
         public async Task<IActionResult> AddPurchase([FromBody] PurchaseJsonDto purchaseJsonDto)

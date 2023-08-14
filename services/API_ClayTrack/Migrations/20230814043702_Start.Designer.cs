@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_ClayTrack.Migrations
 {
     [DbContext(typeof(ClayTrackDbContext))]
-    [Migration("20230812153503_defaul0")]
-    partial class defaul0
+    [Migration("20230814043702_Start")]
+    partial class Start
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -613,9 +613,6 @@ namespace API_ClayTrack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idDetailSale"));
 
-                    b.Property<int>("RecipeidCatRecipe")
-                        .HasColumnType("int");
-
                     b.Property<int>("fkCatRecipe")
                         .HasColumnType("int");
 
@@ -630,7 +627,7 @@ namespace API_ClayTrack.Migrations
 
                     b.HasKey("idDetailSale");
 
-                    b.HasIndex("RecipeidCatRecipe");
+                    b.HasIndex("fkCatRecipe");
 
                     b.HasIndex("fkCatSale");
 
@@ -1085,7 +1082,7 @@ namespace API_ClayTrack.Migrations
                 {
                     b.HasOne("API_ClayTrack.Models.CatRecipe", "Recipe")
                         .WithMany()
-                        .HasForeignKey("RecipeidCatRecipe")
+                        .HasForeignKey("fkCatRecipe")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
