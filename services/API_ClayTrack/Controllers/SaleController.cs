@@ -11,7 +11,7 @@ namespace API_ClayTrack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Employee,Admin,Client")]
     public class SaleController : ControllerBase
     {
         private readonly ClayTrackDbContext dbContext;
