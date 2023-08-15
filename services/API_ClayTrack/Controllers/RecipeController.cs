@@ -1,14 +1,10 @@
 ﻿using API_ClayTrack.DataBase;
 using API_ClayTrack.DTOs;
 using API_ClayTrack.Models;
-using API_ClayTrack.Repositories.IImageRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace API_ClayTrack.Controllers
 {
@@ -34,7 +30,7 @@ namespace API_ClayTrack.Controllers
                 .ToListAsync();
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Route("GetOne{id:int}")]
         [AllowAnonymous]
         public async Task<ActionResult<CatRecipe>> GetRecipe(int id)
@@ -50,6 +46,66 @@ namespace API_ClayTrack.Controllers
             }
 
             return Ok(recipe);
+        }*/
+        [HttpGet]
+        [Route("GetOne/{id:int}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<RecipeDetailDto>> GetRecipe(int id)
+        {
+            var recipe = await dbContext.CatRecipe
+                .Include(r => r.Size)
+                .Include(r => r.Image)
+                .FirstOrDefaultAsync(s => s.idCatRecipe == id);
+
+            if (recipe == null)
+            {
+                return NotFound();
+            }
+
+            var colorIds = await dbContext.DetailRecipeColor
+                .Where(d => d.fkCatRecipe == id)
+                .Select(d => d.fkCatColor)
+                .ToListAsync();
+
+            var colors = await dbContext.CatColor
+                .Where(c => colorIds.Contains(c.idCatColor))
+                .ToListAsync();
+
+            var rawMaterialDetails = await dbContext.DetailRecipeRawMaterial
+                .Where(dr => dr.fkCatRecipe == id)
+                .ToListAsync();
+
+            var rawMaterialIds = rawMaterialDetails.Select(dr => dr.fkCatRawMaterial).ToList();
+
+            var rawMaterials = await dbContext.CatRawMaterial
+                .Where(rm => rawMaterialIds.Contains(rm.idCatRawMaterial))
+                .ToListAsync();
+
+            var rawMaterialDtos = rawMaterials.Select(rm => new RawMaterialSimpleDto
+            {
+                IdCatRawMaterial = rm.idCatRawMaterial,
+                Name = rm.name
+            }).ToList();
+
+            var rawMaterialDetailsDto = rawMaterialDetails.Select(rm => new DetailRecipeRawMaterialSimpleDto
+            {
+                IdDetailRecipeRawMaterial = rm.idDetailRecipeRawMaterial,
+                Quantity = rm.quantity
+            }).ToList();
+
+            var recipeDetailsDto = new RecipeDetailDto
+            {
+                IdCatRecipe = recipe.idCatRecipe,
+                Name = recipe.name,
+                Price = recipe.price,
+                FkCatImage = recipe.fkCatImage,
+                FkCatSize = recipe.fkCatSize,
+                Colors = colors,
+                RawMaterials = rawMaterialDtos,
+                RawMaterialDetails = rawMaterialDetailsDto
+            };
+
+            return Ok(recipeDetailsDto);
         }
 
         [HttpPost]
@@ -107,7 +163,7 @@ namespace API_ClayTrack.Controllers
             return Ok("Recipe inserted successfully.");
         }
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("Update/{idCatRecipe:int}")]
         public async Task<IActionResult> Update(int idCatRecipe, [FromBody] RecipeJsonDto recipeJson)
         {
@@ -161,7 +217,108 @@ namespace API_ClayTrack.Controllers
             }
 
             return Ok("Recipe updated successfully.");
+        }*/
+
+        [HttpPut]
+        [Route("Update/{idCatRecipe:int}")]
+        public async Task<IActionResult> Update(int idCatRecipe, [FromBody] RecipeJsonDto recipeJson)
+        {
+            // Check if the recipe JSON is valid
+            if (recipeJson == null)
+            {
+                return BadRequest("The recipe JSON is invalid or empty.");
+            }
+
+            // Check if the provided idCatRecipe exists
+            var existingRecipe = await dbContext.CatRecipe.FirstOrDefaultAsync(r => r.idCatRecipe == idCatRecipe);
+            if (existingRecipe == null)
+            {
+                return NotFound("Recipe not found.");
+            }
+
+            // Update the existing recipe properties
+            existingRecipe.name = recipeJson.Name;
+            existingRecipe.price = recipeJson.Price;
+            existingRecipe.fkCatImage = recipeJson.FkCatImage;
+            existingRecipe.fkCatSize = recipeJson.FkCatSize;
+
+            // Save the changes to the database
+            await dbContext.SaveChangesAsync();
+
+            // Update color details
+            if (recipeJson.ColorIds != null)
+            {
+                // Get existing color details for the recipe
+                var existingDetailColors = await dbContext.DetailRecipeColor
+                    .Where(d => d.fkCatRecipe == idCatRecipe)
+                    .ToListAsync();
+
+                var existingColorIds = existingDetailColors.Select(dc => dc.fkCatColor).ToList();
+                var newColorIds = recipeJson.ColorIds;
+
+                // Calculate color IDs to add and remove
+                var colorsToAdd = newColorIds.Except(existingColorIds).ToList();
+                var colorsToRemove = existingColorIds.Except(newColorIds).ToList();
+
+                // Add new color details
+                foreach (var colorId in colorsToAdd)
+                {
+                    var detailColor = new DetailRecipeColor
+                    {
+                        fkCatRecipe = idCatRecipe,
+                        fkCatColor = colorId
+                    };
+                    dbContext.DetailRecipeColor.Add(detailColor);
+                }
+
+                // Remove color details that are not selected anymore
+                var detailsToRemove = existingDetailColors.Where(dc => colorsToRemove.Contains(dc.fkCatColor)).ToList();
+                dbContext.DetailRecipeColor.RemoveRange(detailsToRemove);
+
+                await dbContext.SaveChangesAsync();
+            }
+
+            // Insert raw material details
+            if (recipeJson.RawMaterials != null)
+            {
+                // Get existing raw material details for the recipe
+                var existingDetailRawMaterials = await dbContext.DetailRecipeRawMaterial
+                    .Where(d => d.fkCatRecipe == idCatRecipe)
+                    .ToListAsync();
+
+                var existingRawMaterialIds = existingDetailRawMaterials.Select(dr => dr.fkCatRawMaterial).ToList();
+                var newRawMaterials = recipeJson.RawMaterials;
+
+                // Calculate raw material IDs to add and remove
+                var rawMaterialsToAdd = newRawMaterials
+                    .Where(newMaterial => !existingRawMaterialIds.Contains(newMaterial.FkCatRawMaterial))
+                    .ToList();
+                var rawMaterialsToRemove = existingRawMaterialIds
+                    .Where(existingId => !newRawMaterials.Any(newMaterial => newMaterial.FkCatRawMaterial == existingId))
+                    .ToList();
+
+                // Add new raw material details
+                foreach (var rawMaterial in rawMaterialsToAdd)
+                {
+                    var detailRawMaterial = new DetailRecipeRawMaterial
+                    {
+                        fkCatRecipe = idCatRecipe,
+                        fkCatRawMaterial = rawMaterial.FkCatRawMaterial,
+                        quantity = rawMaterial.Quantity
+                    };
+                    dbContext.DetailRecipeRawMaterial.Add(detailRawMaterial);
+                }
+
+                // Remove raw material details that are not selected anymore
+                var detailsToRemove = existingDetailRawMaterials
+                    .Where(dr => rawMaterialsToRemove.Contains(dr.fkCatRawMaterial))
+                    .ToList();
+                dbContext.DetailRecipeRawMaterial.RemoveRange(detailsToRemove);
+            }
+
+            return Ok("Recipe updated successfully.");
         }
+
 
 
 

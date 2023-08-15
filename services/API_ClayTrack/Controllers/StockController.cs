@@ -60,17 +60,23 @@ namespace API_ClayTrack.Controllers
                 var detailColors = await dbContext.DetailRecipeColor
                     .Include(d => d.Color)
                     .Where(d => d.fkCatRecipe == recipe.idCatRecipe)
-                    .Select(d => d.Color.idCatColor)
+                    .Select(d => new CatColor
+                    {
+                        idCatColor = d.Color.idCatColor,
+                        description = d.Color.description,
+                        hexadecimal = d.Color.hexadecimal,
+                    })
                     .ToListAsync();
 
-                stockDto.ColorIds = detailColors;
+                stockDto.ColorIds = detailColors.Select(color => color.idCatColor).ToList();
+                stockDto.ColorDescriptions = detailColors.Select(color => color.description).ToList();
+                stockDto.ColorHexadecimals = detailColors.Select(color => color.hexadecimal).ToList();
+
                 stockWithColorsDto.Add(stockDto);
             }
 
             return stockWithColorsDto;
         }
-
-
 
         [HttpGet]
         [Route("GetOne{id:int}")]
