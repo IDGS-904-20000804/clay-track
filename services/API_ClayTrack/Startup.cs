@@ -116,7 +116,6 @@ namespace API_ClayTrack
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
             }
 
             app.UseCors("AllowOrigin");

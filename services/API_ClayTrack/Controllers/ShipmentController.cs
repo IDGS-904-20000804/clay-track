@@ -126,5 +126,71 @@ namespace API_ClayTrack.Controllers
             await dbContext.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpGet]
+        [Route("GetAllForClient")]
+        public async Task<ActionResult<List<SaleClient>>> GetAllForClient()
+        {
+            var saleClients = await dbContext.CatShipment
+                .Include(s => s.Sale)
+                .Include(s => s.Employee)
+                .Where(s => !s.delivered)
+                .Select(s => new SaleClient
+                {
+                    // Shipment
+                    idCatShipment = s.idCatShipment,
+                    delivered = s.delivered,
+                    creationDate = s.creationDate,
+
+                    // Sale
+                    fkCatSale = s.fkCatSale,
+                    total = s.Sale.total,
+
+                    // DetailSale
+                    DetailSale = dbContext.DetailSale
+                        .Where(detailSale => detailSale.fkCatSale == s.fkCatSale)
+                        .Select(detailSale => new DetailSale
+                        {
+                            idDetailSale = detailSale.idDetailSale,
+                            quantity = detailSale.quantity,
+                            price = detailSale.price,
+                            fkCatRecipe = detailSale.fkCatRecipe,
+                            Recipe = new CatRecipe
+                            {
+                                idCatRecipe = detailSale.Recipe.idCatRecipe,
+                                name = detailSale.Recipe.name,
+                                fkCatSize = detailSale.Recipe.fkCatSize,
+                                Size = new CatSize
+                                {
+                                    idCatSize = detailSale.Recipe.Size.idCatSize,
+                                    description = detailSale.Recipe.Size.description,
+                                    abbreviation = detailSale.Recipe.Size.abbreviation
+                                },
+                                Image = new CatImage
+                                {
+                                    FilePath = detailSale.Recipe.Image.FilePath
+                                }
+                            }
+                        })
+                        .ToList(),
+
+
+                    // Client
+                    fkCatClient = s.Sale.fkCatClient,
+                    ClientName = s.Sale.Client.Person.name,
+                    ClientLastName = s.Sale.Client.Person.lastName,
+                    ClientMiddleName = s.Sale.Client.Person.middleName,
+                    ClientPhone = s.Sale.Client.Person.phone,
+                    ClientEmail = s.Sale.Client.User.Email,
+                    postalCode = s.Sale.Client.Person.postalCode,
+                    streetNumber = s.Sale.Client.Person.streetNumber,
+                    apartmentNumber = s.Sale.Client.Person.apartmentNumber,
+                    street = s.Sale.Client.Person.street,
+                    neighborhood = s.Sale.Client.Person.neighborhood,
+                })
+                .ToListAsync();
+
+            return saleClients;
+        }
     }
 }

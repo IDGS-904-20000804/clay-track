@@ -25,7 +25,8 @@ namespace API_ClayTrack.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult<List<StockWithColorsDto>>> GetAllWithColors()
+        [AllowAnonymous]
+        public async Task<ActionResult<List<StockWithColorsDto>>> GetAllStock()
         {
             var stock = await dbContext.CatRecipe
                 .Include(r => r.Size)
@@ -73,6 +74,7 @@ namespace API_ClayTrack.Controllers
 
         [HttpGet]
         [Route("GetOne{id:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult<CatRecipe>> GetStock(int id)
         {
             var stock = await dbContext.CatRecipe
