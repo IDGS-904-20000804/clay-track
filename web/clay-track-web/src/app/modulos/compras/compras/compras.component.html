@@ -110,7 +110,7 @@
                             </div>
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-12">
                                         <label for="materiap">Materia Prima:</label>
                                         
                                         <select class="form-select" [(ngModel)]="materiaP"
@@ -128,11 +128,8 @@
                                         <label for="precio">Precio:</label>
                                         <input type="text" [(ngModel)]="precio" class="form-control" />
                                     </div>
-                                    <div class="col-6">
-                                        <label for="precio">Total:</label>
-                                        <input type="text" disabled [(ngModel)]="fechaC" class="form-control" /><br>
-                                    </div>
-                                    <div class="col-12 text-center">
+                                   
+                                    <div class="col-12 text-center mt-4">
                                         <p-button label="Agregar" icon="pi pi-plus" (click)="agregarCompra()"
                                             styleClass="p-button-outlined p-button-info p-button-sm  mx-5"></p-button>
                                     </div>
@@ -148,8 +145,6 @@
                                             <th>Materia Prima</th>
                                             <th>Cantidad</th>
                                             <th>Precio</th>
-                                            <th>Caducidad</th>
-                                            <th>Acciones</th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-materiaP let-rowIndex="rowIndex">
@@ -158,7 +153,6 @@
                                             <td>{{materiaP.fkCatRawMaterial}}</td>
                                             <td>{{materiaP.quantity}}</td>
                                             <td>{{materiaP.price}}</td>
-                                            <td>{{materiaP.fechaC}}</td>
                                             <!-- <td> <p-button icon="pi pi-times"
                                                     styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"
                                                     (click)="eliminarCompra(rowIndex)"></p-button>

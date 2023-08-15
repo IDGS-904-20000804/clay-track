@@ -29,14 +29,14 @@ import { MateriaPrimaService } from 'src/app/servicios/materiaPrima/materia-prim
 })
 export class ComprasComponent {
   visible: boolean = false;
-  provedor!:string;
-  empleado!:string;
+  provedor!:number;
+  empleado!:number;
   materiaP!:string;
   cantidad!:string;
-  precio!:string;
+  precio!:number;
   fechaC!:string;
   loading: boolean = true;
-
+  totalCompra:number=0
   arrayCompra: any[]=  new Array();
   arrarCompraServicio:any[]=  new Array();
   arrayEmpleados:any[]=new Array()
@@ -44,21 +44,7 @@ export class ComprasComponent {
   arrayMateriaPrimaSelector: any[]=new Array()
   columna:string='col-9';
   navBar:boolean=false;
-  compra:PurchaseData={
-    "idCatPurchase": 0,
-    "total": 0,
-    "fkCatSupplier": 3,
-    "fkCatEmployee": 20,
-    "rawMaterials": [
-      {
-        "idCatalog": 0,
-        "quantity": 100,
-        "price": 30,
-        "fkCatRawMaterial": 10
-      }
-     
-    ]
-  }
+  compra!:PurchaseData
 
   showDialog() {
     this.visible = true;
@@ -91,12 +77,19 @@ export class ComprasComponent {
   }
 
   guardarCompra() {
+    this.compra={
+      "idCatPurchase": 0,
+      "total": 0,
+      "fkCatSupplier": this.provedor,
+      "fkCatEmployee": this.empleado,
+      "rawMaterials": this.arrayCompra
+    }
       this._servicioCompra.guardarCompra(this.compra).subscribe(
         (response) => {
             this.visible = false;
             this.messageService.add({key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se guardó la compra correctamente.' });
             console.log('Compra guardado exitosamente:', response.error.text); // Acceder al mensaje de éxito
-          
+          this.obtenerCompra()
         },
         (error) => {
           // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
@@ -116,23 +109,34 @@ export class ComprasComponent {
 
   agregarCompra() {
     const recetaExistente = this.arrayCompra.find(
-      (compra) => compra.materia === this.materiaP
+      (compra) => compra.fkCatRawMaterial === this.materiaP
     );
   
     const cantidadNueva = parseFloat(this.cantidad);
   
     if (!isNaN(cantidadNueva) && cantidadNueva > 0) {
       if (recetaExistente) {
-        recetaExistente.cantidad += cantidadNueva;
+        recetaExistente.quantity += cantidadNueva;
       } else {
         this.arrayCompra.push({
-          idCatalog:0,
+          idCatalog: 0,
           fkCatRawMaterial: this.materiaP,
           quantity: cantidadNueva,
-          price : this.precio,
-          // fechaC:this.fechaC
-          
+          price: this.precio,
+          // fechaC: this.fechaC
         });
+        
+        const totalPrecio = this.arrayCompra.reduce((sum, value) => {
+          if (typeof value.price === "number") {
+            return sum + value.price;
+          } else {
+            return sum;
+          }
+        }, 0);
+        
+        this.totalCompra = totalPrecio;
+        
+
       }
     } else {
       this.messageService.add({ key: 'tc',severity: 'info', summary: 'Verifica', detail: 'La cantidad debe ser un número válido mayor que cero.' });

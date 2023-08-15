@@ -3,12 +3,37 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 
 export interface Receta {
+  idCatRecipe?: number; // Agregado si es necesario
   name: string;
   price: number;
+  quantityStock?: number; // Agregado si es necesario
+  status?: boolean; // Agregado si es necesario
+  creationDate?: string; // Agregado si es necesario
+  updateDate?: string; // Agregado si es necesario
   fkCatSize: number;
   fkCatImage: number;
+  size?: CatSize; // Agregado si es necesario
+  image?: CatImage; // Agregado si es necesario
   colorIds: number[];
   rawMaterials: RawMaterial[];
+}
+
+export interface CatSize {
+  idCatSize: number;
+  description: string;
+  abbreviation: string;
+  status?: boolean; // Agregado si es necesario
+  creationDate?: string; // Agregado si es necesario
+  updateDate?: string; // Agregado si es necesario
+}
+
+export interface CatImage {
+  idCatImage: number;
+  file: any; // Cambia "any" por el tipo de dato correcto para representar la imagen
+  fileName: string;
+  fileExtension: string;
+  fileSizeInBytes: number;
+  filePath: string;
 }
 
 export interface RawMaterial {
@@ -130,6 +155,49 @@ export class RecetasService {
     console.log('ESTE ES EL TOKEN', token)
     return this.http.get<any>(url, { headers });
   }
+
+  actualizarReceta(receta: Receta,id:number): Observable<any> {
+    const url = `${this.baseUrl}api/Recipe/Update/${id}`; // Ajusta la URL según la ruta de la API para guardar recetas
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post<Receta>(url, receta, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
+  obtenerRecetaPorId(id:string):Observable<Receta>{
+    const url = `${this.baseUrl}api/Recipe/GetOne${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<Receta>(url, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
+  eliminarReceta(id:string): Observable<any> {
+    const url = `${this.baseUrl}api/Recipe/Delete${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<any>(url,null, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
 
 
 

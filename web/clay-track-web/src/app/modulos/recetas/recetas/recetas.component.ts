@@ -2,7 +2,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { MateriaPrimaService } from 'src/app/servicios/materiaPrima/materia-prima.service';
-import {  Receta, RecetasService } from 'src/app/servicios/recetas/recetas.service';
+import { Receta, RecetasService } from 'src/app/servicios/recetas/recetas.service';
 interface Color {
   idCatColor: number;
   description: string;
@@ -40,32 +40,32 @@ interface UploadEvent {
 export class RecetasComponent {
 
   visible: boolean = false;
-  visibleImagen: boolean= false;
-  unidadMedida!:number;
-  idMateriaP!:string;
-  cantidad!:string;
-  arrayMateriaPrima: any[]=  new Array();
-  arrayFotos: any[]= new Array();
-  columna:string='col-9';
-  navBar:boolean=false;
-  arrayMateriaPrimaSelector: any[]= new Array();
-  arrayColores: any[]= new Array();
-  coloresObtenidos: any[]= new Array();
-  foto!:File;
-  idImagen:string='';
-  idImagen2:number=0;
-  arrayReceta: any[]=  new Array();
+  visibleImagen: boolean = false;
+  unidadMedida!: number;
+  idMateriaP!: string;
+  cantidad!: string;
+  arrayMateriaPrima: any[] = new Array();
+  arrayFotos: any[] = new Array();
+  columna: string = 'col-9';
+  navBar: boolean = false;
+  arrayMateriaPrimaSelector: any[] = new Array();
+  arrayColores: any[] = new Array();
+  coloresObtenidos: any[] = new Array();
+  foto!: File;
+  idImagen: string = '';
+  idImagen2: number = 0;
+  arrayReceta: any;
   tamanios = [
     { nombre: 'Chico', valor: 1 },
     { nombre: 'Mediano', valor: 2 },
     { nombre: 'Grande', valor: 3 }
   ];
-  idTamanio:number=0;
+  idTamanio: number = 0;
   loading: boolean = true;
-  idFoto:number=0;
-  nombre:string=''
-  precio:number=0
-  cantidadReceta:number=0
+  idFoto: number = 0;
+  nombre: string = ''
+  precio: number = 0
+  cantidadReceta: any
 
 
   // {
@@ -87,59 +87,84 @@ export class RecetasComponent {
 
   receta!: Receta
 
-  
-  
-  
+
+
+
   showDialog() {
     this.visible = true;
   }
 
-  showDialogImagen(){
-    this.visibleImagen=true;
+  showDialogImagen() {
+    this.visibleImagen = true;
   }
 
   toggleNavBar() {
-    if(this.navBar==false){
-      this.navBar =true;
-      this.columna='col-12';
-    }else{
-      this.navBar =false;
-      this.columna='col-9';
+    if (this.navBar == false) {
+      this.navBar = true;
+      this.columna = 'col-12';
+    } else {
+      this.navBar = false;
+      this.columna = 'col-9';
     }
-    
+
   }
-  constructor( private cdr: ChangeDetectorRef, private messageService: MessageService, private _servicioMateriaP: MateriaPrimaService, private _servicioReceta: RecetasService) { 
+  constructor(private cdr: ChangeDetectorRef, private messageService: MessageService, private _servicioMateriaP: MateriaPrimaService, private _servicioReceta: RecetasService) {
     this.obtenerMateriaPrima();
     this.obtenerColores();
     this.obtenerReceta();
     this.obtenerFotos();
-  
+
 
   }
 
-  obtenerReceta(){
-    this.loading = true; 
-    this._servicioReceta.obtenerReceta().subscribe((receta)=>{
-      this.arrayReceta=receta;
-      console.log('RECEYA',this.arrayReceta)
-      this.loading = false; 
-    }, (err)=>{
+  obtenerIdReceta(id: string) {
+    this._servicioReceta.obtenerRecetaPorId(id).subscribe((datosReceta) => {
+      this.arrayReceta = datosReceta;
+      this.nombre = datosReceta.name;
+      this.precio = datosReceta.price;
+      this.idTamanio = datosReceta.fkCatSize;
+      this.idFoto = datosReceta.fkCatImage;
+      this.cantidadReceta=datosReceta.quantityStock;
+      this.coloresObtenidos = []; // Debes proporcionar los valores correctos aquí
+      this.arrayMateriaPrima = [];
+      // this.receta = {
+      //   name: this.nombre,
+      //   price:this.precio,
+      //   fkCatSize:   this.cantidadReceta,
+      //   fkCatImage: this.idFoto,
+      //   colorIds: this.coloresObtenidos,
+      //   rawMaterials: 
+      //     this.arrayMateriaPrima
+      // };
+      console.log('DATOS', datosReceta)
+      this.showDialog();
+    })
+  }
+
+
+  obtenerReceta() {
+    this.loading = true;
+    this._servicioReceta.obtenerReceta().subscribe((receta) => {
+      this.arrayReceta = receta;
+      console.log('RECEYA', this.arrayReceta)
+      this.loading = false;
+    }, (err) => {
       console.log(err)
-      this.messageService.add({key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener la Receta' });
-      this.loading = false; 
+      this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener la Receta' });
+      this.loading = false;
 
     })
   }
 
   agregarEmpleado() {
-    this.visible=false;
-    this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo el empleado correctamente.' });
+    this.visible = false;
+    this.messageService.add({ key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo el empleado correctamente.' });
   }
 
   cancelar() {
-    this.visible=false;
-    this.visibleImagen=false;
-    this.messageService.add({ key: 'tc',severity: 'error', summary: 'Error', detail: 'Ha anulado el guardado del empleado.' });
+    this.visible = false;
+    this.visibleImagen = false;
+    this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Ha anulado el guardado del empleado.' });
   }
 
   agregarMateria() {
@@ -147,9 +172,9 @@ export class RecetasComponent {
     const recetaExistente = this.arrayMateriaPrima.find(
       (materiaPrima) => materiaPrima.materia === this.unidadMedida
     );
-  
+
     const cantidadNueva = parseFloat(this.cantidad);
-  
+
     if (!isNaN(cantidadNueva) && cantidadNueva > 0) {
       if (recetaExistente) {
         recetaExistente.cantidad += cantidadNueva;
@@ -161,13 +186,13 @@ export class RecetasComponent {
         });
       }
     } else {
-      this.messageService.add({ key: 'tc',severity: 'info', summary: 'Verifica', detail: 'La cantidad debe ser un número válido mayor que cero.' });
+      this.messageService.add({ key: 'tc', severity: 'info', summary: 'Verifica', detail: 'La cantidad debe ser un número válido mayor que cero.' });
     }
   }
-  
 
-  eliminarMateriaP(i: number){
-    this.arrayMateriaPrima.splice(i,1)
+
+  eliminarMateriaP(i: number) {
+    this.arrayMateriaPrima.splice(i, 1)
   }
 
   obtenerMateriaPrima() {
@@ -196,26 +221,44 @@ export class RecetasComponent {
     );
   }
   obtencionIdColor(event: any) {
-   this.coloresObtenidos= event.value.map((color: any) => color.idCatColor);
+    this.coloresObtenidos = event.value.map((color: any) => color.idCatColor);
     console.log('IDs seleccionados:', this.coloresObtenidos);
-    this.receta.colorIds=this.coloresObtenidos;
+    this.receta.colorIds = this.coloresObtenidos;
   }
 
   agregarReceta() {
     this.receta = {
       name: this.nombre,
-      price:this.precio,
+      price: this.precio,
       fkCatSize: this.cantidadReceta,
       fkCatImage: this.idFoto,
       colorIds: this.coloresObtenidos,
-      rawMaterials: 
+      rawMaterials:
         this.arrayMateriaPrima
     };
+    console.log(this.receta)
+
+    // const provedor = {
+    //   "name": "Nestor",
+    //   "price": 0,
+    //   "fkCatSize": 1,
+    //   "fkCatImage": 1,
+    //   "colorIds": [
+    //     3, 4, 5
+    //   ],
+    //   "rawMaterials": [
+    //     {
+    //       "idCatalog": 0,
+    //       "quantity": 3,
+    //       "fkCatRawMaterial": 3
+    //     }
+    //   ]
+    // }
     this._servicioReceta.guardarReceta(this.receta).subscribe(
       (response) => {
         // Cliente guardado con éxito, realizar acciones adicionales si es necesario
         this.visible = false;
-        this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
+        this.messageService.add({ key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
         console.log('Receta guardado exitosamente:', response);
         this.obtenerReceta()
       },
@@ -224,29 +267,29 @@ export class RecetasComponent {
         console.error('Error al guardar la receta:', error);
       }
     );
-  
-    
-    }
 
-  guardarFoto(){
+
+  }
+
+  guardarFoto() {
     this.guardarFotoReceta(this.datoFoto)
   }
 
 
-  guardarFotoReceta(file: File){
+  guardarFotoReceta(file: File) {
     this._servicioReceta.uploadRecipeFile(file).subscribe(
-          (response:any) => {
-            this.messageService.add({key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se cargo la foto correctamente.' });
-            this.idImagen=response.idCatImage
-          },
-          (error:any) => {
-            console.error('Error uploading file:', error);
-          }
-        );
+      (response: any) => {
+        this.messageService.add({ key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se cargo la foto correctamente.' });
+        this.idImagen = response.idCatImage
+      },
+      (error: any) => {
+        console.error('Error uploading file:', error);
+      }
+    );
   }
 
 
-    selectedObject: any = null;
+  selectedObject: any = null;
 
   seleccionarMateriaPrima(event: any) {
     const index = event.target.value;
@@ -272,7 +315,7 @@ export class RecetasComponent {
     }
   }
 
-  selectedFile!: File ;
+  selectedFile!: File;
 
   onFileChange(event: Event) {
     const inputElement = event.target as HTMLInputElement;
@@ -280,7 +323,7 @@ export class RecetasComponent {
       this.selectedFile = inputElement.files[0];
     }
   }
-  datoFoto!:File;
+  datoFoto!: File;
   // idFile: string = "";
   // idFileJson: any;
   // selectedfileJson: any;
@@ -301,17 +344,17 @@ export class RecetasComponent {
     this.cdr.detectChanges(); // Forzar la detección de cambios
   }
 
-  
-  obtenerFotos(){
-    this.loading = true; 
-    this._servicioReceta.obtenerFotos().subscribe((fotos)=>{
-      this.arrayFotos=fotos;
-      console.log('FOTOS',this.arrayFotos)
-      this.loading = false; 
-    }, (err)=>{
+
+  obtenerFotos() {
+    this.loading = true;
+    this._servicioReceta.obtenerFotos().subscribe((fotos) => {
+      this.arrayFotos = fotos;
+      console.log('FOTOS', this.arrayFotos)
+      this.loading = false;
+    }, (err) => {
       console.log(err)
-      this.messageService.add({key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener las Fotos' });
-      this.loading = false; 
+      this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al obtener las Fotos' });
+      this.loading = false;
 
     })
   }

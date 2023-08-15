@@ -11,14 +11,32 @@
                     <small class="text-uppercase font-weight-bold">MODULOS</small>
                 </button>
             </div>
-            
+            <div class="row">
+                <div class="col-4">
+                    <label for="colo" style="color: white;">Tipo deGrafica:</label><br>
+                    <select class="form-select" [(ngModel)]="tipoGrafica">
+                        <option *ngFor="let t of graficas" [value]="t.valor">{{ t.nombre }}</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label for="colo" style="color: white;">Fecha:</label><br>
+                    <input class="form-control" type="date" [(ngModel)]="fecha">
+                </div>
+                <div class="col-4">
+                    <p-button label="Obtener Informacion" icon="pi pi-save" (click)="obtencionDatos()"
+                                    styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                </div>
+            </div>
+           
             <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
                 <label for="materia" class="mt-4"><b>INFORMACION DE</b></label>
+                <h1>{{fecha}}</h1>
+                <h1>{{tipoGrafica}}</h1>
                 <p-chart type="line" [data]="data" [options]="options"></p-chart>
             </div>
             <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
                 <label for="materia" class="mt-4"><b>INFORMACION DE VENTAS POR CLIENTE</b></label>
-                <p-chart type="bar" [data]="getChartData()"[options]="options" width="800" height="400"></p-chart>
+                <p-chart type="bar" [data]="getChartData()" [options]="options" width="800" height="400"></p-chart>
 
             </div>
             <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">

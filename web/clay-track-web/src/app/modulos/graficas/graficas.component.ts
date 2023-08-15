@@ -1,6 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component } from '@angular/core';
 import { ChartData, ChartOptions } from 'chart.js';
+import { AnalisisService } from 'src/app/servicios/analisis/analisis.service';
 
 interface CustomerData {
     purchaseCount: number;
@@ -35,511 +36,564 @@ export class GraficasComponent {
     columna: string = 'col-9';
     navBar: boolean = false;
     chartDataR: any;
-  chartOptionsR: any;
+    chartOptionsR: any;
+    arraySalesByClient: any[] = new Array()
+    arrayPurchasesBySupplier: any[] = new Array();
+    arrayRawMaterialsByRecipe: any[] = new Array();
+    arrayRecipesBySale: any[] = new Array()
+    tipoGrafica: string = ''
+    fecha!: Date
+    graficas = [
+        { nombre: 'SalesByClient', valor: 'SalesByClient' },
+        { nombre: 'PurchasesBySupplier', valor: 'PurchasesBySupplier' },
+        { nombre: 'RawMaterialsByRecipe', valor: 'RawMaterialsByRecipe' },
+        { nombre: 'RecipesBySale', valor: 'RecipesBySale' }
+    ];
 
-  rawDataR = [
-    {
-        "descriptionRecipe": "Azulejo color solido (G) - Marr\u00f3n (#A52A2A)",
-        "totalRecipes": 67,
-        "totalProfit": 67,
-        "idCatRecipe": 12,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Azulejo color solido (C) - Red (#FF0000)",
-        "totalRecipes": 34,
-        "totalProfit": 34,
-        "idCatRecipe": 19,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Azulejo color solido (M) - Crema (#FFFDD0)",
-        "totalRecipes": 9,
-        "totalProfit": 9,
-        "idCatRecipe": 26,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Azulejo colores (G) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
-        "totalRecipes": 5,
-        "totalProfit": 5,
-        "idCatRecipe": 39,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Cacerola color solido (G) - Marr\u00f3n (#A52A2A)",
-        "totalRecipes": 26,
-        "totalProfit": 26,
-        "idCatRecipe": 96,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Cuenco colores (C) - Beige (#F5F5DC), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
-        "totalRecipes": 7,
-        "totalProfit": 7,
-        "idCatRecipe": 199,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Ensaladera color solido (C) - Marr\u00f3n (#A52A2A)",
-        "totalRecipes": 55,
-        "totalProfit": 55,
-        "idCatRecipe": 220,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Florero color solido (C) - Marr\u00f3n (#A52A2A)",
-        "totalRecipes": 87,
-        "totalProfit": 87,
-        "idCatRecipe": 262,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Florero colores (G) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
-        "totalRecipes": 3,
-        "totalProfit": 3,
-        "idCatRecipe": 294,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Fregadero color solido (M) - Azul (#0000FF)",
-        "totalRecipes": 6,
-        "totalProfit": 6,
-        "idCatRecipe": 308,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Fregadero color solido (M) - Red (#FF0000)",
-        "totalRecipes": 7,
-        "totalProfit": 7,
-        "idCatRecipe": 314,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Fregadero color solido (C) - Terracota (#E2725B)",
-        "totalRecipes": 30,
-        "totalProfit": 30,
-        "idCatRecipe": 322,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Fregadero colores (M) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
-        "totalRecipes": 26,
-        "totalProfit": 26,
-        "idCatRecipe": 335,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Inodoro color solido (C) - Beige (#F5F5DC)",
-        "totalRecipes": 21,
-        "totalProfit": 21,
-        "idCatRecipe": 340,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Inodoro colores (M) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
-        "totalRecipes": 3,
-        "totalProfit": 3,
-        "idCatRecipe": 374,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Inodoro colores (G) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
-        "totalRecipes": 3,
-        "totalProfit": 3,
-        "idCatRecipe": 378,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Jarra color solido (M) - Gris (#808080)",
-        "totalRecipes": 3,
-        "totalProfit": 3,
-        "idCatRecipe": 386,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Jarra colores (C) - Beige (#F5F5DC), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
-        "totalRecipes": 51,
-        "totalProfit": 51,
-        "idCatRecipe": 409,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Jarra colores (M) - Blanco (#FFFFFF), Gris (#808080), Negro (#000000)",
-        "totalRecipes": 57,
-        "totalProfit": 57,
-        "idCatRecipe": 413,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Jarr\u00f3n color solido (C) - Azul (#0000FF)",
-        "totalRecipes": 21,
-        "totalProfit": 21,
-        "idCatRecipe": 433,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Jarr\u00f3n color solido (C) - Terracota (#E2725B)",
-        "totalRecipes": 52,
-        "totalProfit": 52,
-        "idCatRecipe": 448,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Jarr\u00f3n colores (G) - Beige (#F5F5DC), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
-        "totalRecipes": 56,
-        "totalProfit": 56,
-        "idCatRecipe": 453,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Ladrillo color solido (M) - Red (#FF0000)",
-        "totalRecipes": 48,
-        "totalProfit": 48,
-        "idCatRecipe": 482,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Ladrillo colores (C) - Beige (#F5F5DC), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
-        "totalRecipes": 5,
-        "totalProfit": 5,
-        "idCatRecipe": 493,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Ladrillo colores (M) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
-        "totalRecipes": 55,
-        "totalProfit": 55,
-        "idCatRecipe": 500,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Ladrillo colores (G) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
-        "totalRecipes": 31,
-        "totalProfit": 31,
-        "idCatRecipe": 501,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Lavabo colores (G) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
-        "totalRecipes": 28,
-        "totalProfit": 28,
-        "idCatRecipe": 543,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Maceta color solido (C) - Negro (#000000)",
-        "totalRecipes": 14,
-        "totalProfit": 14,
-        "idCatRecipe": 568,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Mosaico color solido (C) - Verde (#008000)",
-        "totalRecipes": 49,
-        "totalProfit": 49,
-        "idCatRecipe": 604,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Mosaico color solido (M) - Red (#FF0000)",
-        "totalRecipes": 23,
-        "totalProfit": 23,
-        "idCatRecipe": 608,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Pimentero color solido (C) - Azul (#0000FF)",
-        "totalRecipes": 3,
-        "totalProfit": 3,
-        "idCatRecipe": 643,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Pimentero color solido (C) - Verde (#008000)",
-        "totalRecipes": 26,
-        "totalProfit": 26,
-        "idCatRecipe": 646,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Pimentero color solido (G) - Red (#FF0000)",
-        "totalRecipes": 35,
-        "totalProfit": 35,
-        "idCatRecipe": 651,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Pimentero color solido (M) - Terracota (#E2725B)",
-        "totalRecipes": 34,
-        "totalProfit": 34,
-        "idCatRecipe": 659,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Pimentero colores (M) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
-        "totalRecipes": 8,
-        "totalProfit": 8,
-        "idCatRecipe": 668,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Platillo color solido (G) - Verde (#008000)",
-        "totalRecipes": 49,
-        "totalProfit": 49,
-        "idCatRecipe": 690,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Platillo color solido (G) - Negro (#000000)",
-        "totalRecipes": 29,
-        "totalProfit": 29,
-        "idCatRecipe": 696,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Platillo colores (G) - Blanco (#FFFFFF), Gris (#808080), Negro (#000000)",
-        "totalRecipes": 35,
-        "totalProfit": 35,
-        "idCatRecipe": 708,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Platillo colores (M) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
-        "totalRecipes": 20,
-        "totalProfit": 20,
-        "idCatRecipe": 713,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Plato color solido (G) - Gris (#808080)",
-        "totalRecipes": 19,
-        "totalProfit": 19,
-        "idCatRecipe": 723,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Plato color solido (M) - Verde (#008000)",
-        "totalRecipes": 10,
-        "totalProfit": 10,
-        "idCatRecipe": 731,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Plato color solido (C) - Terracota (#E2725B)",
-        "totalRecipes": 16,
-        "totalProfit": 16,
-        "idCatRecipe": 742,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Plato colores (G) - Blanco (#FFFFFF), Gris (#808080), Negro (#000000)",
-        "totalRecipes": 54,
-        "totalProfit": 54,
-        "idCatRecipe": 750,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Salero color solido (M) - Marr\u00f3n (#A52A2A)",
-        "totalRecipes": 24,
-        "totalProfit": 24,
-        "idCatRecipe": 767,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Taza color solido (C) - Azul (#0000FF)",
-        "totalRecipes": 9,
-        "totalProfit": 9,
-        "idCatRecipe": 811,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Taza color solido (C) - Red (#FF0000)",
-        "totalRecipes": 7,
-        "totalProfit": 7,
-        "idCatRecipe": 817,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Tetera color solido (M) - Blanco (#FFFFFF)",
-        "totalRecipes": 10,
-        "totalProfit": 10,
-        "idCatRecipe": 884,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Tetera color solido (M) - Gris (#808080)",
-        "totalRecipes": 31,
-        "totalProfit": 31,
-        "idCatRecipe": 890,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Tetera color solido (M) - Negro (#000000)",
-        "totalRecipes": 2,
-        "totalProfit": 2,
-        "idCatRecipe": 905,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
-    },
-    {
-        "descriptionRecipe": "Tetera colores (M) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
-        "totalRecipes": 62,
-        "totalProfit": 62,
-        "idCatRecipe": 923,
-        "FileName": null,
-        "FileExtension": null,
-        "FileSizeInBytes": null,
-        "FilePath": null
+    constructor(private _servicioAnalisis: AnalisisService) {
+
     }
-];
- 
+
+
+
+    obtencionDatos() {
+       
+        const fechaOriginal = new Date(this.fecha);
+        fechaOriginal.setDate(fechaOriginal.getDate() + 1); 
+
+        const fechaFormateada = this.formatearFecha(fechaOriginal);
+
+        console.log(fechaFormateada); // Salida: 2023,8,16
+
+            this._servicioAnalisis.obtenerDatos(fechaFormateada, this.tipoGrafica).subscribe((datos) => {
+                if (this.tipoGrafica == 'SalesByClient') {
+                    this.arraySalesByClient = datos
+                } else if (this.tipoGrafica == 'PurchasesBySupplier') {
+                    this.arrayPurchasesBySupplier = datos
+                }
+                else if (this.tipoGrafica == 'RecipesBySale') {
+                    this.arrayRecipesBySale = datos
+                }
+                else if (this.tipoGrafica == 'RawMaterialsByRecipe') {
+                    this.arrayRawMaterialsByRecipe = datos
+                }
+                console.log(datos)
+            })
+    }
+
+    formatearFecha(fecha: Date): string {
+        const ano = fecha.getFullYear();
+        const mes = fecha.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
+        const dia = fecha.getDate();
+
+        return `${ano},${mes},${dia}`;
+    }
+
+
+
+    rawDataR = [
+        {
+            "descriptionRecipe": "Azulejo color solido (G) - Marr\u00f3n (#A52A2A)",
+            "totalRecipes": 67,
+            "totalProfit": 67,
+            "idCatRecipe": 12,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Azulejo color solido (C) - Red (#FF0000)",
+            "totalRecipes": 34,
+            "totalProfit": 34,
+            "idCatRecipe": 19,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Azulejo color solido (M) - Crema (#FFFDD0)",
+            "totalRecipes": 9,
+            "totalProfit": 9,
+            "idCatRecipe": 26,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Azulejo colores (G) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
+            "totalRecipes": 5,
+            "totalProfit": 5,
+            "idCatRecipe": 39,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Cacerola color solido (G) - Marr\u00f3n (#A52A2A)",
+            "totalRecipes": 26,
+            "totalProfit": 26,
+            "idCatRecipe": 96,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Cuenco colores (C) - Beige (#F5F5DC), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
+            "totalRecipes": 7,
+            "totalProfit": 7,
+            "idCatRecipe": 199,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Ensaladera color solido (C) - Marr\u00f3n (#A52A2A)",
+            "totalRecipes": 55,
+            "totalProfit": 55,
+            "idCatRecipe": 220,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Florero color solido (C) - Marr\u00f3n (#A52A2A)",
+            "totalRecipes": 87,
+            "totalProfit": 87,
+            "idCatRecipe": 262,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Florero colores (G) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
+            "totalRecipes": 3,
+            "totalProfit": 3,
+            "idCatRecipe": 294,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Fregadero color solido (M) - Azul (#0000FF)",
+            "totalRecipes": 6,
+            "totalProfit": 6,
+            "idCatRecipe": 308,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Fregadero color solido (M) - Red (#FF0000)",
+            "totalRecipes": 7,
+            "totalProfit": 7,
+            "idCatRecipe": 314,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Fregadero color solido (C) - Terracota (#E2725B)",
+            "totalRecipes": 30,
+            "totalProfit": 30,
+            "idCatRecipe": 322,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Fregadero colores (M) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
+            "totalRecipes": 26,
+            "totalProfit": 26,
+            "idCatRecipe": 335,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Inodoro color solido (C) - Beige (#F5F5DC)",
+            "totalRecipes": 21,
+            "totalProfit": 21,
+            "idCatRecipe": 340,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Inodoro colores (M) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
+            "totalRecipes": 3,
+            "totalProfit": 3,
+            "idCatRecipe": 374,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Inodoro colores (G) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
+            "totalRecipes": 3,
+            "totalProfit": 3,
+            "idCatRecipe": 378,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Jarra color solido (M) - Gris (#808080)",
+            "totalRecipes": 3,
+            "totalProfit": 3,
+            "idCatRecipe": 386,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Jarra colores (C) - Beige (#F5F5DC), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
+            "totalRecipes": 51,
+            "totalProfit": 51,
+            "idCatRecipe": 409,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Jarra colores (M) - Blanco (#FFFFFF), Gris (#808080), Negro (#000000)",
+            "totalRecipes": 57,
+            "totalProfit": 57,
+            "idCatRecipe": 413,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Jarr\u00f3n color solido (C) - Azul (#0000FF)",
+            "totalRecipes": 21,
+            "totalProfit": 21,
+            "idCatRecipe": 433,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Jarr\u00f3n color solido (C) - Terracota (#E2725B)",
+            "totalRecipes": 52,
+            "totalProfit": 52,
+            "idCatRecipe": 448,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Jarr\u00f3n colores (G) - Beige (#F5F5DC), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
+            "totalRecipes": 56,
+            "totalProfit": 56,
+            "idCatRecipe": 453,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Ladrillo color solido (M) - Red (#FF0000)",
+            "totalRecipes": 48,
+            "totalProfit": 48,
+            "idCatRecipe": 482,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Ladrillo colores (C) - Beige (#F5F5DC), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
+            "totalRecipes": 5,
+            "totalProfit": 5,
+            "idCatRecipe": 493,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Ladrillo colores (M) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
+            "totalRecipes": 55,
+            "totalProfit": 55,
+            "idCatRecipe": 500,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Ladrillo colores (G) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
+            "totalRecipes": 31,
+            "totalProfit": 31,
+            "idCatRecipe": 501,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Lavabo colores (G) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
+            "totalRecipes": 28,
+            "totalProfit": 28,
+            "idCatRecipe": 543,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Maceta color solido (C) - Negro (#000000)",
+            "totalRecipes": 14,
+            "totalProfit": 14,
+            "idCatRecipe": 568,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Mosaico color solido (C) - Verde (#008000)",
+            "totalRecipes": 49,
+            "totalProfit": 49,
+            "idCatRecipe": 604,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Mosaico color solido (M) - Red (#FF0000)",
+            "totalRecipes": 23,
+            "totalProfit": 23,
+            "idCatRecipe": 608,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Pimentero color solido (C) - Azul (#0000FF)",
+            "totalRecipes": 3,
+            "totalProfit": 3,
+            "idCatRecipe": 643,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Pimentero color solido (C) - Verde (#008000)",
+            "totalRecipes": 26,
+            "totalProfit": 26,
+            "idCatRecipe": 646,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Pimentero color solido (G) - Red (#FF0000)",
+            "totalRecipes": 35,
+            "totalProfit": 35,
+            "idCatRecipe": 651,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Pimentero color solido (M) - Terracota (#E2725B)",
+            "totalRecipes": 34,
+            "totalProfit": 34,
+            "idCatRecipe": 659,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Pimentero colores (M) - Azul (#0000FF), Verde (#008000), Blanco (#FFFFFF)",
+            "totalRecipes": 8,
+            "totalProfit": 8,
+            "idCatRecipe": 668,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Platillo color solido (G) - Verde (#008000)",
+            "totalRecipes": 49,
+            "totalProfit": 49,
+            "idCatRecipe": 690,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Platillo color solido (G) - Negro (#000000)",
+            "totalRecipes": 29,
+            "totalProfit": 29,
+            "idCatRecipe": 696,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Platillo colores (G) - Blanco (#FFFFFF), Gris (#808080), Negro (#000000)",
+            "totalRecipes": 35,
+            "totalProfit": 35,
+            "idCatRecipe": 708,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Platillo colores (M) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
+            "totalRecipes": 20,
+            "totalProfit": 20,
+            "idCatRecipe": 713,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Plato color solido (G) - Gris (#808080)",
+            "totalRecipes": 19,
+            "totalProfit": 19,
+            "idCatRecipe": 723,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Plato color solido (M) - Verde (#008000)",
+            "totalRecipes": 10,
+            "totalProfit": 10,
+            "idCatRecipe": 731,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Plato color solido (C) - Terracota (#E2725B)",
+            "totalRecipes": 16,
+            "totalProfit": 16,
+            "idCatRecipe": 742,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Plato colores (G) - Blanco (#FFFFFF), Gris (#808080), Negro (#000000)",
+            "totalRecipes": 54,
+            "totalProfit": 54,
+            "idCatRecipe": 750,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Salero color solido (M) - Marr\u00f3n (#A52A2A)",
+            "totalRecipes": 24,
+            "totalProfit": 24,
+            "idCatRecipe": 767,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Taza color solido (C) - Azul (#0000FF)",
+            "totalRecipes": 9,
+            "totalProfit": 9,
+            "idCatRecipe": 811,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Taza color solido (C) - Red (#FF0000)",
+            "totalRecipes": 7,
+            "totalProfit": 7,
+            "idCatRecipe": 817,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Tetera color solido (M) - Blanco (#FFFFFF)",
+            "totalRecipes": 10,
+            "totalProfit": 10,
+            "idCatRecipe": 884,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Tetera color solido (M) - Gris (#808080)",
+            "totalRecipes": 31,
+            "totalProfit": 31,
+            "idCatRecipe": 890,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Tetera color solido (M) - Negro (#000000)",
+            "totalRecipes": 2,
+            "totalProfit": 2,
+            "idCatRecipe": 905,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        },
+        {
+            "descriptionRecipe": "Tetera colores (M) - Terracota (#E2725B), Marr\u00f3n (#A52A2A), Crema (#FFFDD0)",
+            "totalRecipes": 62,
+            "totalProfit": 62,
+            "idCatRecipe": 923,
+            "FileName": null,
+            "FileExtension": null,
+            "FileSizeInBytes": null,
+            "FilePath": null
+        }
+    ];
+
     customerData: CustomerData[] =
         [
             {
@@ -639,27 +693,27 @@ export class GraficasComponent {
         labels: this.customerData.map(customer => `${customer.name} ${customer.lastName}`),
         datasets: [
             {
-              label: 'Cantidad de Compras',
-              backgroundColor: '#FA3838',
-              data: this.customerData.map(customer => customer.purchaseCount),
+                label: 'Cantidad de Compras',
+                backgroundColor: '#FA3838',
+                data: this.customerData.map(customer => customer.purchaseCount),
             },
             {
-              label: 'Total de Compras',
-              backgroundColor: '#FAC238',
-              data: this.customerData.map(customer => customer.totalPurchases)     ,
+                label: 'Total de Compras',
+                backgroundColor: '#FAC238',
+                data: this.customerData.map(customer => customer.totalPurchases),
             },
-          ],
-        
+        ],
+
     };
 
-    
 
-    optionsBarras!:any
-getChartData(): ChartData {
-    // Aquí generamos y devolvemos el objeto chartData que configuramos antes
-    return this.chartData;
-  }
-    
+
+    optionsBarras!: any
+    getChartData(): ChartData {
+        // Aquí generamos y devolvemos el objeto chartData que configuramos antes
+        return this.chartData;
+    }
+
     toggleNavBar() {
         if (this.navBar == false) {
             this.navBar = true;
@@ -670,32 +724,33 @@ getChartData(): ChartData {
         }
 
     }
-    basicOptionsGrafica!:any;
+    basicOptionsGrafica!: any;
     chartDataPay!: any;
 
 
     ngOnInit() {
 
-            this.chartDataR = {
-              labels: this.rawDataR.map(item => item.descriptionRecipe),
-              datasets: [
+
+        this.chartDataR = {
+            labels: this.rawDataR.map(item => item.descriptionRecipe),
+            datasets: [
                 {
-                  label: 'Total de Recetas',
-                  data: this.rawDataR.map(item => item.totalRecipes),
-                  backgroundColor: '#42A5F5', // Color de las barras
+                    label: 'Total de Recetas',
+                    data: this.rawDataR.map(item => item.totalRecipes),
+                    backgroundColor: '#42A5F5', // Color de las barras
                 }
-              ]
-            };
-        
-            this.chartOptionsR = {
-              scales: {
+            ]
+        };
+
+        this.chartOptionsR = {
+            scales: {
                 y: {
-                  beginAtZero: true // Comenzar desde cero en el eje y
+                    beginAtZero: true // Comenzar desde cero en el eje y
                 }
-              }
-            };
-          
-        
+            }
+        };
+
+
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
         const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
@@ -910,99 +965,99 @@ getChartData(): ChartData {
             }
         };
 
-    this.basicOptionsGrafica = {
-        plugins: {
-            legend: {
-                labels: {
-                    color: textColor
-                }
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    color: textColorSecondary
-                },
-                grid: {
-                    color: surfaceBorder,
-                    drawBorder: false
+        this.basicOptionsGrafica = {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor
+                    }
                 }
             },
-            x: {
-                ticks: {
-                    color: textColorSecondary
-                },
-                grid: {
-                    color: surfaceBorder,
-                    drawBorder: false
-                }
-            }
-        }
-    };
-
-    this.chartDataPay = {
-        labels: this.arrayComprasp.map((item:any) => item.name),
-        datasets: [
-          {
-            data: this.arrayComprasp.map((item:any) => item.totalQuantityRawMaterialUsed),
-            backgroundColor: [
-              "#FF6384",
-              "#36A2EB",
-              "#FFCE56",
-              // Agregar más colores aquí si tienes más datos
-            ],
-            hoverBackgroundColor: [
-              "#FF6384",
-              "#36A2EB",
-              "#FFCE56",
-              // Agregar más colores aquí si tienes más datos
-            ]
-          }
-        ]
-      };
-
-      
-      this.optionsBarras = {
-        indexAxis: 'y',
-        maintainAspectRatio: false,
-        aspectRatio: 0.8,
-        plugins: {
-            legend: {
-                labels: {
-                    color: textColor
-                }
-            }
-        },
-        scales: {
-            x: {
-                ticks: {
-                    color: textColorSecondary,
-                    font: {
-                        weight: 500
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
                     }
                 },
-                grid: {
-                    color: surfaceBorder,
-                    drawBorder: false
-                }
-            },
-            y: {
-                ticks: {
-                    color: textColorSecondary
-                },
-                grid: {
-                    color: surfaceBorder,
-                    drawBorder: false
+                x: {
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
                 }
             }
-        }
-    };
-}
-    
-    
+        };
 
-    arrayComprasp:any[]=[
+        this.chartDataPay = {
+            labels: this.arrayComprasp.map((item: any) => item.name),
+            datasets: [
+                {
+                    data: this.arrayComprasp.map((item: any) => item.totalQuantityRawMaterialUsed),
+                    backgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56",
+                        // Agregar más colores aquí si tienes más datos
+                    ],
+                    hoverBackgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56",
+                        // Agregar más colores aquí si tienes más datos
+                    ]
+                }
+            ]
+        };
+
+
+        this.optionsBarras = {
+            indexAxis: 'y',
+            maintainAspectRatio: false,
+            aspectRatio: 0.8,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: textColorSecondary,
+                        font: {
+                            weight: 500
+                        }
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
+                }
+            }
+        };
+    }
+
+
+
+    arrayComprasp: any[] = [
         {
             "totalQuantityRawMaterialUsed": 444,
             "name": "Arcilla de loza",
