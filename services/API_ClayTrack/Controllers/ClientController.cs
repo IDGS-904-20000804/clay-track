@@ -183,7 +183,7 @@ namespace API_ClayTrack.Controllers
                 dbContext.Update(existingClient);
                 await dbContext.SaveChangesAsync();
 
-                return Ok("Employee was updated successfully.");
+                return Ok("Client was updated successfully.");
             }
             catch (Exception ex)
             {
