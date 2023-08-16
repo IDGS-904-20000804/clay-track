@@ -35,6 +35,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { PaginatorModule } from 'primeng/paginator';
 import {  EmpleadoNombre, RawMaterialNamePipe } from 'src/app/modulos/recetas/recetas.pipe';
 import { TiendaComponent } from 'src/app/modulos/tienda/tienda/tienda.component';
+import { InicioComponent } from 'src/app/inicio/inicio.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,9 @@ import { TiendaComponent } from 'src/app/modulos/tienda/tienda/tienda.component'
     GraficasComponent,
     RawMaterialNamePipe,
     TiendaComponent,
-    EmpleadoNombre
+    EmpleadoNombre,
+    InicioComponent,
+
   ],
   imports: [
     CommonModule,
@@ -100,7 +103,9 @@ import { TiendaComponent } from 'src/app/modulos/tienda/tienda/tienda.component'
     MultiSelectModule,
     ChartModule,
     FileUploadModule,
-    PaginatorModule
+    PaginatorModule,
+    InicioComponent,
+
   ]
 })
 export class PrimeNgModule { }

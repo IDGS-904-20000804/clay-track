@@ -66,7 +66,7 @@ export class InicioSesionComponent {
       if(idCliente>0){
         this.router.navigate(['/TiendaOnline']);
       }else{
-        this.router.navigate(['/Inicio']);
+        this.router.navigate(['/Empleados']);
       }
     }, (err) => {
       console.log(err)

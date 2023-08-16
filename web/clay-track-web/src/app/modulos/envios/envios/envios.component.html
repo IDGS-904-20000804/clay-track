@@ -13,7 +13,7 @@
                 </button>
             </div>
             <div class="col-6 text-end">
-                <button type="button" class="btn btn-outline-light" (click)="toggleEntregados()">
+                <button type="button" class="btn btn-outline-light" (click)="toggleEntregados(); " >
                     {{ entregados ? 'Entregados' : 'No Entregados' }}
                   </button>
             </div>
@@ -62,8 +62,8 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-envio >
-                    <ng-container *ngIf="envio.delivered ==entregados">
-                        <tr>
+                    <ng-container>
+                        <tr >
                           <td>{{ envio.idCatShipment }}</td>
                           <td>{{ envio.employeeName }} {{ envio.employeelastName }}</td>
                           <td>{{ envio.delivered ? 'Entregado' : 'No entregado' }}</td>
@@ -88,6 +88,8 @@
             </p-table>
             
             </div>
+            
+            
         </div>
     </div>
 </div>

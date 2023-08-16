@@ -39,6 +39,7 @@ export class EnviosComponent {
   // Función para cambiar el estado del botón
   toggleEntregados() {
     this.entregados = !this.entregados;
+    this.obtenerDatosArray()
   }
   showDialog() {
     this.visible = true;
@@ -71,9 +72,31 @@ export class EnviosComponent {
     this.messageService.add({ key: 'tc',severity: 'error', summary: 'Error', detail: 'Ha anulado el guardado del empleado.' });
   }
 
+  obtenerDatosArray()
+  {
+    if(this.entregados){
+      this.obtenerActivos()
+
+    }else{
+      this.obtenerEnvios()
+    }
+  }
+
   obtenerEnvios(){
     this.loading=true
     this._servicioEnvio.obtenerEnvio().subscribe((envios)=>{
+      this.arrayEnvios=envios
+      console.log(this.arrayEnvios)
+      this.loading=false
+    },(err)=>{
+      this.messageService.add({ key: 'tc',severity: 'error', summary: 'Error', detail: 'Error al cargar envio' });
+      this.loading=false
+    })
+  }
+
+  obtenerActivos(){
+    this.loading=true
+    this._servicioEnvio.obtenerActivos().subscribe((envios)=>{
       this.arrayEnvios=envios
       console.log(this.arrayEnvios)
       this.loading=false

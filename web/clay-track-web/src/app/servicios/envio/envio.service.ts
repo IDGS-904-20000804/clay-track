@@ -23,6 +23,17 @@ export class EnvioService {
     return this.http.get<any>(url, { headers });
   }
 
+  obtenerActivos(): Observable<any> {
+    const url = `${this.baseUrl}api/Shipment/GetAllDelivered`;
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    
+    console.log('ESTE ES EL TOKEN', token)
+    return this.http.get<any>(url, { headers });
+  }
+
   obtenerDetalleEnvio(id:string): Observable<any> {
     const url = `${this.baseUrl}api/Shipment/GetAllForClient`;
     const token = this.token;

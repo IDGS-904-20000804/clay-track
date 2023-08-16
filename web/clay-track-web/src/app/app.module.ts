@@ -26,7 +26,6 @@ import { InicioComponent } from './inicio/inicio.component';
   declarations: [
     AppComponent,
     RegistroComponent,
-    InicioComponent,
     
    
   ],
