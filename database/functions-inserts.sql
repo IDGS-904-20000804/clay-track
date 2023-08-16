@@ -297,7 +297,8 @@ EXEC procedureInsertEmployee 'Eladio','Peiro','Tirado','+514775263673','37357','
 'AJlGIzWVgYsa4G/rSxp5MUtBsf8Wc5FneCma8sGTigpIPcS1NQcEOviHqkZDgIrcqg==', -- paswordshashes
 'c309fa92-2123-47be-b397-adfdgdfg3344';
 EXEC procedureInsertEmployee 'Alain','Grande','Fernández','+514777837646','37207','230',null,'Calle Noria De Los Pedregales','El Consuelo',
-'AGWtyK6neuTgLSOS4mlp3MIk64nztwwg1BE0bOpK2lkLXZWQQAzlx360I6l63Ndqhg==', -- paswordshashes 'c309fa92-2123-47be-b397-a1c77adb502c';
+'AGWtyK6neuTgLSOS4mlp3MIk64nztwwg1BE0bOpK2lkLXZWQQAzlx360I6l63Ndqhg==', -- paswordshashes
+'c309fa92-2123-47be-b397-a1c77adb502c';
 EXEC procedureInsertEmployee 'Marcial','García','Puerto','+514775653880','37538','916','B','Privada San Anselmo','Loma Hermosa',
 'AJN0lP8bw/3lildKNNeL7hAsn94jWqGIypucdzJH8bUJ7RJ754UjeKands/mWjDLnQ==', -- paswordshashes
 'c309fa92-2123-47be-b397-adfdgdfg3344';
@@ -1126,3 +1127,5 @@ SET crm.updateDate = rr.updateDate
 FROM CatRecipe crm
 INNER JOIN RankedResults rr ON crm.idCatRecipe = rr.fkCatRecipe
 WHERE rr.RowNum = 1;
+
+UPDATE CatImage SET FilePath = REPLACE(REPLACE(FilePath, '\\', '/'), 'C:/Users/user/Git_Workspace/school/clay-track/database/generator/python/downloaded_images', 'https://localhost:7106/Images');
