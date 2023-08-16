@@ -31,6 +31,7 @@ namespace API_ClayTrack.Controllers
             var stock = await dbContext.CatRecipe
                 .Include(r => r.Size)
                 .Include(r => r.Image)
+                .Where(r => r.quantityStock > 0)
                 .ToListAsync();
 
             var stockWithColorsDto = new List<StockWithColorsDto>();

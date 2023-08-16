@@ -129,7 +129,7 @@ namespace API_ClayTrack.Controllers
 
         [HttpGet]
         [Route("GetAllForClient")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client,Employee,Admin")]
         public async Task<ActionResult<List<SaleClient>>> GetAllForClient(int clientId)
         {
 
