@@ -47,7 +47,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-clientes>
-          <tr>
+          <tr [hidden]="clientes.status==false">
             <td>{{ clientes.person.name }} {{ clientes.person.lastName }}</td>
             <td>{{ clientes.person.phone }}</td>
             <td>{{ clientes.person.street }}, {{ clientes.person.neighborhood }}</td>
@@ -85,48 +85,53 @@
             <div class="row">
               <input type="text" class="form-control" hidden [(ngModel)]="cliente.idCatClient">
               <div class="col-6">
-                <label for="Nombre">Nombre:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.person.name" />
+                <label for="Nombre">Nombre:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.name" maxlength="80"  minlength="4"  />
               </div>
               <div class="col-6">
-                <label for="apaterno">Apellido Paterno:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.person.lastName" />
+                <label for="apaterno">Apellido Paterno:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.lastName" maxlength="80"  minlength="4" />
               </div>
               <div class="col-6">
                 <label for="amaterno">Apellido Materno:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.person.middleName" />
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.middleName"  maxlength="80"  minlength="4" />
               </div>
               <div class="col-6">
-                <label for="telefono">Telefono:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.person.phone" />
+                <label for="telefono">Telefono:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.phone" maxlength="10" />
               </div>
               <div class="col-6">
-                <label for="calle">Calle:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.person.street" />
+                <label for="calle">Calle:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.street" maxlength="80"  minlength="4" />
               </div>
               <div class="col-6">
-                <label for="Colonia">Colonia:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.person.neighborhood" />
-              </div>
-              <div class="col-3">
-                <label for="numE">Numero Exterior:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.person.streetNumber" />
-              </div>
-              <div class="col-3">
-                <label for="numI">Numero Interior:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.person.apartmentNumber" />
+                <label for="Colonia">Colonia:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.neighborhood" maxlength="80"  minlength="4" />
               </div>
               <div class="col-6">
-                <label for="cp">Codigo Postal:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.person.postalCode" />
+                <div class="row">
+                  <div class="col-6">
+                    <label for="numE">Numero Exterior:<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" [(ngModel)]="cliente.person.streetNumber" maxlength="80"  minlength="4" />
+                  </div>
+                  <div class="col-6">
+                    <label for="numI">Numero Interior:</label>
+                    <input type="text" class="form-control" [(ngModel)]="cliente.person.apartmentNumber" maxlength="80"  minlength="4" />
+                  </div>
+                </div>
+              </div>
+             
+              <div class="col-6">
+                <label for="cp">Codigo Postal:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.postalCode" maxlength="5"   />
               </div>
               <div class="col-6">
-                <label for="correo">Correo:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.user.email" />
+                <label for="correo">Correo:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.user.email" maxlength="80"  minlength="4" />
               </div>
               <div class="col-6">
-                <label for="contrasenia">Contraseña:</label>
-                <input type="text" class="form-control" [(ngModel)]="cliente.user.passwordHash" />
+                <label for="contrasenia">Contraseña:<span style="color: red;">*</span></label>
+                <input type="password" class="form-control" [(ngModel)]="cliente.user.passwordHash" maxlength="80"  minlength="4" />
               </div>
             </div>
             <div class="col-12 text-center mt-4">

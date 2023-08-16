@@ -68,6 +68,7 @@ export class MateriaPrimaComponent {
   agregarMateroiaP() {
     if(this.materiaP.idCatRawMaterial>0){
       this.modificarMateriaP()
+      this.obtenerMateriaPrima(); 
     }else{
       
     this._servicioMateriaP.guardarMatreriaP(this.materiaP).subscribe(

@@ -48,7 +48,7 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-empleado>
-                            <tr >
+                            <tr [hidden]="empleado.status==false">
                                 <td>{{ empleado.person.name }} {{ empleado.person.lastName }}</td>
                                 <td>{{ empleado.person.phone }}</td>
                                 <td>{{ empleado.person.street }}, {{ empleado.person.neighborhood }}</td>
@@ -69,7 +69,6 @@
                         </ng-template>
                     </p-table>
                 </div>
-                <pre>{{arrayEmpleados | json}}</pre>
 
             </div>
         </div>
@@ -85,48 +84,54 @@
                     <div class="row">
                         <input type="text" class="form-control" hidden [(ngModel)]="empleado.idCatEmployee" />
                         <div class="col-6">
-                            <label for="Nombre">Nombre:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.person.name" />
+                            <label for="Nombre">Nombre:<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.name" maxlength="80"  minlength="4" />
                         </div>
                         <div class="col-6">
-                            <label for="apaterno">Apellido Paterno:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.person.lastName" />
+                            <label for="apaterno">Apellido Paterno:<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.lastName"  maxlength="80"  minlength="4"  />
                         </div>
                         <div class="col-6">
                             <label for="amaterno">Apellido Materno:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.person.middleName" />
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.middleName"  maxlength="80"  minlength="4" />
                         </div>
                         <div class="col-6">
-                            <label for="telefono">Telefono:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.person.phone" />
+                            <label for="telefono">Telefono:<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.phone" maxlength="10" />
                         </div>
                         <div class="col-6">
-                            <label for="calle">Calle:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.person.street" />
+                            <label for="calle">Calle:<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.street" maxlength="80"  minlength="4"/>
                         </div>
                         <div class="col-6">
-                            <label for="Colonia">Colonia:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.person.neighborhood" />
-                        </div>
-                        <div class="col-3">
-                            <label for="numE">Numero Exterior:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.person.streetNumber" />
-                        </div>
-                        <div class="col-3">
-                            <label for="numI">Numero Interior:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.person.apartmentNumber" />
+                            <label for="Colonia">Colonia:<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.neighborhood" maxlength="80"  minlength="4"/>
                         </div>
                         <div class="col-6">
-                            <label for="cp">Codigo Postal:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.person.postalCode" />
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="numE">Numero Exterior:<span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" [(ngModel)]="empleado.person.streetNumber" maxlength="80"  minlength="4"/>
+                                </div>
+                                <div class="col-6">
+                                    <label for="numI">Numero Interior:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="empleado.person.apartmentNumber" maxlength="80"  minlength="4"/>
+                                </div>
+                            </div>
+                           
+                           
                         </div>
                         <div class="col-6">
-                            <label for="correo">Correo:</label>
-                            <input type="text" class="form-control" [(ngModel)]="empleado.user.email" />
+                            <label for="cp">Codigo Postal:<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.person.postalCode" maxlength="5"  />
                         </div>
                         <div class="col-6">
-                            <label for="contrasenia">Contraseña:</label>
-                            <input type="password" class="form-control" [(ngModel)]="empleado.user.passwordHash" />
+                            <label for="correo">Correo:<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" [(ngModel)]="empleado.user.email" maxlength="80"  minlength="4"/>
+                        </div>
+                        <div class="col-6">
+                            <label for="contrasenia">Contraseña:<span style="color: red;">*</span></label>
+                            <input type="password" class="form-control" [(ngModel)]="empleado.user.passwordHash" maxlength="8"  minlength="4" />
                         </div>
 
                         <div class="col-12 text-center mt-4">

@@ -40,7 +40,7 @@
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-almacen>
-            <tr>
+            <tr [hidden]="almacen.quantityWarehouse==0">
               <td>{{ almacen.name }}</td>
               <td>{{ almacen.quantityWarehouse }}</td>
               <td>{{ almacen.unitMeasure.description }}</td>

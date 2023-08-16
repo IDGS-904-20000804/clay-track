@@ -120,7 +120,7 @@ export class ComprasComponent {
       } else {
         this.arrayCompra.push({
           idCatalog: 0,
-          fkCatRawMaterial: this.materiaP,
+          fkCatRawMaterial: parseInt(this.materiaP),
           quantity: cantidadNueva,
           price: this.precio,
           // fechaC: this.fechaC

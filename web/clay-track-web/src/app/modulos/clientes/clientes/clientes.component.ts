@@ -36,7 +36,7 @@ export class ClientesComponent {
   cliente: Client = {
     idCatClient: 0,
     fkCatPerson: 0,
-    fkUser: "string",
+    fkUser: "1",
     fkRol: "c309fa92-2123-47be-b397-adfdgdfg3344",
     person: {
       idCatPerson: 0,
@@ -54,21 +54,10 @@ export class ClientesComponent {
       updateDate: "2023-07-28T00:47:02.987Z"
     },
     user: {
-      "id": "string",
-      "userName": "string",
-      "normalizedUserName": "string",
-      "email": "string",
-      "normalizedEmail": "string",
-      "emailConfirmed": true,
-      "passwordHash": "string",
-      "securityStamp": "string",
-      "concurrencyStamp": "string",
-      "phoneNumber": "string",
-      "phoneNumberConfirmed": true,
-      "twoFactorEnabled": true,
-      "lockoutEnd": "2023-08-06T19:29:05.037Z",
-      "lockoutEnabled": true,
-      "accessFailedCount": 0
+      "id": "1",
+      "userName": "",
+      "email": "",
+      "passwordHash": "",
     },
     role: {
       id: "c309fa92-2123-47be-b397-adfdgdfg3344",
@@ -96,15 +85,7 @@ export class ClientesComponent {
   }
 
   agregarEmpleado() {
-  //   // Set the current date and time to the cliente object before saving.
-  // const currentDate = new Date().toISOString();
-
-  // // Set the creationDate and updateDate properties to the current date.
-  // this.cliente.person.creationDate = currentDate;
-  // this.cliente.person.updateDate = currentDate;
-  // this.usuariId++
-
-    // Llamar al servicio para guardar el cliente
+  
     this.clientService.guardarCliente(this.cliente).subscribe(
       (response) => {
         // Cliente guardado con éxito, realizar acciones adicionales si es necesario
@@ -149,23 +130,40 @@ export class ClientesComponent {
 
   
   agregarCliente() {
+    if (
+      this.cliente.person.name &&
+      this.cliente.person.lastName &&
+      this.cliente.person.phone &&
+      this.cliente.person.street &&
+      this.cliente.person.neighborhood &&
+      this.cliente.person.streetNumber &&
+      this.cliente.person.postalCode &&
+      this.cliente.user.email &&
+      this.cliente.user.passwordHash
+  ) {
     if(this.cliente.idCatClient>0){
       this.modificarClientes()
+      this.obtenerClientes()  
     }else{
     this._servicioClientes.guardarCliente(this.cliente).subscribe(
       (response) => {
-        
           this.visible = false;
           this.messageService.add({key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se guardó el cliente correctamente.' });
-          console.log('CLIENTE guardado exitosamente:', response); // Acceder al mensaje de éxito
-        
+          console.log('CLIENTE guardado exitosamente:', response); // Acceder al mensaje de éxito      
+          this.obtenerClientes()  
       },
       (error) => {
-        // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
         console.error('Error al guardar el cliente:', error);
       }
     );
     }
+  }else {
+    this.messageService.add({ severity: 'info', summary: 'Ops..', detail: 'Por favor, completa todos los campos.' });
+  }
+
+
+
+
   }
 
   modificarClientes() {

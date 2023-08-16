@@ -1,6 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { EnvioService } from 'src/app/servicios/envio/envio.service';
 import { RecetasService } from 'src/app/servicios/recetas/recetas.service';
 import { SaleData, VentasService } from 'src/app/servicios/ventas/ventas.service';
 
@@ -32,14 +33,15 @@ visible: boolean = false;
 productosAgregar: any[] = [];
 venta!:SaleData
 visibleTarjeta: boolean = false;
+arrayEnviosDetalle:any
+visibleDetalle:boolean=false
 
 
 
 
 
 
-
-  constructor( private messageService: MessageService, private _servicioVentas: VentasService, private _servicioReceta: RecetasService) { 
+  constructor( private messageService: MessageService, private _servicioEnvio: EnvioService, private _servicioVentas: VentasService, private _servicioReceta: RecetasService) { 
     this.obtenerStock();
   }
 
@@ -147,8 +149,12 @@ crearDetalleSalesArray(): any[] {
   return detalleSalesArray;
 }
 
+idCliente:any
 
 realizarCompra() {
+  this.idCliente= localStorage.getItem('ClientId')
+
+  if(this.idCliente>0){
   this.venta = {
     fkCatClient: 1,
     detailSales: this.crearDetalleSalesArray()
@@ -167,9 +173,25 @@ realizarCompra() {
       }
     }
   );
+  }else{
+    this.messageService.add({ key: 'tc', severity: 'info', summary: 'Ops..', detail: 'Para realizar la compra debes registrate' });
+  }
+}
+
+cerrarSesion(){
+  localStorage.clear()
 }
 
 
-
+obtenerEnviosDetalle(){
+  this.idCliente= localStorage.getItem('ClientId')
+  this._servicioEnvio.obtenerDetalleEnvio(this.idCliente).subscribe((envios)=>{
+    this.arrayEnviosDetalle=envios
+    console.log(this.arrayEnviosDetalle)
+    this.visibleDetalle=true
+  },(err)=>{
+    this.messageService.add({ key: 'tc',severity: 'error', summary: 'Error', detail: 'Error al cargar detalle envio' });
+  })
+}
 
 }

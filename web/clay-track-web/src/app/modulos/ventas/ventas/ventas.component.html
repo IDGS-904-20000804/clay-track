@@ -15,10 +15,10 @@
       <div class="col-6 text-end">
         <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
       </div>
-      <div class="col-12 mt-3">
+      <div class="col-12 mt-3" style="overflow-y: auto; overflow-x: hidden; height: 80vh;">
       <main>
-        <section class="job-section recent-jobs-section section-padding">
-          <div class="container">
+        <section class="job-section recent-jobs-section section-padding" >
+          <div class="container"  style="margin-top: -8%;">
             
               <div class="row align-items-center">
 
@@ -74,7 +74,7 @@
                                       {{ '$' + stock.price }}MXM
                                   </p>
 
-                                  <a type="submit" class="custom-btn btn ms-auto"   (click)="agregarCarrito(stock)">Apply now</a>
+                                  
                               </div>
                           </div>
                       </div>
@@ -106,7 +106,7 @@
   </div>
 </div>
 
-<h2>Carrito de Compras</h2>
+<!-- <h2>Carrito de Compras</h2>
 <div class="cart-list" *ngIf="productosAgregar.length > 0">
     <p-table [value]="productosAgregar" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
@@ -140,7 +140,7 @@
     </ng-template>
   </p-table>
   <div class="cart-total">Total: {{ calcularTotal() | currency }}</div>
-</div>
+</div> -->
 
 
 

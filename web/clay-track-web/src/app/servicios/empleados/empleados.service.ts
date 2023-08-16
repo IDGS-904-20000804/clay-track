@@ -87,7 +87,7 @@ export class EmpleadosService {
   }
 
   actualizarEmpleado(empleado: Empleado,id:number): Observable<any> {
-    const url = `${this.baseUrl}api/Employee/Update${id}`; // Ajusta la URL según la ruta de la API para guardar empleados
+    const url = `${this.baseUrl}api/Employee/UpdateEmployee/${id}`; // Ajusta la URL según la ruta de la API para guardar empleados
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`

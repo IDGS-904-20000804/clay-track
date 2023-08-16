@@ -3,7 +3,7 @@
 <div id="top" style="color: beige;">
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <a class="navbar-brand d-flex align-items-center" >
                 <img src="/assets/logotipo.png" class="img-fluid logo-image">
 
                 <div class="d-flex flex-column">
@@ -14,13 +14,18 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav align-items-center ms-lg-5">
 
-                    <li class="nav-item ms-lg-auto">
-                        <a class="nav-link"  style="color: black;font-size: 15px;">Informacion</a>
+                    <li class="nav-item ms-lg-auto"  *ngIf="idCliente>0">
+                        <a class="nav-link"  style="color: black;font-size: 15px;" (click)="obtenerEnviosDetalle()">Informacion</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item" style="text-align: end;">
                         <a class="nav-link custom-btn "  (click)="showDialog()" style="color: black;font-size: 25px;"><i
                                 class="bi bi-cart"></i></a>
+                    </li>
+                    
+                    <li class="nav-item" *ngIf="idCliente>0">
+                        <a class="nav-link custom-btn "  (click)="cerrarSesion()" style="color: black;font-size: 15px;"><i class="fa fa-lock text-primary"></i>
+                            Cerrar Sesion</a>
                     </li>
                 </ul>
             </div>
@@ -44,7 +49,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-lg-4 col-md-6 col-12" *ngFor="let stock of filteredStock" [hidden]="stock.status==false">
-                        <label>{{stock.idCatRecipe                        }}</label>
+                        <label>{{stock.idCatRecipe}}</label>
                         <div class="job-thumb job-thumb-box">
                             <div class="job-image-box-wrap">
                                 <a href="job-details.html">
@@ -221,4 +226,53 @@
     </div>
   </div>
   
-  
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class=" flex justify-content-center">
+          <p-toast></p-toast>
+          <div class=" flex justify-content-center">
+            <p-dialog header="INFORMACION CLIENTE" [(visible)]="visibleDetalle" [style]="{ width: '60vw' }" [maximizable]="true"
+              headerStyleClass="custom-dialog-header">
+             <div class="row">
+                <table class="custom-table">
+                    <thead>
+                      <tr>
+                        <th>Nombre de la Receta</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th>Foto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let envio of arrayEnviosDetalle">
+                        <tr>
+                          <td colspan="4" class="envio-info">Envío ID: {{ envio.idCatShipment }}</td>
+                        </tr>
+                        <tr>
+                          <td colspan="4" class="cliente-info">Cliente: {{ envio.clientName }} {{ envio.clientLastName }}</td>
+                        </tr>
+                        <tr>
+                          <td colspan="4" class="direccion-info">Dirección: {{ envio.street }}, {{ envio.neighborhood }}</td>
+                        </tr>
+                        <tr *ngFor="let detalle of envio.detailSale">
+                          <td>{{ detalle.recipe.name }}</td>
+                          <td>{{ detalle.quantity }}</td>
+                          <td>${{ detalle.price }}</td>
+                          <td>
+                            <img [src]="detalle.recipe.image.filePath" alt="Foto del producto" width="50" height="50">
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                  
+                  
+             </div>
+             
+            </p-dialog>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

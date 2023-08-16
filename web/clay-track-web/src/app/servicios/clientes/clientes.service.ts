@@ -21,24 +21,13 @@ export interface Client {
     status: boolean;
     creationDate: string;
     updateDate: string;
-  },
+  };
   user: {
-    "id": "string",
-    "userName": "string",
-    "normalizedUserName": "string",
-    "email": "string",
-    "normalizedEmail": "string",
-    "emailConfirmed": true,
-    "passwordHash": "string",
-    "securityStamp": "string",
-    "concurrencyStamp": "string",
-    "phoneNumber": "string",
-    "phoneNumberConfirmed": true,
-    "twoFactorEnabled": true,
-    "lockoutEnd": "2023-08-06T19:29:05.037Z",
-    "lockoutEnabled": true,
-    "accessFailedCount": 0
-  },
+    id: string;
+    userName: string;
+    email: string;
+    passwordHash: string;
+  };
   role: {
     id: string;
     name: string;
@@ -46,6 +35,51 @@ export interface Client {
     concurrencyStamp: string;
   };
 }
+
+// export interface Client {
+//   idCatClient: number;
+//   fkCatPerson: number;
+//   fkUser: number | string;
+//   fkRol: string;
+//   person: {
+//     idCatPerson: number;
+//     name: string;
+//     lastName: string;
+//     middleName: string | undefined;
+//     phone: string;
+//     postalCode: number;
+//     streetNumber: string | number;
+//     apartmentNumber: string | undefined;
+//     street: string;
+//     neighborhood: string;
+//     status: boolean;
+//     creationDate: string;
+//     updateDate: string;
+//   },
+//   user: {
+//     "id": "",
+//     "userName": "",
+//     "normalizedUserName": "",
+//     "email": "",
+//     "normalizedEmail": "",
+//     "emailConfirmed": true,
+//     "passwordHash": "",
+//     "securityStamp": "",
+//     "concurrencyStamp": "",
+//     "phoneNumber": "",
+//     "phoneNumberConfirmed": true,
+//     "twoFactorEnabled": true,
+//     "lockoutEnd": "2023-08-06T19:29:05.037Z",
+//     "lockoutEnabled": true,
+//     "accessFailedCount": 0
+//   },
+//   role: {
+//     id: string;
+//     name: string;
+//     normalizedName: string;
+//     concurrencyStamp: string;
+//   };
+// }
 
 
 @Injectable({
@@ -84,7 +118,7 @@ export class ClientesService {
   }
 
   actualizarCliente(cliente: Client,id:number): Observable<any> {
-    const url = `${this.baseUrl}api/Client/Update${id}`; // Ajusta la URL según la ruta de la API para guardar clientes
+    const url = `${this.baseUrl}api/Client/UpdateClient/${id}`; // Ajusta la URL según la ruta de la API para guardar clientes
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`

@@ -43,7 +43,7 @@ export class RecetasComponent {
 
   visible: boolean = false;
   visibleImagen: boolean = false;
-  unidadMedida!: number;
+  unidadMedida!: string;
   idMateriaP!: string;
   cantidad!: string;
   arrayMateriaPrima: any[] = new Array();
@@ -52,7 +52,7 @@ export class RecetasComponent {
   navBar: boolean = false;
   arrayMateriaPrimaSelector: any[] = new Array();
   arrayColores: any[] = new Array();
-  coloresObtenidos: any[] = new Array();
+  coloresObtenidos: any
   foto!: File;
   idImagen: string = '';
   idImagen2: number = 0;
@@ -102,6 +102,7 @@ export class RecetasComponent {
 
   showDialog() {
     this.visible = true;
+    this.obtenerFotos()
   }
 
   showDialogImagen() {
@@ -126,6 +127,16 @@ export class RecetasComponent {
     
 
 
+  }
+
+  colores:any;
+
+  agregarColores(){
+    alert('Hola')
+    this.colores.push(
+      {id: this.coloresObtenidos}
+     )
+     console.log(this.colores)
   }
 
   obtenerIdReceta(id: string) {
@@ -201,8 +212,9 @@ export class RecetasComponent {
         this.arrayMateriaPrima.push({
           idCatalog: 0,
           quantity: cantidadNueva,
-          fkCatRawMaterial: this.unidadMedida,
+          fkCatRawMaterial: parseInt(this.unidadMedida),
         });
+        console.log(this.arrayMateriaPrima)
         const materialOriginal = this.arrayMateriaPrima.find(
           (material) => material.name === this.unidadMedida
         );
@@ -331,6 +343,8 @@ selectedColors: any[] = [];
       (response: any) => {
         this.messageService.add({ key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se cargo la foto correctamente.' });
         this.idImagen = response.idCatImage
+        this.visible=false
+
       },
       (error: any) => {
         console.error('Error uploading file:', error);

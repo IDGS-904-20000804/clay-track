@@ -45,9 +45,6 @@ export class EnvioService {
       'Authorization': `Bearer ${token}`
     });
 
-    
-    
-    
     console.log('ESTE ES EL TOKEN', token)
     return this.http.put<any>(url, { headers });
   }

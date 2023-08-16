@@ -84,24 +84,44 @@ export class EmpleadosComponent {
      }
 
      agregarEmpleado() {
-      if(this.empleado.idCatEmployee>0){
-        this.modificarEmpleado()
-      }else{
-        this._servicioEmpleados.guardarEmpleado(this.empleado).subscribe(
-          (response) => {
-            
-              this.visible = false;
-              this.messageService.add({key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se guardó el cliente correctamente.' });
-              console.log('Empleado guardado exitosamente:', response.error.text); // Acceder al mensaje de éxito
-            
-          },
-          (error) => {
-            // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
-            console.error('Error al guardar el empleado:', error);
-          }
-        );
+      if (
+        this.empleado.person.name &&
+        this.empleado.person.lastName &&
+        this.empleado.person.phone &&
+        this.empleado.person.street &&
+        this.empleado.person.neighborhood &&
+        this.empleado.person.streetNumber &&
+        this.empleado.person.postalCode &&
+        this.empleado.user.email &&
+        this.empleado.user.passwordHash
+      ) {
+        if(this.empleado.idCatEmployee>0){
+          this.modificarEmpleado()
+          this.obtenerEmpleados()
+        }else{
+          this._servicioEmpleados.guardarEmpleado(this.empleado).subscribe(
+            (response) => {
+              
+                this.visible = false;
+                this.messageService.add({key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se guardó el empleado correctamente.' });
+                console.log('Empleado guardado exitosamente:', response.error.text); // Acceder al mensaje de éxito
+                this.obtenerEmpleados()
+              
+            },
+            (error) => {
+              // Ocurrió un error al guardar el cliente, manejar el error apropiadamente
+              console.error('Error al guardar el empleado:', error);
+            }
+          );
+  
+        }
 
+      }else {
+        // Algunos campos están vacíos, mostrar un mensaje de error
+        this.messageService.add({ severity: 'info', summary: 'Ops..', detail: 'Por favor, completa todos los campos.' });
       }
+
+     
       
     }
 
