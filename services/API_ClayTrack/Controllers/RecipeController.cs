@@ -89,7 +89,7 @@ namespace API_ClayTrack.Controllers
 
             var rawMaterialDetailsDto = rawMaterialDetails.Select(rm => new DetailRecipeRawMaterialSimpleDto
             {
-                IdDetailRecipeRawMaterial = rm.idDetailRecipeRawMaterial,
+                fkRawMaterial = rm.fkCatRawMaterial,
                 Quantity = rm.quantity
             }).ToList();
 
