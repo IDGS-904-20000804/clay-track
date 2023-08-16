@@ -129,6 +129,7 @@ namespace API_ClayTrack.Controllers
 
         [HttpGet]
         [Route("GetAllForClient")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
         public async Task<ActionResult<List<SaleClient>>> GetAllForClient()
         {
             var saleClients = await dbContext.CatShipment

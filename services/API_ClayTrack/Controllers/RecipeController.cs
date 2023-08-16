@@ -163,62 +163,6 @@ namespace API_ClayTrack.Controllers
             return Ok("Recipe inserted successfully.");
         }
 
-        /*[HttpPost]
-        [Route("Update/{idCatRecipe:int}")]
-        public async Task<IActionResult> Update(int idCatRecipe, [FromBody] RecipeJsonDto recipeJson)
-        {
-            // Check if the recipe JSON is valid
-            if (recipeJson == null)
-            {
-                return BadRequest("The recipe JSON is invalid or empty.");
-            }
-
-            // Check if the provided idCatRecipe exists
-            var existingRecipe = await dbContext.CatRecipe.FirstOrDefaultAsync(r => r.idCatRecipe == idCatRecipe);
-            if (existingRecipe == null)
-            {
-                return NotFound("Recipe not found.");
-            }
-
-            // Update the existing recipe properties
-            existingRecipe.name = recipeJson.Name;
-            existingRecipe.price = recipeJson.Price;
-            existingRecipe.fkCatImage = recipeJson.FkCatImage;
-            existingRecipe.fkCatSize = recipeJson.FkCatSize;
-
-            // Save the changes to the database
-            await dbContext.SaveChangesAsync();
-
-            // Insert color details
-            if (recipeJson.ColorIds != null && recipeJson.ColorIds.Count > 0)
-            {
-                var colorJson = new ColorJsonDto
-                {
-                    IdCatalog = idCatRecipe,
-                    ColorIds = recipeJson.ColorIds
-                };
-                await InsertDetailColors(colorJson);
-            }
-
-            // Insert raw material details
-            if (recipeJson.RawMaterials != null && recipeJson.RawMaterials.Count > 0)
-            {
-                var rawMaterialJsonList = new List<RawMaterialJsonDto>();
-                foreach (var rawMaterial in recipeJson.RawMaterials)
-                {
-                    rawMaterialJsonList.Add(new RawMaterialJsonDto
-                    {
-                        IdCatalog = idCatRecipe,
-                        Quantity = rawMaterial.Quantity,
-                        FkCatRawMaterial = rawMaterial.FkCatRawMaterial
-                    });
-                }
-                await InsertDetailRawMaterial(rawMaterialJsonList);
-            }
-
-            return Ok("Recipe updated successfully.");
-        }*/
-
         [HttpPut]
         [Route("Update/{idCatRecipe:int}")]
         public async Task<IActionResult> Update(int idCatRecipe, [FromBody] RecipeJsonDto recipeJson)
