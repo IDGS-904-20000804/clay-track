@@ -137,22 +137,19 @@ namespace API_ClayTrack.Controllers
                 existingUser.UserName = employee.User.Email;
                 existingUser.Email = employee.User.Email;
 
-                // Actualizar otras propiedades del empleado si es necesario
                 existingEmployee.Person.name = employee.Person.name;
                 existingEmployee.Person.lastName = employee.Person.lastName;
                 existingEmployee.Person.middleName = employee.Person.middleName;
                 existingEmployee.Person.phone = employee.Person.phone;
-                // ... otras propiedades de la persona
 
-                // Actualizar las propiedades del rol en lugar de adjuntar la entidad al contexto
                 var existingRole = await dbContext.Roles.FirstOrDefaultAsync(r => r.Id == existingEmployee.fkRol);
                 if (existingRole != null)
                 {
                     existingRole.Name = employee.Role.Name;
                 }
 
-                dbContext.Update(existingUser); // Actualizar el usuario en el contexto
-                dbContext.Update(existingEmployee); // Actualizar el empleado en el contexto
+                dbContext.Update(existingUser);
+                dbContext.Update(existingEmployee);
                 await dbContext.SaveChangesAsync();
 
                 return Ok("Employee was updated successfully.");

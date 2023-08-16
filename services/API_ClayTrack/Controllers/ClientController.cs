@@ -103,7 +103,7 @@ namespace API_ClayTrack.Controllers
         }
 
 
-        [HttpPut]
+        /*[HttpPut]
         [Route("Update{id:int}")]
         [AllowAnonymous]
         public async Task<ActionResult> UpdateClient(CatClient client, int id)
@@ -126,6 +126,69 @@ namespace API_ClayTrack.Controllers
             dbContext.Update(client);
             await dbContext.SaveChangesAsync();
             return Ok();
+        }*/
+
+        [HttpPut]
+        [Route("UpdateClient/{id}")]
+        public async Task<ActionResult> UpdateClient(int id, [FromBody] CatClient client)
+        {
+            try
+            {
+                if (client.idCatClient != id)
+                {
+                    return BadRequest("Client id different from URL id");
+                }
+
+                var existingClient = await dbContext.CatClient
+                    .Include(e => e.Person)
+                    .Include(e => e.User)
+                    .Include(e => e.Role)
+                    .FirstOrDefaultAsync(e => e.idCatClient == id);
+
+                if (existingClient == null)
+                {
+                    return NotFound("Client not found");
+                }
+
+                var existingUser = await userManager.FindByIdAsync(existingClient.fkUser);
+
+                if (existingUser == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                var employeePassword = client.User.PasswordHash;
+
+                if (!string.IsNullOrEmpty(employeePassword))
+                {
+                    var newPasswordHash = userManager.PasswordHasher.HashPassword(existingUser, employeePassword);
+                    existingUser.PasswordHash = newPasswordHash;
+                }
+
+                existingUser.UserName = client.User.Email;
+                existingUser.Email = client.User.Email;
+
+                existingClient.Person.name = client.Person.name;
+                existingClient.Person.lastName = client.Person.lastName;
+                existingClient.Person.middleName = client.Person.middleName;
+                existingClient.Person.phone = client.Person.phone;
+
+                var existingRole = await dbContext.Roles.FirstOrDefaultAsync(r => r.Id == existingClient.fkRol);
+                if (existingRole != null)
+                {
+                    existingRole.Name = client.Role.Name;
+                }
+
+                dbContext.Update(existingUser);
+                dbContext.Update(existingClient);
+                await dbContext.SaveChangesAsync();
+
+                return Ok("Employee was updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
