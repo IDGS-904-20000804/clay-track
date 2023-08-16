@@ -97,30 +97,73 @@ namespace API_ClayTrack.Controllers
             }
         }
 
-
         [HttpPut]
-        [Route("Update{id:int}")]
-        public async Task<ActionResult> UpdateEmployee(CatEmployee employee, int id)
+        [Route("UpdateEmployee/{id}")]
+        public async Task<ActionResult> UpdateEmployee(int id, [FromBody] CatEmployee employee)
         {
-            if (employee.idCatEmployee != id)
+            try
             {
-                return BadRequest("Employee id different from URL id");
-            }
+                if (employee.idCatEmployee != id)
+                {
+                    return BadRequest("Employee id different from URL id");
+                }
 
-            var exist = await dbContext.CatEmployee
-                .Include(e => e.Person)
-                .Include(e => e.User)
-                .Include(e => e.Role)
-                .AnyAsync(x => x.idCatEmployee == id);
-            if (!exist)
+                var existingEmployee = await dbContext.CatEmployee
+                    .Include(e => e.Person)
+                    .Include(e => e.User)
+                    .Include(e => e.Role)
+                    .FirstOrDefaultAsync(e => e.idCatEmployee == id);
+
+                if (existingEmployee == null)
+                {
+                    return NotFound("Employee not found");
+                }
+
+                var existingUser = await userManager.FindByIdAsync(existingEmployee.fkUser);
+
+                if (existingUser == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                var employeePassword = employee.User.PasswordHash;
+
+                if (!string.IsNullOrEmpty(employeePassword))
+                {
+                    var newPasswordHash = userManager.PasswordHasher.HashPassword(existingUser, employeePassword);
+                    existingUser.PasswordHash = newPasswordHash;
+                }
+
+                existingUser.UserName = employee.User.Email;
+                existingUser.Email = employee.User.Email;
+
+                // Actualizar otras propiedades del empleado si es necesario
+                existingEmployee.Person.name = employee.Person.name;
+                existingEmployee.Person.lastName = employee.Person.lastName;
+                existingEmployee.Person.middleName = employee.Person.middleName;
+                existingEmployee.Person.phone = employee.Person.phone;
+                // ... otras propiedades de la persona
+
+                // Actualizar las propiedades del rol en lugar de adjuntar la entidad al contexto
+                var existingRole = await dbContext.Roles.FirstOrDefaultAsync(r => r.Id == existingEmployee.fkRol);
+                if (existingRole != null)
+                {
+                    existingRole.Name = employee.Role.Name;
+                }
+
+                dbContext.Update(existingUser); // Actualizar el usuario en el contexto
+                dbContext.Update(existingEmployee); // Actualizar el empleado en el contexto
+                await dbContext.SaveChangesAsync();
+
+                return Ok("Employee was updated successfully.");
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
-
-            dbContext.Update(employee);
-            await dbContext.SaveChangesAsync();
-            return Ok();
         }
+
+
 
         [HttpPut]
         [Route("Delete{id:int}")]
