@@ -62,7 +62,53 @@ namespace API_ClayTrack.Controllers
             return purchaseDto;
         }
 
-       
+        [HttpGet]
+        [Route("GetById")]
+        public async Task<ActionResult<PurchaseDto>> GetPurchaseById(int id)
+        {
+            var purchase = await dbContext.CatPurchase
+                .Include(p => p.Supplier.Person)
+                .Include(p => p.Employee.Person)
+                .FirstOrDefaultAsync(p => p.idCatPurchase == id);
+
+            if (purchase == null)
+            {
+                return NotFound();
+            }
+
+            var purchaseDto = new PurchaseDto
+            {
+                idCatPurchase = purchase.idCatPurchase,
+                total = purchase.total,
+                fkCatSupplier = purchase.fkCatSupplier,
+                email = purchase.Supplier.email,
+                idCatPersonSupplier = purchase.Supplier.Person.idCatPerson,
+                nameSupplier = purchase.Supplier.Person.name,
+                lastNameSupplier = purchase.Supplier.Person.lastName,
+                middleNameSupplier = purchase.Supplier.Person.middleName,
+                phoneSupplier = purchase.Supplier.Person.phone,
+                fkCatEmployee = purchase.fkCatEmployee,
+                idCatPersonEmployee = purchase.Employee.Person.idCatPerson,
+                nameEmployee = purchase.Employee.Person.name,
+                lastNameEmployee = purchase.Employee.Person.lastName,
+                middleNameEmployee = purchase.Employee.Person.middleName,
+                phoneEmployee = purchase.Employee.Person.phone,
+                Details = dbContext.DetailPurchase
+                        .Where(d => d.fkCatPurchase == purchase.idCatPurchase)
+                        .Select(d => new DetailPurchaseDto
+                        {
+                            idDetailPurchase = d.idDetailPurchase,
+                            quantity = d.quantity,
+                            price = d.price,
+                            fkCatRawMaterial = d.fkCatRawMaterial,
+                            rawMaterialName = d.RawMaterial.name
+                        }).ToList(),
+            };
+
+            return purchaseDto;
+        }
+
+
         [HttpPost]
         [Route("Add")]
         public async Task<IActionResult> AddPurchase([FromBody] PurchaseJsonDto purchaseJsonDto)

@@ -130,12 +130,13 @@ namespace API_ClayTrack.Controllers
         [HttpGet]
         [Route("GetAllForClient")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
-        public async Task<ActionResult<List<SaleClient>>> GetAllForClient()
+        public async Task<ActionResult<List<SaleClient>>> GetAllForClient(int clientId)
         {
+
             var saleClients = await dbContext.CatShipment
                 .Include(s => s.Sale)
                 .Include(s => s.Employee)
-                .Where(s => !s.delivered)
+                .Where(s => !s.delivered && s.Sale.fkCatClient == clientId)
                 .Select(s => new SaleClient
                 {
                     // Shipment

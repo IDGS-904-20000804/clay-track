@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using API_ClayTrack.Repositories.IImageRepository;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.FileProviders;
+using API_ClayTrack.Repositories.Password;
 
 namespace API_ClayTrack
 {
@@ -43,6 +44,10 @@ namespace API_ClayTrack
                            .AllowAnyMethod();
                 });
             });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ClayTrackDbContext>()
+                .AddDefaultTokenProviders();
 
 
             services.AddControllers(options =>
@@ -99,14 +104,11 @@ namespace API_ClayTrack
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddIdentityCore<IdentityUser>()
-                .AddRoles<IdentityRole>()
-                .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("ClayTrack")
-                .AddEntityFrameworkStores<ClayTrackDbContext>().AddDefaultTokenProviders();
-
             services.AddHttpContextAccessor();
             services.AddScoped<ITokenRepository, TokenRepository>();
             services.AddScoped<IImageRepository, LocalImageRepository>();
+            services.AddScoped<IPasswordService, PasswordService>();
+
 
         }
 

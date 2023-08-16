@@ -28,5 +28,7 @@ namespace API_ClayTrack.DTOs
         public string lastNameEmployee { get; set; }
         public string? middleNameEmployee { get; set; }
         public string phoneEmployee { get; set; }
+
+        public List<DetailPurchaseDto> Details { get; set; }
     }
 }

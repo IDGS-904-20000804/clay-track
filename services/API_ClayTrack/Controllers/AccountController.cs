@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using API_ClayTrack.DataBase;
 using API_ClayTrack.DTOs;
+using API_ClayTrack.Repositories.Password;
 using API_ClayTrack.Repositories.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -22,13 +23,15 @@ namespace API_ClayTrack.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly ITokenRepository tokenRepository;
         private readonly ClayTrackDbContext dbContext;
+        private readonly IPasswordService _passwordService;
 
         public AccountController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository,
-            ClayTrackDbContext dbContext)
+            ClayTrackDbContext dbContext, IPasswordService passwordService)
         {
             this.userManager = userManager;
             this.tokenRepository = tokenRepository;
             this.dbContext = dbContext;
+            _passwordService = passwordService;
         }
 
 
@@ -104,5 +107,24 @@ namespace API_ClayTrack.Controllers
             return BadRequest("Username or password incorrect");
         }
 
+        [HttpPost]
+        [Route("UpdatePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var success = await _passwordService.ChangePasswordAsync(model.Email, model.NewPassword);
+                if (success)
+                {
+                    // Contraseña cambiada exitosamente
+                    return Ok();
+                }
+                else
+                {
+                    ModelState.AddModelError("", "No se pudo cambiar la contraseña. Verifica el correo electrónico.");
+                }
+            }
+            return Ok(model);
+        }
     }
 }
