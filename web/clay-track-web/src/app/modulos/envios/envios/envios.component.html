@@ -13,31 +13,86 @@
                 </button>
             </div>
             <div class="col-6 text-end">
-                <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
-
+                <button type="button" class="btn btn-outline-light" (click)="toggleEntregados()">
+                    {{ entregados ? 'Entregados' : 'No Entregados' }}
+                  </button>
             </div>
             <div class="col-12 mt-3">
-                <p-table [tableStyle]="{ 'min-width': '50rem' }">
-                    <ng-template pTemplate="header">
-                        <tr >
-                            <th>Nombre</th>
-                            <th>Correo</th>
-                            <th>Telefono</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-product>
+                <p-table #dt1 [value]="arrayEnvios" dataKey="idCatShipment" [rows]="15"
+                [showCurrentPageReport]="true" [rowsPerPageOptions]="[15, 25, 50]" [loading]="loading"
+                [paginator]="true"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                filterMode="global"
+                styleClass="p-datatable-sm"
+                [tableStyle]="{ 'min-width': '50rem' }"
+                [style]="{ 'font-size': '15px' }"
+                [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <div class="flex align-items-center mt-4">
+                                ID de Envío
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex align-items-center mt-4">
+                                Empleado
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex align-items-center mt-4">
+                                Estado de Entrega
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex align-items-center mt-4">
+                                Fecha de Creación
+                            </div>
+                        </th>
+                       
+                        <th>
+                            <div class="flex align-items-center mt-4">
+                                Cliente
+                            </div>
+                        </th>
+                        <th>
+                            Acciones
+                        </th>
+                        <!-- Puedes agregar más encabezados aquí según tus datos -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-envio >
+                    <ng-container *ngIf="envio.delivered ==entregados">
                         <tr>
-
+                          <td>{{ envio.idCatShipment }}</td>
+                          <td>{{ envio.employeeName }} {{ envio.employeelastName }}</td>
+                          <td>{{ envio.delivered ? 'Entregado' : 'No entregado' }}</td>
+                          <td>{{ envio.creationDate }}</td>
+                          <td>{{ envio.clientName }} {{ envio.clientlastName }}</td>
+                          <td>
+                            <button class="btn custom-small-button btn-outline-warning" (click)="obtenerEnviosDetalle(envio.fkCatClient)">
+                              <i class="pi pi-pencil"></i>
+                            </button>
+                            <button class="btn custom-small-button btn-outline-success" (click)="enviarPedido(envio.idCatShipment)">
+                                <i class="bi bi-arrow-up"></i>
+                              </button>
+                          </td>
                         </tr>
-                    </ng-template>
-                </p-table>
+                      </ng-container>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="5">No hay envíos disponibles.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- 
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -47,30 +102,91 @@
                     <p-dialog header="INFORMACION ENVIO" [(visible)]="visible" [style]="{ width: '60vw' }"
                         [maximizable]="true" headerStyleClass="custom-dialog-header">
                         <div class="row">
-                            <div class="col-6">
-                                <label for="empleado">Empleado:</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="Uno">One</option>
-                                    <option value="Dos">Two</option>
-                                    <option value="Tres">Three</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label for="fechaE">Fecha Envio:</label>
-                                <input type="date" class="form-control" />
-                            </div>
-
-                            <div class="col-12 text-center mt-4">
-                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarEmpleado()"
-                                    styleClass="p-button-outlined p-button-success  mx-5"></p-button>
-                                <p-button label="Cancelar" icon="pi pi-times"
-                                    styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
-                            </div>
+                        <div class="col-12">
+                            <table>
+                                <thead>
+                                  <tr>
+                                    <th>Nombre de la Receta</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Foto</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let envio of arrayEnviosDetalle">
+                                    <td colspan="4">Envío ID: {{ envio.idCatShipment }}</td>
+                                  </tr>
+                                  <tr *ngFor="let envio of arrayEnviosDetalle">
+                                    <td colspan="4">Cliente: {{ envio.clientName }} {{ envio.clientLastName }}</td>
+                                  </tr>
+                                  <tr *ngFor="let detalle of arrayEnviosDetalle.detailSale">
+                                    <td>{{ detalle.recipe.name }}</td>
+                                    <td>{{ detalle.quantity }}</td>
+                                    <td>{{ detalle.price }}</td>
+                                    <td>
+                                      <img [src]="detalle.recipe.image.filePath" alt="Foto del producto" width="50" height="50">
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              
+                        </div>
                         </div>
                     </p-dialog>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> -->
+
+
+<div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class=" flex justify-content-center">
+          <p-toast></p-toast>
+          <div class=" flex justify-content-center">
+            <p-dialog header="INFORMACION CLIENTE" [(visible)]="visible" [style]="{ width: '60vw' }" [maximizable]="true"
+              headerStyleClass="custom-dialog-header">
+             <div class="row">
+                <table class="custom-table">
+                    <thead>
+                      <tr>
+                        <th>Nombre de la Receta</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th>Foto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let envio of arrayEnviosDetalle">
+                        <tr>
+                          <td colspan="4" class="envio-info">Envío ID: {{ envio.idCatShipment }}</td>
+                        </tr>
+                        <tr>
+                          <td colspan="4" class="cliente-info">Cliente: {{ envio.clientName }} {{ envio.clientLastName }}</td>
+                        </tr>
+                        <tr>
+                          <td colspan="4" class="direccion-info">Dirección: {{ envio.street }}, {{ envio.neighborhood }}</td>
+                        </tr>
+                        <tr *ngFor="let detalle of envio.detailSale">
+                          <td>{{ detalle.recipe.name }}</td>
+                          <td>{{ detalle.quantity }}</td>
+                          <td>${{ detalle.price }}</td>
+                          <td>
+                            <img [src]="detalle.recipe.image.filePath" alt="Foto del producto" width="50" height="50">
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                  
+                  
+             </div>
+             
+            </p-dialog>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

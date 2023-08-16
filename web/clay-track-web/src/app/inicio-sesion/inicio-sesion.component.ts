@@ -19,7 +19,7 @@ export class InicioSesionComponent {
   contrasenia: string = '';
   mostrarContrasenia: boolean = false;
   tipoContrasenia: string = 'password';
-  token:any;
+  token: any;
 
   constructor(private router: Router,
     private _servicioLogin: LoginService,
@@ -51,14 +51,23 @@ export class InicioSesionComponent {
       console.log(datos)
       this.visible = false;
       this.messageService.add({ key: 'tc', severity: 'success', summary: 'Exito', detail: 'Usuario cargado correctamente.' });
-      this.router.navigate(['/Inicio']);
+      // this.router.navigate(['/Inicio']);
       console.log('Entre');
-      this.token=localStorage.getItem("token");
-      const tokenInfo = this.getDecodedAccessToken(this.token); 
+      this.token = localStorage.getItem("token");
+      const tokenInfo = this.getDecodedAccessToken(this.token);
       console.log(tokenInfo)
-      localStorage.setItem('usuario',tokenInfo['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
-      localStorage.setItem('rol',tokenInfo['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
+      localStorage.setItem('usuario', tokenInfo['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
+      localStorage.setItem('rol', tokenInfo['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
+      localStorage.setItem('ClientId',tokenInfo.ClientId )
       console.log(tokenInfo);
+
+      const idCliente:any= localStorage.getItem('ClientId')
+
+      if(idCliente>0){
+        this.router.navigate(['/TiendaOnline']);
+      }else{
+        this.router.navigate(['/Inicio']);
+      }
     }, (err) => {
       console.log(err)
       this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Usuario y contraseña incorrectos intenta de nuevo.' });

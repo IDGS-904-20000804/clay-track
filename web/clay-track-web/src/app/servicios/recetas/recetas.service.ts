@@ -162,7 +162,7 @@ export class RecetasService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.post<Receta>(url, receta, { headers }).pipe(
+    return this.http.put<Receta>(url, receta, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error); // Registra el error en la consola.
         return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
@@ -171,7 +171,7 @@ export class RecetasService {
   }
 
   obtenerRecetaPorId(id:string):Observable<Receta>{
-    const url = `${this.baseUrl}api/Recipe/GetOne${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
+    const url = `${this.baseUrl}api/Recipe/GetOne/${id}`; // Ajusta la URL según la ruta de la API para guardar provedors
     const token = this.token;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`

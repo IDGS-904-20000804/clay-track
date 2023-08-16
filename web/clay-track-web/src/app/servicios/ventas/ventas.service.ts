@@ -1,6 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
+export interface SaleData {
+  fkCatClient: number;
+  detailSales: DetailSale[];
+}
+
+export interface DetailSale {
+  quantity: number;
+  fkCatClient: number;
+  fkCatSale: number;
+  fkCatRecipe: number;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -69,4 +81,20 @@ export class VentasService {
       })
     );
   }
+
+   
+  realizarVenta(venta: SaleData): Observable<any> {
+    const url = `${this.baseUrl}api/Sale/AddSales`; // Ajusta la URL según la ruta de la API para guardar ventas
+    const token = this.token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post<SaleData>(url, venta, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error); // Registra el error en la consola.
+        return throwError(error); // Re-lanza el error para que sea capturado por el componente que lo llame.
+      })
+    );
+  }
+
 }

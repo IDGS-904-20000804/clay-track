@@ -23,24 +23,21 @@
                     <input class="form-control" type="date" [(ngModel)]="fecha">
                 </div>
                 <div class="col-4">
-                    <p-button label="Obtener Informacion" icon="pi pi-save" (click)="obtencionDatos()"
-                                    styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                    <p-button label="Obtener" (click)="obtencionDatos()"
+                                    styleClass="p-button-outlined p-button-success  mx-5 mt-4"></p-button>
                 </div>
             </div>
-           
-            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
-                <label for="materia" class="mt-4"><b>INFORMACION DE</b></label>
-                <h1>{{fecha}}</h1>
-                <h1>{{tipoGrafica}}</h1>
+            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;" *ngIf="arraySalesByClient.length>0">
+                <label for="materia" class="mt-4"><b>INFORMACION DE VENTAS POR CLIENTE</b></label>
                 <p-chart type="line" [data]="data" [options]="options"></p-chart>
             </div>
-            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
-                <label for="materia" class="mt-4"><b>INFORMACION DE VENTAS POR CLIENTE</b></label>
+            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;" *ngIf="arrayPurchasesBySupplier.length>0">
+                <label for="materia" class="mt-4"><b>INFORMACION DE COMPRAS POR PROVEEDOR</b></label>
                 <p-chart type="bar" [data]="getChartData()" [options]="options" width="800" height="400"></p-chart>
 
             </div>
-            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
-                <label for="materia" class="mt-4"><b>INFORMACION COMPRAS POR PROVEEDOR</b></label>
+            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;" *ngIf="arrayRawMaterialsByRecipe.length>0">
+                <label for="materia" class="mt-4"><b>INFORMACION DE MATERIAS PRIMAS POR RECETAS</b></label>
                 <p-table [value]="arrayComprasp" [paginator]="true" [rows]="10">
                     <ng-template pTemplate="header">
                         <tr>
@@ -63,8 +60,8 @@
                 </p-table>
                 <p-chart type="bar" [data]="chartDataPay" [options]="optionsBarras"></p-chart>
             </div>
-            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;">
-                <label for="materia" class="mt-4"><b>INFORMACION DE MATERIAS PRIMAS POR RECETAS</b></label>
+            <div class="col-12 mt-3" style="background-color: white; margin-left: -20px;" *ngIf="arrayRecipesBySale.length>0">
+                <label for="materia" class="mt-4"><b>INFORMACION DE RECETAS POR VENTAS</b></label>
                 <p-chart type="bar" [data]="chartDataR" [options]="chartOptionsR"></p-chart>
 
             </div>

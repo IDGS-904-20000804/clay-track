@@ -53,17 +53,18 @@
                             <th>Acciones</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-receta>
-                        <tr>
+                    <ng-template pTemplate="body" let-receta >
+                        <tr [hidden]="receta.status==false">
                             <td>{{ receta.name }}</td>
                             <td>${{ receta.price }}MXM</td>
                             <td>{{ receta.fkCatSize }}</td>
-                            <td><img [src]="receta.image.filePath"></td>
+                            <td><img [src]="receta.image.filePath" width="40"></td>
                             <td>
-                                <button class="btn custom-small-button btn-outline-warning" (click)="obtenerIdReceta(receta.idCatRecipe)">
+                                <button class="btn custom-small-button btn-outline-warning"
+                                    (click)="obtenerIdReceta(receta.idCatRecipe)">
                                     <i class="pi pi-pencil"></i>
                                 </button>
-                                <button class="btn custom-small-button btn-outline-danger">
+                                <button class="btn custom-small-button btn-outline-danger" (click)="eliminarReceta(receta.idCatRecipe)">
                                     <i class="pi pi-times"></i>
                                 </button>
                             </td>
@@ -93,7 +94,8 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <input class="form-control" hidden [(ngModel)]="idReceta">
+                                    <div class="col-12">
                                         <label for="Nombre">Nombre:</label>
                                         <input type="text" class="form-control" [(ngModel)]="nombre" />
                                     </div>
@@ -101,10 +103,7 @@
                                         <label for="precio">Precio:</label>
                                         <input type="text" class="form-control" [(ngModel)]="precio" />
                                     </div>
-                                    <div class="col-6">
-                                        <label for="cantidad">Cantidad:</label>
-                                        <input type="text" class="form-control" [(ngModel)]="cantidadReceta" />
-                                    </div>
+
                                     <div class="col-6">
                                         <label for="colo">Tamaño:</label><br>
                                         <select class="form-select" [(ngModel)]="idTamanio">
@@ -112,19 +111,36 @@
                                         </select>
                                     </div>
                                     <div class="col-6 ">
+                                        <!-- <label for="colo">Color:</label><br>
+                                        <div class="form-group">
+                                            <select class="form-control" id="colorSelect" [(ngModel)]="coloresObtenidos" >
+                                                <option *ngFor="let color of arrayColores" [value]="color.idCatColor">
+                                                    <div class="color-option" [style.background-color]="color.hexadecimal"></div>
+                                                    {{ color.description }}
+                                                </option>
+                                            </select>
+                                        </div> -->
+
                                         <label for="colo">Color:</label><br>
-                                        <p-multiSelect [style]="{ width: '26vw', height:'3vw' }"
+                                        <p-multiSelect [style]="{ width: '26vw', height: '3vw' }"
                                             [options]="arrayColores" optionLabel="description"
-                                            styleClass="custom-multiselect" (onChange)="obtencionIdColor($event)">
+                                            styleClass="custom-multiselect" (onChange)="obtencionIdColor($event)"
+                                            [(ngModel)]="selectedColors">
                                             <ng-template let-color pTemplate="item">
                                                 <div class="color-option" [style.background-color]="color.hexadecimal">
                                                     &nbsp; <!-- Espacio en blanco para ocupar toda la opción -->
                                                 </div>
                                                 <div class="color-label">{{ color.description }}</div>
-                                                <input type="text" class="form-control" hidden
-                                                    [(ngModel)]="color.idCatRawMaterial" />
                                             </ng-template>
                                         </p-multiSelect>
+
+
+
+
+
+
+
+
                                     </div>
                                     <div class="col-6">
                                         <label for="colo">Imagen:</label><br>
@@ -184,7 +200,8 @@
                                     <ng-template pTemplate="body" let-materiaP let-rowIndex="rowIndex">
                                         <tr>
                                             <td>{{rowIndex + 1}}</td>
-                                            <td>{{materiaP.fkCatRawMaterial}}</td>
+                                            <td>{{materiaP.fkCatRawMaterial | rawMaterialName: arrayMateriaPrimaSelector
+                                                }}</td>
                                             <td>{{materiaP.quantity}}</td>
                                             <td> <p-button icon="pi pi-times"
                                                     styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"

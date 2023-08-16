@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { InicioSesionComponent } from 'src/app/inicio-sesion/inicio-sesion.component';
@@ -33,6 +33,8 @@ import { ChartModule } from 'primeng/chart';
 import { GraficasComponent } from 'src/app/modulos/graficas/graficas.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { PaginatorModule } from 'primeng/paginator';
+import {  EmpleadoNombre, RawMaterialNamePipe } from 'src/app/modulos/recetas/recetas.pipe';
+import { TiendaComponent } from 'src/app/modulos/tienda/tienda/tienda.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,7 @@ import { PaginatorModule } from 'primeng/paginator';
     EmpleadosComponent,
     ClientesComponent,
     MateriaPrimaComponent,
-    AlmacenComponent,
+    AlmacenComponent,  
     MateriaPrimaComponent,
     RecetasComponent,
     VentasComponent,
@@ -49,7 +51,10 @@ import { PaginatorModule } from 'primeng/paginator';
     EnviosComponent,
     StockComponent,
     MenuComponent,
-    GraficasComponent
+    GraficasComponent,
+    RawMaterialNamePipe,
+    TiendaComponent,
+    EmpleadoNombre
   ],
   imports: [
     CommonModule,
@@ -73,7 +78,8 @@ import { PaginatorModule } from 'primeng/paginator';
     MultiSelectModule,
     ChartModule,
     FileUploadModule,
-    PaginatorModule
+    PaginatorModule,
+    ReactiveFormsModule
     
     
   ],

@@ -44,10 +44,10 @@ export class GraficasComponent {
     tipoGrafica: string = ''
     fecha!: Date
     graficas = [
-        { nombre: 'SalesByClient', valor: 'SalesByClient' },
-        { nombre: 'PurchasesBySupplier', valor: 'PurchasesBySupplier' },
-        { nombre: 'RawMaterialsByRecipe', valor: 'RawMaterialsByRecipe' },
-        { nombre: 'RecipesBySale', valor: 'RecipesBySale' }
+        { nombre: 'Ventas por cliente', valor: 'SalesByClient' },
+        { nombre: 'Compras por proveedor', valor: 'PurchasesBySupplier' },
+        { nombre: 'Materias primas por receta', valor: 'RawMaterialsByRecipe' },
+        { nombre: 'Recetas Por Venta', valor: 'RecipesBySale' }
     ];
 
     constructor(private _servicioAnalisis: AnalisisService) {
@@ -67,19 +67,148 @@ export class GraficasComponent {
 
             this._servicioAnalisis.obtenerDatos(fechaFormateada, this.tipoGrafica).subscribe((datos) => {
                 if (this.tipoGrafica == 'SalesByClient') {
-                    this.arraySalesByClient = datos
+                    const jsonResult = JSON.parse(datos[0].result);
+                    this.arraySalesByClient = jsonResult
+                    console.log(this.arraySalesByClient)
+                    this. obtenerDatosGraficaVentaCliente()
+                  
                 } else if (this.tipoGrafica == 'PurchasesBySupplier') {
-                    this.arrayPurchasesBySupplier = datos
-                }
-                else if (this.tipoGrafica == 'RecipesBySale') {
-                    this.arrayRecipesBySale = datos
+                    const jsonResult = JSON.parse(datos[0].result);
+                    this.arrayPurchasesBySupplier = jsonResult
+                    console.log(this.arrayPurchasesBySupplier)
+                    this.obtenerGraficaComprasProvedor()
                 }
                 else if (this.tipoGrafica == 'RawMaterialsByRecipe') {
-                    this.arrayRawMaterialsByRecipe = datos
+                    const jsonResult = JSON.parse(datos[0].result);
+                    this.arrayRawMaterialsByRecipe = jsonResult
+                    this.obtenerGraficaMateriaPorReceta()
+                    console.log(this.arrayRawMaterialsByRecipe)
                 }
-                console.log(datos)
+                else if (this.tipoGrafica == 'RecipesBySale') {
+                    const jsonResult = JSON.parse(datos[0].result);
+                    this.arrayRecipesBySale = jsonResult
+                    console.log(this.arrayRecipesBySale )
+                   this.obtenerGraficaRecetasPorVenta()
+                }
             })
     }
+
+
+    obtenerDatosGraficaVentaCliente() {
+          const labels = this.arraySalesByClient.map(item => item.name);
+          console.log(labels)
+          const salesCountData = this.arraySalesByClient.map(item => item.salesCount);
+          const totalSalesData = this.arraySalesByClient.map(item => item.totalSales);
+        
+        const documentStyle = getComputedStyle(document.documentElement);
+        console.log(labels)
+        this.data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Recuento de ventas',
+                    fill: false,
+                    borderColor: documentStyle.getPropertyValue('--blue-500'),
+                    yAxisID: 'y',
+                    tension: 0.4,
+                    data: salesCountData
+                },
+                {
+                    label: 'Ventas totales',
+                    fill: false,
+                    borderColor: documentStyle.getPropertyValue('--green-500'),
+                    yAxisID: 'y1',
+                    tension: 0.4,
+                    data: totalSalesData
+                }
+            ]
+        };
+        this.arrayPurchasesBySupplier=[]
+        this.arrayRawMaterialsByRecipe=[]
+        this.arrayRecipesBySale=[]
+    }
+
+    obtenerGraficaComprasProvedor(){
+
+        this.chartData = {
+            labels: this.arrayPurchasesBySupplier.map(customer => `${customer.name} ${customer.lastName}`),
+            datasets: [
+                {
+                    label: 'Cantidad de Compras',
+                    backgroundColor: '#FA3838',
+                    data: this.arrayPurchasesBySupplier.map(customer => customer.purchaseCount),
+                },
+                {
+                    label: 'Total de Compras',
+                    backgroundColor: '#FAC238',
+                    data: this.arrayPurchasesBySupplier.map(customer => customer.totalPurchases),
+                },
+            ],
+    
+        };
+        this.arraySalesByClient=[]
+        this.arrayRawMaterialsByRecipe=[]
+        this.arrayRecipesBySale=[]
+    }
+
+    obtenerGraficaMateriaPorReceta(){
+     const materialObjeto = this.arrayRawMaterialsByRecipe
+     .sort((a, b) => b.totalQuantityRawMaterialUsed - a.totalQuantityRawMaterialUsed)
+     .slice(0, 15);
+
+        this.chartDataPay = {
+            labels: materialObjeto.map((item: any) => item.name),
+            datasets: [
+                {
+                    label:'Cantidad total de materia prima utilizada',
+                    data: materialObjeto.map((item: any) => item.totalQuantityRawMaterialUsed),
+                    backgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56",
+                        // Agregar más colores aquí si tienes más datos
+                    ],
+                    hoverBackgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56",
+                        // Agregar más colores aquí si tienes más datos
+                    ]
+                }
+            ]
+        };
+        this.arraySalesByClient=[]
+        this.arrayPurchasesBySupplier=[]
+        this.arrayRecipesBySale=[]
+    }
+
+    obtenerGraficaRecetasPorVenta(){
+        const recetaObjeto = this.arrayRecipesBySale
+     .sort((a, b) => b.totalRecipes - a.totalRecipes)
+     .slice(0, 15);
+        this.chartDataR = {
+            labels: recetaObjeto.map(item => item.descriptionRecipe),
+            datasets: [
+                {
+                    label: 'Total de Recetas',
+                    data: this.arrayRecipesBySale.map(item => item.totalRecipes),
+                    backgroundColor: '#42A5F5', // Color de las barras
+                }
+            ]
+        };
+
+        this.chartOptionsR = {
+            scales: {
+                y: {
+                    beginAtZero: true // Comenzar desde cero en el eje y
+                }
+            }
+        };
+        this.arraySalesByClient=[]
+        this.arrayPurchasesBySupplier=[]
+        this.arrayRawMaterialsByRecipe=[]
+    }
+    
 
     formatearFecha(fecha: Date): string {
         const ano = fecha.getFullYear();
@@ -593,118 +722,105 @@ export class GraficasComponent {
             "FilePath": null
         }
     ];
+    
+    //ESte es el segundo 
+    // customerData: CustomerData[] =
+    //     [
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 4000.0,
+    //             "name": "Estibaliz",
+    //             "lastName": "Iglesias",
+    //             "middleName": "Guevara"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 10000.0,
+    //             "name": "Rachida",
+    //             "lastName": "Ojeda",
+    //             "middleName": "Moyano"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 1500.0,
+    //             "name": "Alexandra",
+    //             "lastName": "Felipe",
+    //             "middleName": "Cardona"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 4000.0,
+    //             "name": "Angelica",
+    //             "lastName": "Palacios",
+    //             "middleName": "Garrido"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 8000.0,
+    //             "name": "Markel",
+    //             "lastName": "Maroto",
+    //             "middleName": "San-Juan"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 14000.0,
+    //             "name": "Marcelina",
+    //             "lastName": "Megias",
+    //             "middleName": "Verdu"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 12000.0,
+    //             "name": "Roger",
+    //             "lastName": "Barrientos",
+    //             "middleName": "Cardona"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 5000.0,
+    //             "name": "Estibaliz",
+    //             "lastName": "Iglesias",
+    //             "middleName": "Guevara"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 2400.0,
+    //             "name": "Rachida",
+    //             "lastName": "Ojeda",
+    //             "middleName": "Moyano"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 1500.0,
+    //             "name": "Alexandra",
+    //             "lastName": "Felipe",
+    //             "middleName": "Cardona"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 4000.0,
+    //             "name": "Angelica",
+    //             "lastName": "Palacios",
+    //             "middleName": "Garrido"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 4000.0,
+    //             "name": "Marcelina",
+    //             "lastName": "Megias",
+    //             "middleName": "Verdu"
+    //         },
+    //         {
+    //             "purchaseCount": 1,
+    //             "totalPurchases": 2000.0,
+    //             "name": "Roger",
+    //             "lastName": "Barrientos",
+    //             "middleName": "Cardona"
+    //         }
+    //     ]
 
-    customerData: CustomerData[] =
-        [
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 4000.0,
-                "name": "Estibaliz",
-                "lastName": "Iglesias",
-                "middleName": "Guevara"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 10000.0,
-                "name": "Rachida",
-                "lastName": "Ojeda",
-                "middleName": "Moyano"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 1500.0,
-                "name": "Alexandra",
-                "lastName": "Felipe",
-                "middleName": "Cardona"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 4000.0,
-                "name": "Angelica",
-                "lastName": "Palacios",
-                "middleName": "Garrido"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 8000.0,
-                "name": "Markel",
-                "lastName": "Maroto",
-                "middleName": "San-Juan"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 14000.0,
-                "name": "Marcelina",
-                "lastName": "Megias",
-                "middleName": "Verdu"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 12000.0,
-                "name": "Roger",
-                "lastName": "Barrientos",
-                "middleName": "Cardona"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 5000.0,
-                "name": "Estibaliz",
-                "lastName": "Iglesias",
-                "middleName": "Guevara"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 2400.0,
-                "name": "Rachida",
-                "lastName": "Ojeda",
-                "middleName": "Moyano"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 1500.0,
-                "name": "Alexandra",
-                "lastName": "Felipe",
-                "middleName": "Cardona"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 4000.0,
-                "name": "Angelica",
-                "lastName": "Palacios",
-                "middleName": "Garrido"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 4000.0,
-                "name": "Marcelina",
-                "lastName": "Megias",
-                "middleName": "Verdu"
-            },
-            {
-                "purchaseCount": 1,
-                "totalPurchases": 2000.0,
-                "name": "Roger",
-                "lastName": "Barrientos",
-                "middleName": "Cardona"
-            }
-        ]
+    chartData!: ChartData
 
-    chartData: ChartData = {
-        labels: this.customerData.map(customer => `${customer.name} ${customer.lastName}`),
-        datasets: [
-            {
-                label: 'Cantidad de Compras',
-                backgroundColor: '#FA3838',
-                data: this.customerData.map(customer => customer.purchaseCount),
-            },
-            {
-                label: 'Total de Compras',
-                backgroundColor: '#FAC238',
-                data: this.customerData.map(customer => customer.totalPurchases),
-            },
-        ],
-
-    };
 
 
 
@@ -731,24 +847,24 @@ export class GraficasComponent {
     ngOnInit() {
 
 
-        this.chartDataR = {
-            labels: this.rawDataR.map(item => item.descriptionRecipe),
-            datasets: [
-                {
-                    label: 'Total de Recetas',
-                    data: this.rawDataR.map(item => item.totalRecipes),
-                    backgroundColor: '#42A5F5', // Color de las barras
-                }
-            ]
-        };
+        // this.chartDataR = {
+        //     labels: this.rawDataR.map(item => item.descriptionRecipe),
+        //     datasets: [
+        //         {
+        //             label: 'Total de Recetas',
+        //             data: this.rawDataR.map(item => item.totalRecipes),
+        //             backgroundColor: '#42A5F5', // Color de las barras
+        //         }
+        //     ]
+        // };
 
-        this.chartOptionsR = {
-            scales: {
-                y: {
-                    beginAtZero: true // Comenzar desde cero en el eje y
-                }
-            }
-        };
+        // this.chartOptionsR = {
+        //     scales: {
+        //         y: {
+        //             beginAtZero: true // Comenzar desde cero en el eje y
+        //         }
+        //     }
+        // };
 
 
         const documentStyle = getComputedStyle(document.documentElement);
@@ -762,162 +878,162 @@ export class GraficasComponent {
         // const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
 
-        const jsonData = [
-            {
-                "purchaseCount": 10,
-                "totalSales": 14370.0,
-                "UserName": "francisco_la332",
-                "name": "Francisco",
-                "lastName": "Gaspar",
-                "middleName": "Avila"
-            },
-            {
-                "purchaseCount": 27,
-                "totalSales": 75040.0,
-                "UserName": "iryna_ro349",
-                "name": "Iryna",
-                "lastName": "Fern\u00e1ndez",
-                "middleName": "Valero"
-            },
-            {
-                "purchaseCount": 30,
-                "totalSales": 42620.0,
-                "UserName": "noel_da366",
-                "name": "Noel",
-                "lastName": "Mosquera",
-                "middleName": "Estrada"
-            },
-            {
-                "purchaseCount": 31,
-                "totalSales": 43750.0,
-                "UserName": "hilario_no383",
-                "name": "Hilario",
-                "lastName": "Alcantara",
-                "middleName": "Moyano"
-            },
-            {
-                "purchaseCount": 13,
-                "totalSales": 12180.0,
-                "UserName": "florin_ra400",
-                "name": "Florin",
-                "lastName": "Beltran",
-                "middleName": "Rivera"
-            },
-            {
-                "purchaseCount": 11,
-                "totalSales": 26420.0,
-                "UserName": "german_ra417",
-                "name": "German",
-                "lastName": "Rivera",
-                "middleName": "Alcantara"
-            },
-            {
-                "purchaseCount": 10,
-                "totalSales": 4360.0,
-                "UserName": "unax_ez434",
-                "name": "Unax",
-                "lastName": "Verdu",
-                "middleName": "Ya\u00f1ez"
-            },
-            {
-                "purchaseCount": 15,
-                "totalSales": 5360.0,
-                "UserName": "unai_pe451",
-                "name": "Unai",
-                "lastName": "Hidalgo",
-                "middleName": "Felipe"
-            },
-            {
-                "purchaseCount": 8,
-                "totalSales": 2040.0,
-                "UserName": "fabian_da468",
-                "name": "Fabian",
-                "lastName": "Quiroga",
-                "middleName": "Ubeda"
-            },
-            {
-                "purchaseCount": 9,
-                "totalSales": 2620.0,
-                "UserName": "maria_ia485",
-                "name": "Maria",
-                "lastName": "Cabanillas",
-                "middleName": "Garc\u00eda"
-            },
-            {
-                "purchaseCount": 6,
-                "totalSales": 1140.0,
-                "UserName": "narciso_du502",
-                "name": "Narciso",
-                "lastName": "Reyes",
-                "middleName": "Verdu"
-            },
-            {
-                "purchaseCount": 5,
-                "totalSales": 900.0,
-                "UserName": "anibal_ro519",
-                "name": "Anibal",
-                "lastName": "Garrido",
-                "middleName": "Valero"
-            },
-            {
-                "purchaseCount": 8,
-                "totalSales": 3580.0,
-                "UserName": "jeronima_ll536",
-                "name": "Jeronima",
-                "lastName": "Tirado",
-                "middleName": "Martorell"
-            },
-            {
-                "purchaseCount": 6,
-                "totalSales": 1480.0,
-                "UserName": "segundo_ar553",
-                "name": "Segundo",
-                "lastName": "Martin",
-                "middleName": "Gaspar"
-            },
-            {
-                "purchaseCount": 5,
-                "totalSales": 910.0,
-                "UserName": "julia_ar570",
-                "name": "Julia",
-                "lastName": "Ya\u00f1ez",
-                "middleName": "Gaspar"
-            },
-            {
-                "purchaseCount": 8,
-                "totalSales": 430.0,
-                "UserName": "leire_ez587",
-                "name": "Leire",
-                "lastName": "Martorell",
-                "middleName": "Fern\u00e1ndez"
-            }
-        ]
+        // const jsonData = [
+        //     {
+        //         "purchaseCount": 10,
+        //         "totalSales": 14370.0,
+        //         "UserName": "francisco_la332",
+        //         "name": "Francisco",
+        //         "lastName": "Gaspar",
+        //         "middleName": "Avila"
+        //     },
+        //     {
+        //         "purchaseCount": 27,
+        //         "totalSales": 75040.0,
+        //         "UserName": "iryna_ro349",
+        //         "name": "Iryna",
+        //         "lastName": "Fern\u00e1ndez",
+        //         "middleName": "Valero"
+        //     },
+        //     {
+        //         "purchaseCount": 30,
+        //         "totalSales": 42620.0,
+        //         "UserName": "noel_da366",
+        //         "name": "Noel",
+        //         "lastName": "Mosquera",
+        //         "middleName": "Estrada"
+        //     },
+        //     {
+        //         "purchaseCount": 31,
+        //         "totalSales": 43750.0,
+        //         "UserName": "hilario_no383",
+        //         "name": "Hilario",
+        //         "lastName": "Alcantara",
+        //         "middleName": "Moyano"
+        //     },
+        //     {
+        //         "purchaseCount": 13,
+        //         "totalSales": 12180.0,
+        //         "UserName": "florin_ra400",
+        //         "name": "Florin",
+        //         "lastName": "Beltran",
+        //         "middleName": "Rivera"
+        //     },
+        //     {
+        //         "purchaseCount": 11,
+        //         "totalSales": 26420.0,
+        //         "UserName": "german_ra417",
+        //         "name": "German",
+        //         "lastName": "Rivera",
+        //         "middleName": "Alcantara"
+        //     },
+        //     {
+        //         "purchaseCount": 10,
+        //         "totalSales": 4360.0,
+        //         "UserName": "unax_ez434",
+        //         "name": "Unax",
+        //         "lastName": "Verdu",
+        //         "middleName": "Ya\u00f1ez"
+        //     },
+        //     {
+        //         "purchaseCount": 15,
+        //         "totalSales": 5360.0,
+        //         "UserName": "unai_pe451",
+        //         "name": "Unai",
+        //         "lastName": "Hidalgo",
+        //         "middleName": "Felipe"
+        //     },
+        //     {
+        //         "purchaseCount": 8,
+        //         "totalSales": 2040.0,
+        //         "UserName": "fabian_da468",
+        //         "name": "Fabian",
+        //         "lastName": "Quiroga",
+        //         "middleName": "Ubeda"
+        //     },
+        //     {
+        //         "purchaseCount": 9,
+        //         "totalSales": 2620.0,
+        //         "UserName": "maria_ia485",
+        //         "name": "Maria",
+        //         "lastName": "Cabanillas",
+        //         "middleName": "Garc\u00eda"
+        //     },
+        //     {
+        //         "purchaseCount": 6,
+        //         "totalSales": 1140.0,
+        //         "UserName": "narciso_du502",
+        //         "name": "Narciso",
+        //         "lastName": "Reyes",
+        //         "middleName": "Verdu"
+        //     },
+        //     {
+        //         "purchaseCount": 5,
+        //         "totalSales": 900.0,
+        //         "UserName": "anibal_ro519",
+        //         "name": "Anibal",
+        //         "lastName": "Garrido",
+        //         "middleName": "Valero"
+        //     },
+        //     {
+        //         "purchaseCount": 8,
+        //         "totalSales": 3580.0,
+        //         "UserName": "jeronima_ll536",
+        //         "name": "Jeronima",
+        //         "lastName": "Tirado",
+        //         "middleName": "Martorell"
+        //     },
+        //     {
+        //         "purchaseCount": 6,
+        //         "totalSales": 1480.0,
+        //         "UserName": "segundo_ar553",
+        //         "name": "Segundo",
+        //         "lastName": "Martin",
+        //         "middleName": "Gaspar"
+        //     },
+        //     {
+        //         "purchaseCount": 5,
+        //         "totalSales": 910.0,
+        //         "UserName": "julia_ar570",
+        //         "name": "Julia",
+        //         "lastName": "Ya\u00f1ez",
+        //         "middleName": "Gaspar"
+        //     },
+        //     {
+        //         "purchaseCount": 8,
+        //         "totalSales": 430.0,
+        //         "UserName": "leire_ez587",
+        //         "name": "Leire",
+        //         "lastName": "Martorell",
+        //         "middleName": "Fern\u00e1ndez"
+        //     }
+        // ]
 
-        const labels = jsonData.map(item => item.name);
-        const purchaseData = jsonData.map(item => item.purchaseCount);
-        const salesData = jsonData.map(item => item.totalSales);
+        // const labels = jsonData.map(item => item.name);
+        // const purchaseData = jsonData.map(item => item.purchaseCount);
+        // const salesData = jsonData.map(item => item.totalSales);
 
-        this.data = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Recuento de compras',
-                    fill: false,
-                    borderColor: documentStyle.getPropertyValue('--blue-500'),
-                    yAxisID: 'y',
-                    tension: 0.4,
-                    data: purchaseData
-                },
-                {
-                    label: 'Ventastotales',
-                    fill: false,
-                    borderColor: documentStyle.getPropertyValue('--green-500'),
-                    yAxisID: 'y1',
-                    tension: 0.4,
-                    data: salesData
-                }
-            ]
-        };
+        // this.data = {
+        //     labels: labels,
+        //     datasets: [
+        //         {
+        //             label: 'Recuento de compras',
+        //             fill: false,
+        //             borderColor: documentStyle.getPropertyValue('--blue-500'),
+        //             yAxisID: 'y',
+        //             tension: 0.4,
+        //             data: purchaseData
+        //         },
+        //         {
+        //             label: 'Ventastotales',
+        //             fill: false,
+        //             borderColor: documentStyle.getPropertyValue('--green-500'),
+        //             yAxisID: 'y1',
+        //             tension: 0.4,
+        //             data: salesData
+        //         }
+        //     ]
+        // };
 
         this.options = {
             stacked: false,
@@ -996,26 +1112,26 @@ export class GraficasComponent {
             }
         };
 
-        this.chartDataPay = {
-            labels: this.arrayComprasp.map((item: any) => item.name),
-            datasets: [
-                {
-                    data: this.arrayComprasp.map((item: any) => item.totalQuantityRawMaterialUsed),
-                    backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56",
-                        // Agregar más colores aquí si tienes más datos
-                    ],
-                    hoverBackgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56",
-                        // Agregar más colores aquí si tienes más datos
-                    ]
-                }
-            ]
-        };
+        // this.chartDataPay = {
+        //     labels: this.arrayComprasp.map((item: any) => item.name),
+        //     datasets: [
+        //         {
+        //             data: this.arrayComprasp.map((item: any) => item.totalQuantityRawMaterialUsed),
+        //             backgroundColor: [
+        //                 "#FF6384",
+        //                 "#36A2EB",
+        //                 "#FFCE56",
+        //                 // Agregar más colores aquí si tienes más datos
+        //             ],
+        //             hoverBackgroundColor: [
+        //                 "#FF6384",
+        //                 "#36A2EB",
+        //                 "#FFCE56",
+        //                 // Agregar más colores aquí si tienes más datos
+        //             ]
+        //         }
+        //     ]
+        // };
 
 
         this.optionsBarras = {

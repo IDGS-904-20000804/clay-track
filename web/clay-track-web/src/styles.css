@@ -9,3 +9,37 @@ body {
 }
 
 @import "primeicons/primeicons.css";
+
+:root {
+    --white-color:                  #ffffff;
+    --primary-color:                #5d52ba;
+    --secondary-color:              #0dcaf0;
+    --section-bg-color:             #f0f8ff;
+    --custom-btn-bg-color:          #f65129;
+    --social-icon-link-bg-color:    #7f73eb;
+    --dark-color:                   #000000;
+    --p-color:                      #717275;
+    --border-color:                 #e9eaeb;
+  
+    --body-font-family:             'League Spartan', sans-serif;
+  
+    --h1-font-size:                 62px;
+    --h2-font-size:                 48px;
+    --h3-font-size:                 36px;
+    --h4-font-size:                 32px;
+    --h5-font-size:                 24px;
+    --h6-font-size:                 22px;
+    --p-font-size:                  20px;
+    --btn-font-size:                16px;
+    --copyright-font-size:          14px;
+  
+    --border-radius-large:          100px;
+    --border-radius-medium:         30px;
+    --border-radius-small:          10px;
+  
+    --font-weight-thin:             100;
+    --font-weight-light:            300;
+    --font-weight-normal:           400;
+    --font-weight-semibold:         600;
+    --font-weight-bold:             700;
+  }

@@ -14,6 +14,7 @@ import { ComprasComponent } from './modulos/compras/compras/compras.component';
 import { EnviosComponent } from './modulos/envios/envios/envios.component';
 import { GraficasComponent } from './modulos/graficas/graficas.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { TiendaComponent } from './modulos/tienda/tienda/tienda.component';
 
 const routes: Routes = [
   { path: 'Inicio', component: MenuComponent },
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'Envios', component: EnviosComponent },
   { path: 'Dashboard', component: GraficasComponent },
   { path: 'Inicial', component: InicioComponent },
+  { path: 'TiendaOnline', component: TiendaComponent },
   { path: '**', redirectTo: 'Inicial' }
 ];
 

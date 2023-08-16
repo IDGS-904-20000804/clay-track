@@ -3,6 +3,8 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { MateriaPrimaService } from 'src/app/servicios/materiaPrima/materia-prima.service';
 import { Receta, RecetasService } from 'src/app/servicios/recetas/recetas.service';
+import { VentasService } from 'src/app/servicios/ventas/ventas.service';
+import Swal from 'sweetalert2';
 interface Color {
   idCatColor: number;
   description: string;
@@ -86,8 +88,16 @@ export class RecetasComponent {
   // }
 
   receta!: Receta
+  idReceta:number=0
 
+  colorDescriptionsMap: { [key: number]: string } = {};
 
+  ngOnInit(): void {
+    // Populate color descriptions map
+    this.arrayColores.forEach((color: any) => {
+      this.colorDescriptionsMap[color.idCatColor] = color.description;
+    });
+  }
 
 
   showDialog() {
@@ -108,38 +118,41 @@ export class RecetasComponent {
     }
 
   }
-  constructor(private cdr: ChangeDetectorRef, private messageService: MessageService, private _servicioMateriaP: MateriaPrimaService, private _servicioReceta: RecetasService) {
+  constructor(private _servicioVentas:VentasService, private cdr: ChangeDetectorRef, private messageService: MessageService, private _servicioMateriaP: MateriaPrimaService, private _servicioReceta: RecetasService) {
     this.obtenerMateriaPrima();
     this.obtenerColores();
     this.obtenerReceta();
     this.obtenerFotos();
+    
 
 
   }
 
   obtenerIdReceta(id: string) {
-    this._servicioReceta.obtenerRecetaPorId(id).subscribe((datosReceta) => {
+    this._servicioReceta.obtenerRecetaPorId(id).subscribe((datosReceta:any) => {
+      this.idReceta = datosReceta.idCatRecipe
       this.arrayReceta = datosReceta;
       this.nombre = datosReceta.name;
       this.precio = datosReceta.price;
       this.idTamanio = datosReceta.fkCatSize;
       this.idFoto = datosReceta.fkCatImage;
       this.cantidadReceta=datosReceta.quantityStock;
-      this.coloresObtenidos = []; // Debes proporcionar los valores correctos aquí
-      this.arrayMateriaPrima = [];
-      // this.receta = {
-      //   name: this.nombre,
-      //   price:this.precio,
-      //   fkCatSize:   this.cantidadReceta,
-      //   fkCatImage: this.idFoto,
-      //   colorIds: this.coloresObtenidos,
-      //   rawMaterials: 
-      //     this.arrayMateriaPrima
-      // };
+      this.coloresObtenidos = datosReceta.colors.map((color: any) => color.idCatColor);
+      this.arrayMateriaPrima = datosReceta.rawMaterialDetails.map((detail: any) => {
+        return {
+          idCatalog: 0,
+            quantity: detail.quantity,
+            fkCatRawMaterial: detail.fkRawMaterial
+        };
+    });      
       console.log('DATOS', datosReceta)
+      console.log('colores',this.coloresObtenidos)
       this.showDialog();
+      this.obtenerReceta()
     })
   }
+
+  
 
 
   obtenerReceta() {
@@ -168,27 +181,46 @@ export class RecetasComponent {
   }
 
   agregarMateria() {
-    console.log(this.unidadMedida)
+    console.log(this.unidadMedida);
     const recetaExistente = this.arrayMateriaPrima.find(
-      (materiaPrima) => materiaPrima.materia === this.unidadMedida
+      (materiaPrima) => materiaPrima.fkCatRawMaterial === this.unidadMedida
     );
 
     const cantidadNueva = parseFloat(this.cantidad);
 
     if (!isNaN(cantidadNueva) && cantidadNueva > 0) {
       if (recetaExistente) {
-        recetaExistente.cantidad += cantidadNueva;
+        recetaExistente.quantity += cantidadNueva;
+        const materialOriginal = this.arrayMateriaPrima.find(
+          (material) => material.name === recetaExistente.fkCatRawMaterial
+        );
+        if (materialOriginal) {
+          materialOriginal.totalQuantityRawMaterialUsed += cantidadNueva;
+        }
       } else {
         this.arrayMateriaPrima.push({
           idCatalog: 0,
           quantity: cantidadNueva,
           fkCatRawMaterial: this.unidadMedida,
         });
+        const materialOriginal = this.arrayMateriaPrima.find(
+          (material) => material.name === this.unidadMedida
+        );
+        if (materialOriginal) {
+          materialOriginal.totalQuantityRawMaterialUsed += cantidadNueva;
+        }
       }
     } else {
-      this.messageService.add({ key: 'tc', severity: 'info', summary: 'Verifica', detail: 'La cantidad debe ser un número válido mayor que cero.' });
     }
   }
+
+  obtenerNombreMateriaPrima(id: number): string {
+    const material = this.arrayMateriaPrima.find(
+      (materiaPrima) => materiaPrima.idCatalog === id
+    );
+    return material ? material.name : '';
+  }
+
 
 
   eliminarMateriaP(i: number) {
@@ -199,7 +231,7 @@ export class RecetasComponent {
     this._servicioMateriaP.obtenerMateriaP().subscribe(
       (materiaP) => {
         this.arrayMateriaPrimaSelector = materiaP;
-        console.log('Materia Prima', this.arrayMateriaPrima);
+        console.log('Materia Prima', this.arrayMateriaPrimaSelector);
       },
       (err) => {
         console.log(err);
@@ -207,6 +239,8 @@ export class RecetasComponent {
       }
     );
   }
+
+  
 
   obtenerColores() {
     this._servicioReceta.obtenerColor().subscribe(
@@ -220,17 +254,29 @@ export class RecetasComponent {
       }
     );
   }
-  obtencionIdColor(event: any) {
-    this.coloresObtenidos = event.value.map((color: any) => color.idCatColor);
-    console.log('IDs seleccionados:', this.coloresObtenidos);
-    this.receta.colorIds = this.coloresObtenidos;
-  }
+ 
+
+  obtencionIdColor(event:any) {
+    this.coloresObtenidos = [];
+    for (let color of event.value) {
+        if (this.arrayColores.findIndex(c => c.id === color) !== -1) {
+            this.coloresObtenidos.push(color);
+        }
+    }
+}
+selectedColors: any[] = [];
+
 
   agregarReceta() {
+    if(this.idReceta>0){
+      this.actualizarReceta()
+      this.selectedColors = this.arrayColores.filter(color => this.coloresObtenidos.includes(color.idCatColor));
+
+    }else{
     this.receta = {
       name: this.nombre,
       price: this.precio,
-      fkCatSize: this.cantidadReceta,
+      fkCatSize: this.idTamanio,
       fkCatImage: this.idFoto,
       colorIds: this.coloresObtenidos,
       rawMaterials:
@@ -267,6 +313,10 @@ export class RecetasComponent {
         console.error('Error al guardar la receta:', error);
       }
     );
+    }
+
+
+
 
 
   }
@@ -358,6 +408,61 @@ export class RecetasComponent {
 
     })
   }
+
+
+  actualizarReceta(){
+
+   
+    
+    this.receta = {
+      name: this.nombre,
+      price: this.precio,
+      fkCatSize: this.idTamanio,
+      fkCatImage: this.idFoto,
+      colorIds: [1,2,3],
+      rawMaterials:
+        this.arrayMateriaPrima
+    };
+
+    
+    this._servicioReceta.actualizarReceta(this.receta, this.idReceta).subscribe((datos)=>{
+      this.messageService.add({ key: 'tc', severity: 'success', summary: 'Exito', detail: 'Se guardo la receta correctamente.' });
+ console.log(datos)
+ this.obtenerReceta()
+    });
+  }
+
+  eliminarReceta(id: string) {
+    // Mostrar SweetAlert de confirmación antes de eliminar el proveedor
+    Swal.fire({
+      title: 'Confirmación',
+      text: '¿Estás seguro de eliminar este Producto?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // El usuario ha confirmado la eliminación
+        this._servicioVentas.eliminarStock(id).subscribe(
+          (response) => {
+            // Proveedor eliminado con éxito, realizar acciones adicionales si es necesario
+            this.messageService.add({ key: 'tc', severity: 'success', summary: 'Éxito', detail: 'Se eliminó el Producto correctamente.' });
+            console.log('Stock eliminado exitosamente:', response);
+            this.obtenerReceta(); 
+          },
+          (error) => {
+            // Ocurrió un error al eliminar el proveedor, manejar el error apropiadamente
+            this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Error al eliminar el Stock' });
+            console.error('Error al eliminar el apropiadamente:', error);
+          }
+        );
+      }
+    });
+  }
+
 
 
 
