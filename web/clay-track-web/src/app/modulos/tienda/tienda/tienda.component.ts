@@ -1,5 +1,6 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { EnvioService } from 'src/app/servicios/envio/envio.service';
 import { RecetasService } from 'src/app/servicios/recetas/recetas.service';
@@ -35,13 +36,14 @@ venta!:SaleData
 visibleTarjeta: boolean = false;
 arrayEnviosDetalle:any
 visibleDetalle:boolean=false
+idCliente:any=localStorage.getItem('ClientId')
 
 
 
 
 
 
-  constructor( private messageService: MessageService, private _servicioEnvio: EnvioService, private _servicioVentas: VentasService, private _servicioReceta: RecetasService) { 
+  constructor( private router: Router,private messageService: MessageService, private _servicioEnvio: EnvioService, private _servicioVentas: VentasService, private _servicioReceta: RecetasService) { 
     this.obtenerStock();
   }
 
@@ -138,7 +140,7 @@ crearDetalleSalesArray(): any[] {
   for (const product of this.productosAgregar) {
     const detalleSale = {
       quantity: product.quantity,
-      fkCatClient: 1,
+      fkCatClient: this.idCliente,
       fkCatSale: 0,
       fkCatRecipe: product.idCatRecipe
     };
@@ -149,16 +151,17 @@ crearDetalleSalesArray(): any[] {
   return detalleSalesArray;
 }
 
-idCliente:any
 
 realizarCompra() {
-  this.idCliente= localStorage.getItem('ClientId')
 
   if(this.idCliente>0){
   this.venta = {
-    fkCatClient: 1,
+    fkCatClient: this.idCliente,
     detailSales: this.crearDetalleSalesArray()
   };
+  this.visible=false
+  this.visibleDetalle=false
+  this.visibleTarjeta=false
 
   console.log(this.venta);
 
@@ -175,8 +178,19 @@ realizarCompra() {
   );
   }else{
     this.messageService.add({ key: 'tc', severity: 'info', summary: 'Ops..', detail: 'Para realizar la compra debes registrate' });
+    this.router.navigate(['/InicioSesion']);
+    setTimeout(this.navigateToInicioSesion, 1000); // 10000 milisegundos = 10 segundos
+
+
+    
   }
 }
+
+ navigateToInicioSesion() {
+  this.router.navigate(['/InicioSesion']);
+}
+
+
 
 cerrarSesion(){
   localStorage.clear()
@@ -184,7 +198,6 @@ cerrarSesion(){
 
 
 obtenerEnviosDetalle(){
-  this.idCliente= localStorage.getItem('ClientId')
   this._servicioEnvio.obtenerDetalleEnvio(this.idCliente).subscribe((envios)=>{
     this.arrayEnviosDetalle=envios
     console.log(this.arrayEnviosDetalle)

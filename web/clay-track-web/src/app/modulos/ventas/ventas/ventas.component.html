@@ -169,7 +169,7 @@
                 <select class="form-select" [(ngModel)]="idReceta"
                     aria-label="Default select example">
                     <option selected>Selecciona una opcion</option>
-                    <option *ngFor="let receta of arrayReceta; let i =index"
+                    <option *ngFor="let receta of arrayReceta; let i =index" [hidden]="receta.status==false"
                         value="{{receta.idCatRecipe}}" >{{receta.name}}</option>
                 </select>
             </div>

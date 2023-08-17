@@ -43,7 +43,7 @@
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-materiaPrima>
-            <tr>
+            <tr [hidden]="materiaPrima.status==false">
               <td>{{ materiaPrima.name }}</td>
               <td>{{ materiaPrima.fkCatUnitMeasure | rawMaterialName:arrayMateriaPrima}}</td>
               <td>{{ materiaPrima.creationDate | date}}</td>
@@ -88,52 +88,50 @@
                 <input type="text" [(ngModel)]="materiaP.name" class="form-control" />
               </div>
               <div class="col-6">
-                <select class="form-select mt-4" [(ngModel)]="materiaP.fkCatUnitMeasure"
+                <select class="form-select mt-4" [(ngModel)]="materiaP.unitMeasure.description"
                   aria-label="Default select example">
-
-
-
                   <option value="" selected>Selecciona la unidad de medida</option>
 
-                  <option value='1'>Metro</option>
-
-                  <option value='2'>Metro cuadrado</option>
-
-                  <option value='3'>Gramo</option>
-
-                  <option value='4'>Pedazo</option>
-
-                  <option value='5'>Mililitro</option>
-
-                  <option value='6'>Onza</option>
-
-                  <option value='7'>Libra</option>
-
-                  <option value='8'>Pulgada</option>
-
-                  <option value='9'>Cuarto de galón</option>
-
-                  <option value='10'>Galón</option>
-
-                  <option value='11'>Docena</option>
-
-                  <option value='12'>Docena</option>
-
-                  <option value='13'>Colocar</option>
-
-                  <option value='14'>Caja</option>
-
-                  <option value='15'>Embalar</option>
-
-                  <option value='16'>Hoja</option>
-
-                  <option value='17'>Rollo</option>
-
-                  <option value='18'>Bolsa</option>
-
-                  <option value='19'>Envase</option>
-
-                  <option value='20'>Caja</option>
+                  <option value="Metro">Metro</option>
+                  
+                  <option value="Metro cuadrado">Metro cuadrado</option>
+                  
+                  <option value="Gramo">Gramo</option>
+                  
+                  <option value="Pedazo">Pedazo</option>
+                  
+                  <option value="Mililitro">Mililitro</option>
+                  
+                  <option value="Onza">Onza</option>
+                  
+                  <option value="Libra">Libra</option>
+                  
+                  <option value="Pulgada">Pulgada</option>
+                  
+                  <option value="Cuarto de galón">Cuarto de galón</option>
+                  
+                  <option value="Galón">Galón</option>
+                  
+                  <option value="Docena">Docena</option>
+                  
+                  <option value="Docena">Docena</option>
+                  
+                  <option value="Colocar">Colocar</option>
+                  
+                  <option value="Caja">Caja</option>
+                  
+                  <option value="Embalar">Embalar</option>
+                  
+                  <option value="Hoja">Hoja</option>
+                  
+                  <option value="Rollo">Rollo</option>
+                  
+                  <option value="Bolsa">Bolsa</option>
+                  
+                  <option value="Envase">Envase</option>
+                  
+                  <option value="Caja">Caja</option>
+                  
 
                 </select>
               </div>

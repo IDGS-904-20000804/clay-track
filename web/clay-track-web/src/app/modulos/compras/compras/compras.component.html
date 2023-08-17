@@ -81,7 +81,7 @@
             <div class=" flex justify-content-center">
                 <p-toast></p-toast>
                 <div class=" flex justify-content-center">
-                    <p-dialog header="INFORMACION RECETA" [(visible)]="visible" [style]="{ width: '60vw' }"
+                    <p-dialog header="INFORMACION COMPRA" [(visible)]="visible" [style]="{ width: '60vw' }"
                         [maximizable]="true" headerStyleClass="custom-dialog-header">
                         <div class="row">
                             <div class="col-12">
@@ -116,7 +116,7 @@
                                         <select class="form-select" [(ngModel)]="materiaP"
                                         aria-label="Default select example">
                                         <option selected>Selecciona una opcion</option>
-                                        <option *ngFor="let receta of arrayMateriaPrimaSelector; let i =index"
+                                        <option *ngFor="let receta of arrayMateriaPrimaSelector; let i =index" [hidden]="receta.status==false"
                                             value="{{receta.idCatRawMaterial}}" >{{receta.name}}</option>
                                     </select>
                                     </div>
@@ -145,6 +145,7 @@
                                             <th>Materia Prima</th>
                                             <th>Cantidad</th>
                                             <th>Precio</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-materiaP let-rowIndex="rowIndex">
@@ -153,10 +154,10 @@
                                             <td>{{materiaP.fkCatRawMaterial | rawMaterialName: arrayMateriaPrimaSelector}}</td>
                                             <td>{{materiaP.quantity}}</td>
                                             <td>{{materiaP.price}}</td>
-                                            <!-- <td> <p-button icon="pi pi-times"
+                                         <td> <p-button icon="pi pi-times"
                                                     styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"
                                                     (click)="eliminarCompra(rowIndex)"></p-button>
-                                            </td> -->
+                                            </td> 
                                         </tr>
                                     </ng-template>
                                 </p-table>

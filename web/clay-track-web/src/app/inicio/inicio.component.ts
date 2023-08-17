@@ -75,7 +75,6 @@ export class InicioComponent {
     
   }
   constructor( private router:Router,private messageService: MessageService, private _servicioClientes: ClientesService,private clientService: ClientesService) { 
-    this.obtenerClientes()
   }
 
   agregarEmpleado() {
@@ -101,6 +100,8 @@ export class InicioComponent {
       this.showDialog();
     })
   }
+
+
 
   cancelar() {
     this.visible=false;

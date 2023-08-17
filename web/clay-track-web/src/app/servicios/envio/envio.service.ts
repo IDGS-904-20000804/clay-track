@@ -57,6 +57,6 @@ export class EnvioService {
     });
 
     console.log('ESTE ES EL TOKEN', token)
-    return this.http.put<any>(url, { headers });
+    return this.http.put<any>(url,null, { headers });
   }
 }
