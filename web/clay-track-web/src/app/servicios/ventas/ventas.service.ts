@@ -21,7 +21,7 @@ export class VentasService {
   private baseUrl = 'https://localhost:7106/';
   private token = localStorage.getItem("token");
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {   
   }
 
   obtenerStock(): Observable<any> {
