@@ -1,0 +1,148 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<div class="row" class="background-image">
+  <div [@fadeInOut] [hidden]="navBar" class="col-3">
+    <app-menu></app-menu>
+  </div>
+  <div [class]="columna">
+    <div class="row " style="margin-top: 6%; ">
+      <div class="col-6">
+        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"
+          (click)="toggleNavBar()">
+          <i class="fa fa-bars mr-2"></i>
+          <small class="text-uppercase font-weight-bold">MODULOS</small>
+        </button>
+      </div>
+      <div class="col-6 text-end">
+        <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
+
+      </div>
+      <div class="col-12 mt-3">
+        <p-table #dt1 [value]="arrayClientes" dataKey="idCatSupplier" [rows]="15"
+        [showCurrentPageReport]="true" [rowsPerPageOptions]="[15, 25, 50]" [loading]="loading"
+        [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        filterMode="global"
+        styleClass="p-datatable-sm"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [style]="{ 'font-size': '15px' }"
+        [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>
+              <div class="flex align-items-center mt-4">
+                Nombre
+              </div>
+            </th>
+            <th>
+              <div class="flex align-items-center mt-4">
+                Teléfono
+              </div>
+            </th>
+            <th>
+              <div class="flex align-items-center mt-4">
+                Dirección
+              </div>
+            </th>
+            <th class="flex align-items-center mt-4">Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-clientes>
+          <tr [hidden]="clientes.status==false">
+            <td>{{ clientes.person.name }} {{ clientes.person.lastName }}</td>
+            <td>{{ clientes.person.phone }}</td>
+            <td>{{ clientes.person.street }}, {{ clientes.person.neighborhood }}</td>
+            <td>
+              <button class="btn custom-small-button btn-outline-warning" (click)="obtenerIdProvedor(clientes.idCatClient)">
+                <i class="pi pi-pencil"></i>
+              </button>&nbsp; &nbsp;
+              <button class="btn custom-small-button btn-outline-danger" (click)="eliminarCliente(clientes.idCatClient)">
+                <i class="pi pi-times"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4">No hay clientes disponibles.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class=" flex justify-content-center">
+        <p-toast></p-toast>
+        <div class=" flex justify-content-center">
+          <p-dialog header="INFORMACION CLIENTE" [(visible)]="visible" [style]="{ width: '60vw' }" [maximizable]="true"
+            headerStyleClass="custom-dialog-header">
+            <div class="row">
+              <input type="text" class="form-control" hidden [(ngModel)]="cliente.idCatClient">
+              <div class="col-6">
+                <label for="Nombre">Nombre:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.name" maxlength="80"  minlength="4"  />
+              </div>
+              <div class="col-6">
+                <label for="apaterno">Apellido Paterno:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.lastName" maxlength="80"  minlength="4" />
+              </div>
+              <div class="col-6">
+                <label for="amaterno">Apellido Materno:</label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.middleName"  maxlength="80"  minlength="4" />
+              </div>
+              <div class="col-6">
+                <label for="telefono">Telefono:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.phone" maxlength="10" />
+              </div>
+              <div class="col-6">
+                <label for="calle">Calle:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.street" maxlength="80"  minlength="4" />
+              </div>
+              <div class="col-6">
+                <label for="Colonia">Colonia:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.neighborhood" maxlength="80"  minlength="4" />
+              </div>
+              <div class="col-6">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="numE">Numero Exterior:<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" [(ngModel)]="cliente.person.streetNumber" maxlength="80"  minlength="4" />
+                  </div>
+                  <div class="col-6">
+                    <label for="numI">Numero Interior:</label>
+                    <input type="text" class="form-control" [(ngModel)]="cliente.person.apartmentNumber" maxlength="80"  minlength="4" />
+                  </div>
+                </div>
+              </div>
+             
+              <div class="col-6">
+                <label for="cp">Codigo Postal:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.person.postalCode" maxlength="5"   />
+              </div>
+              <div class="col-6">
+                <label for="correo">Correo:<span style="color: red;">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="cliente.user.email" maxlength="80"  minlength="4" />
+              </div>
+              <div class="col-6">
+                <label for="contrasenia">Contraseña:<span style="color: red;">*</span></label>
+                <input type="password" class="form-control" [(ngModel)]="cliente.user.passwordHash" maxlength="80"  minlength="4" />
+              </div>
+            </div>
+            <div class="col-12 text-center mt-4">
+              <p-button label="Guardar" icon="pi pi-save" (click)="agregarCliente()"
+                styleClass="p-button-outlined p-button-success mx-5"></p-button>
+              <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger"
+                (click)="cancelar()"></p-button>
+            </div>
+          </p-dialog>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

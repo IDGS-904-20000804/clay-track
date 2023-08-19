@@ -1,0 +1,914 @@
+<p-toast position="top-center" key="tc"></p-toast>
+
+<div id="top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img src="/assets/logotipo.png" class="img-fluid logo-image">
+
+                    <div class="d-flex flex-column">
+                        <strong class="logo-text">CLAY TRACK</strong>
+                        <small class="logo-slogan">CERAMICA</small>
+                    </div>
+                </a>
+            </div>
+        </nav>
+
+        <main>
+
+            <section class="hero-section d-flex justify-content-center align-items-center">
+                <div class="section-overlay"></div>
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-6 col-12 mb-5 mb-lg-0">
+                            <div class="hero-section-text ">
+                                <h6 class="text-white" style="color: #88ADEA ;">"Creando Belleza en Cada Capa de Arcilla"</h6>
+
+                                <h1 class="hero-title text-white mt-2 mb-4" style="font-size: 60px;"><b>Donde el Arte Toma <br> Forma en Cada Pieza</b></h1>
+
+                               
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <form class="custom-form hero-form" action="#" method="get" role="form">
+                                <h3 class="text-white mb-3 text-center">Bienvenido de Nuevo! </h3>
+
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <button type="submit" class="form-control" (click)="irInicioSesion()">Inicia Sesión</button>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                       <button type="submit" class="form-control" (click)="showDialog()">Registrate</button>
+                                   </div>
+
+                                    <div class="col-12">
+                                        <div class="d-flex flex-wrap align-items-center mt-4 mt-lg-0">
+                                            <span class="text-white mb-lg-0 mb-md-0 me-2">CLAY TRACK:</span>
+
+                                            <div>
+                                                <a  href="#" routerLinkActive="active" routerLink="/TiendaOnline"  class="badge">Tienda en linea</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="categories-section section-padding" id="categories-section">
+               <div class="container">
+                   <div class="row justify-content-center align-items-center">
+           
+                       <div class="col-lg-12 col-12 text-center">
+                           <h2 class="mb-5">Explora todo por nuestras <span>Categorías</span></h2>
+                       </div>
+           
+                       <div class="col-lg-2 col-md-4 col-6">
+                           <div class="categories-block">
+                               <a class="d-flex flex-column justify-content-center align-items-center h-100">
+                                   <i class="categories-icon bi-bounding-box-circles"></i>
+                                   <small class="categories-block-title">Mosaico</small>
+                               </a>
+                           </div>
+                       </div>
+           
+                       <div class="col-lg-2 col-md-4 col-6">
+                           <div class="categories-block">
+                               <a class="d-flex flex-column justify-content-center align-items-center h-100">
+                                   <i class="categories-icon bi-cup-fill"></i>
+                                   <small class="categories-block-title">Tazas</small>
+                               </a>
+                           </div>
+                       </div>
+           
+                       <div class="col-lg-2 col-md-4 col-6">
+                           <div class="categories-block">
+                               <a class="d-flex flex-column justify-content-center align-items-center h-100">
+                                   <i class="categories-icon bi-pie-chart-fill"></i>
+                                   <small class="categories-block-title">Ensaladeras </small>
+                               </a>
+                           </div>
+                       </div>
+           
+                       <div class="col-lg-2 col-md-4 col-6">
+                           <div class="categories-block">
+                               <a class="d-flex flex-column justify-content-center align-items-center h-100">
+                                   <i class="categories-icon bi-dash-circle-fill"></i>
+                                   <small class="categories-block-title">Platos</small>
+                               </a>
+                           </div>
+                       </div>
+           
+                       <div class="col-lg-2 col-md-4 col-6">
+                           <div class="categories-block">
+                               <a class="d-flex flex-column justify-content-center align-items-center h-100">
+                                   <i class="categories-icon bi-people"></i>
+                                   <small class="categories-block-title">Mucho Más</small>
+                               </a>
+                           </div>
+                       </div>
+           
+                   </div>
+               </div>
+           </section>
+           
+
+
+            <section class="about-section">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-3 col-12">
+                            <div class="about-image-wrap custom-border-radius-start">
+                                <img src="/assets/images/professional-asian-businesswoman-gray-blazer.jpg" class="about-image custom-border-radius-start img-fluid" alt="">
+
+                                <div class="about-info">
+                                    <h4 class="text-white mb-0 me-2">Clay Track</h4>
+
+                                    <p class="text-white mb-0">Empresa</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <div class="custom-text-block">
+                                <h2 class="text-white mb-2">INTRODUCCION</h2>
+
+                                <p class="text-white" style="text-align: justify;">Bienvenidos a ClayTrack, donde la creatividad toma forma en cada pieza de cerámica. Somos una apasionada empresa dedicada a la creación y venta de auténticas obras de arte cerámicas. Nuestro compromiso es fusionar la tradición artesanal con la innovación contemporánea, ofreciendo piezas únicas que encarnan la belleza y la funcionalidad en cada detalle.</p>
+
+                               
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-12">
+                            <div class="instagram-block">
+                                <img src="/assets/images/horizontal-shot-happy-mixed-race-females.jpg" class="about-image custom-border-radius-end img-fluid" alt="">
+
+                             
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="job-section job-featured-section section-padding" id="job-section">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-12 text-center mx-auto mb-2">
+                            <h2>SOBRE NOSOTROS</h2>
+
+                            <p >Explora nuestras colecciones, sumérgete en la belleza de las formas y los colores, y descubre cómo cada pieza puede enriquecer tu vida cotidiana y tu espacio con su singularidad.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section>
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-6 col-12">
+                            <div class="custom-text-block custom-border-radius-start">
+                                <h2 class="text-white mb-3">MISION</h2>
+
+                                <p class="text-white" style="text-align: justify;">Nuestra misión en Clay Track es llevar la belleza y la autenticidad de la cerámica a los hogares y corazones de las personas. Nos esforzamos por crear piezas de cerámica excepcionales y únicas que reflejen la pasión y el arte de nuestros alfareros. A través de nuestra dedicación a la artesanía y la creatividad, buscamos enriquecer la vida de nuestros clientes al ofrecerles productos que fusionan la tradición con la modernidad.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                           <div class="custom-text-block custom-border-radius-start">
+                               <h2 class="text-white mb-3">VALORES</h2>
+
+                               <p class="text-white" style="text-align: justify;">Nuestra visión es convertirnos en el referente global en la industria de la cerámica, reconocidos por la excelencia en diseño, calidad y autenticidad. Deseamos inspirar a las personas a apreciar y valorar la cerámica como una forma de arte y expresión, mientras creamos un impacto positivo en las comunidades de ceramistas con las que colaboramos. Buscamos ser una fuente de inspiración y un destino de elección para todos aquellos que buscan la belleza y la originalidad en la cerámica.
+                               </p>
+                           </div>
+                       </div>
+                    </div>
+                </div>
+            </section>
+            <section class="cta-section mt-4" style=" margin-left: 70px; margin-right: 70px;">
+               <div class="section-overlay"></div>
+
+               <div class="container" >
+                   <div class="row">
+
+                     <div class="col-lg-12 col-12">
+                        <h2 class="text-white" style="margin-top: -10%;">Valores</h2>
+                        <ul class="text-white">
+                            <li style="color: white;">Pasión por la Cerámica: Estamos impulsados por una profunda pasión por la cerámica como forma de arte. Esto se refleja en cada pieza que creamos y en cada paso que damos.</li>
+                            <li style="color: white;">Artesanía Excepcional: Valoramos la artesanía excepcional y la atención al detalle en cada creación. Buscamos la perfección en cada pieza que sale de nuestro taller.</li>
+                            <li style="color: white;">Autenticidad y Originalidad: Creemos en la autenticidad y la originalidad en el diseño y la ejecución de nuestras piezas. Cada obra de cerámica cuenta su propia historia única.</li>
+                            <li style="color: white;">Innovación con Respeto a la Tradición: Combinamos la innovación y las técnicas modernas con el respeto a las tradiciones centenarias de la cerámica, logrando un equilibrio entre lo clásico y lo contemporáneo.</li>
+                            <li style="color: white;">Conexión con la Comunidad: Fomentamos una conexión cercana con la comunidad de amantes de la cerámica, alfareros y clientes. Creemos en compartir conocimientos y experiencias para enriquecer nuestro mundo cerámico.</li>
+                            <li style="color: white;">Calidad Duradera: Nos comprometemos a crear piezas de cerámica de la más alta calidad, diseñadas para resistir el paso del tiempo y ser apreciadas a lo largo de las generaciones.</li>
+                            <li style="color: white;">Impacto Sostenible: Buscamos minimizar nuestro impacto ambiental y contribuir positivamente a las comunidades en las que operamos, promoviendo prácticas sostenibles en todo lo que hacemos.</li>
+                        </ul>
+                    </div>
+                    
+                   </div>
+               </div>
+           </section>
+
+
+            <!-- <section class="job-section recent-jobs-section section-padding">
+                <div class="container">
+                    <div class="row align-items-center">
+
+                        <div class="col-lg-6 col-12 mb-4">
+                            <h2>Recent Jobs</h2>
+
+                            <p><strong>Over 10k opening jobs</strong> Lorem Ipsum dolor sit amet, consectetur adipsicing kengan omeg kohm tokito adipcingi elit eismuod larehai</p>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="job-thumb job-thumb-box">
+                                <div class="job-image-box-wrap">
+                                    <a href="job-details.html">
+                                        <img src="/assets/images/jobs/it-professional-works-startup-project.jpg" class="job-image img-fluid" alt="">
+                                    </a>
+
+                                    <div class="job-image-box-wrap-info d-flex align-items-center">
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge badge-level">Internship</a>
+                                        </p>
+
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge">Freelance</a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="job-body">
+                                    <h4 class="job-title">
+                                        <a href="job-details.html" class="job-title-link">Technical Lead</a>
+                                    </h4>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="job-image-wrap d-flex align-items-center bg-white shadow-lg mt-2 mb-4">
+                                            <img src="/assets/images/logos/salesforce.png" class="job-image me-3 img-fluid" alt="">
+
+                                            <p class="mb-0">Salesforce</p>
+                                        </div>
+
+                                        <a href="#" class="bi-bookmark ms-auto me-2">
+                                        </a>
+
+                                        <a href="#" class="bi-heart">
+                                        </a>
+                                    </div>
+
+                                    <div class="d-flex align-items-center">
+                                        <p class="job-location">
+                                            <i class="custom-icon bi-geo-alt me-1"></i>
+                                            Kuala, Malaysia
+                                        </p>
+
+                                        <p class="job-date">
+                                            <i class="custom-icon bi-clock me-1"></i>
+                                            10 hours ago
+                                        </p>
+                                    </div>
+
+                                    <div class="d-flex align-items-center border-top pt-3">
+                                        <p class="job-price mb-0">
+                                            <i class="custom-icon bi-cash me-1"></i>
+                                            $50k
+                                        </p>
+
+                                        <a href="job-details.html" class="custom-btn btn ms-auto">Apply now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="job-thumb job-thumb-box">
+                                <div class="job-image-box-wrap">
+                                    <a href="job-details.html">
+                                        <img src="/assets/images/jobs/marketing-assistant.jpg" class="job-image img-fluid" alt="marketing assistant">
+                                    </a>
+
+                                    <div class="job-image-box-wrap-info d-flex align-items-center">
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge badge-level">Senior</a>
+                                        </p>
+
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge">Part Time</a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="job-body">
+                                    <h4 class="job-title">
+                                        <a href="job-details.html" class="job-title-link">Marketing Assistant</a>
+                                    </h4>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="job-image-wrap d-flex align-items-center bg-white shadow-lg mt-2 mb-4">
+                                            <img src="/assets/images/logos/spotify.png" class="job-image me-3 img-fluid" alt="">
+
+                                            <p class="mb-0">Spotify</p>
+                                        </div>
+
+                                        <a href="#" class="bi-bookmark ms-auto me-2">
+                                        </a>
+
+                                        <a href="#" class="bi-heart">
+                                        </a>
+                                    </div>
+
+                                    <div class="d-flex align-items-center">
+                                        <p class="job-location">
+                                            <i class="custom-icon bi-geo-alt me-1"></i>
+                                            California, USA
+                                        </p>
+
+                                        <p class="job-date">
+                                            <i class="custom-icon bi-clock me-1"></i>
+                                            8 days ago
+                                        </p>
+                                    </div>
+
+                                    <div class="d-flex align-items-center border-top pt-3">
+                                        <p class="job-price mb-0">
+                                            <i class="custom-icon bi-cash me-1"></i>
+                                            $20k
+                                        </p>
+
+                                        <a href="job-details.html" class="custom-btn btn ms-auto">Apply now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="job-thumb job-thumb-box">
+                                <div class="job-image-box-wrap">
+                                    <a href="job-details.html">
+                                        <img src="/assets/images/jobs/coding-man.jpg" class="job-image img-fluid" alt="">
+                                    </a>
+
+                                    <div class="job-image-box-wrap-info d-flex align-items-center">
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge badge-level">Junior</a>
+                                        </p>
+
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge">Contract</a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="job-body">
+                                    <h4 class="job-title">
+                                        <a href="job-details.html" class="job-title-link">Programmer</a>
+                                    </h4>
+                                        
+                                    <div class="d-flex align-items-center">
+                                        <div class="job-image-wrap d-flex align-items-center bg-white shadow-lg mt-2 mb-4">
+                                            <img src="/assets/images/logos/twitter.png" class="job-image me-3 img-fluid" alt="">
+
+                                            <p class="mb-0">Twiter</p>
+                                        </div>
+
+                                        <a href="#" class="bi-bookmark ms-auto me-2">
+                                        </a>
+
+                                        <a href="#" class="bi-heart">
+                                        </a>
+                                    </div>
+
+                                    <div class="d-flex align-items-center">
+                                        <p class="job-location">
+                                            <i class="custom-icon bi-geo-alt me-1"></i>
+                                            California, USA
+                                        </p>
+
+                                        <p class="job-date">
+                                            <i class="custom-icon bi-clock me-1"></i>
+                                            23 hours ago
+                                        </p>
+                                    </div>
+
+                                    <div class="d-flex align-items-center border-top pt-3">
+                                        <p class="job-price mb-0">
+                                            <i class="custom-icon bi-cash me-1"></i>
+                                            $68k
+                                        </p>
+
+                                        <a href="job-details.html" class="custom-btn btn ms-auto">Apply now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="job-thumb job-thumb-box">
+                                <div class="job-image-box-wrap">
+                                    <a href="job-details.html">
+                                        <img src="/assets/images/jobs/pretty-blogger-posing-cozy-apartment.jpg" class="job-image img-fluid" alt="">
+                                    </a>
+
+                                    <div class="job-image-box-wrap-info d-flex align-items-center">
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge badge-level">Junior</a>
+                                        </p>
+
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge">Contract</a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="job-body">
+                                    <h4 class="job-title">
+                                        <a href="job-details.html" class="job-title-link">HR Manager</a>
+                                    </h4>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="job-image-wrap d-flex align-items-center bg-white shadow-lg mt-2 mb-4">
+                                            <img src="/assets/images/logos/yelp.png" class="job-image me-3 img-fluid" alt="">
+
+                                            <p class="mb-0">Yelp</p>
+                                        </div>
+
+                                        <a href="#" class="bi-bookmark ms-auto me-2">
+                                        </a>
+
+                                        <a href="#" class="bi-heart">
+                                        </a>
+                                    </div>
+
+                                    <div class="d-flex align-items-center">
+                                        <p class="job-location">
+                                            <i class="custom-icon bi-geo-alt me-1"></i>
+                                            California, USA
+                                        </p>
+
+                                        <p class="job-date">
+                                            <i class="custom-icon bi-clock me-1"></i>
+                                            15 hours ago
+                                        </p>
+                                    </div>
+
+                                    <div class="d-flex align-items-center border-top pt-3">
+                                        <p class="job-price mb-0">
+                                            <i class="custom-icon bi-cash me-1"></i>
+                                            $35k - 45k
+                                        </p>
+
+                                        <a href="job-details.html" class="custom-btn btn ms-auto">Apply now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="job-thumb job-thumb-box">
+                                <div class="job-image-box-wrap">
+                                    <a href="job-details.html">
+                                        <img src="/assets/images/jobs/paper-analysis.jpg" class="job-image img-fluid" alt="">
+                                    </a>
+
+                                    <div class="job-image-box-wrap-info d-flex align-items-center">
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge badge-level">Junior</a>
+                                        </p>
+
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge">Contract</a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="job-body">
+                                    <h4 class="job-title">
+                                        <a href="job-details.html" class="job-title-link">Sales Representative</a>
+                                    </h4>
+                                        
+                                    <div class="d-flex align-items-center">
+                                        <div class="job-image-wrap d-flex align-items-center bg-white shadow-lg mt-2 mb-4">
+                                            <img src="/assets/images/logos/paypal.png" class="job-image me-3 img-fluid" alt="">
+
+                                            <p class="mb-0">Paypal</p>
+                                        </div>
+
+                                        <a href="#" class="bi-bookmark ms-auto me-2">
+                                        </a>
+
+                                        <a href="#" class="bi-heart">
+                                        </a>
+                                    </div>
+
+                                    <div class="d-flex align-items-center">
+                                        <p class="job-location">
+                                            <i class="custom-icon bi-geo-alt me-1"></i>
+                                            Bangkok, Thailand
+                                        </p>
+
+                                        <p class="job-date">
+                                            <i class="custom-icon bi-clock me-1"></i>
+                                            30 mins ago
+                                        </p>
+                                    </div>
+
+                                    <div class="d-flex align-items-center border-top pt-3">
+                                        <p class="job-price mb-0">
+                                            <i class="custom-icon bi-cash me-1"></i>
+                                            $20k - 35k
+                                        </p>
+
+                                        <a href="job-details.html" class="custom-btn btn ms-auto">Apply now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="job-thumb job-thumb-box">
+                                <div class="job-image-box-wrap">
+                                    <a href="job-details.html">
+                                        <img src="/assets/images/jobs/logo-designer-working-computer-desktop.jpg" class="job-image img-fluid" alt="">
+                                    </a>
+
+                                    <div class="job-image-box-wrap-info d-flex align-items-center">
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge badge-level">Mid Level</a>
+                                        </p>
+
+                                        <p class="mb-0">
+                                            <a href="job-listings.html" class="badge">Full Time</a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="job-body">
+                                    <h4 class="job-title">
+                                        <a href="job-details.html" class="job-title-link">Graphic Designer</a>
+                                    </h4>
+                                        
+                                    <div class="d-flex align-items-center">
+                                        <div class="job-image-wrap d-flex align-items-center bg-white shadow-lg mt-2 mb-4">
+                                            <img src="/assets/images/logos/envato.png" class="job-image me-3 img-fluid" alt="">
+
+                                            <p class="mb-0">Envato</p>
+                                        </div>
+
+                                        <a href="#" class="bi-bookmark ms-auto me-2">
+                                        </a>
+
+                                        <a href="#" class="bi-heart">
+                                        </a>
+                                    </div>
+
+                                    <div class="d-flex align-items-center">
+                                        <p class="job-location">
+                                            <i class="custom-icon bi-geo-alt me-1"></i>
+                                            Melbourne, Australia
+                                        </p>
+
+                                        <p class="job-date">
+                                            <i class="custom-icon bi-clock me-1"></i>
+                                            2 days ago
+                                        </p>
+                                    </div>
+
+                                    <div class="d-flex align-items-center border-top pt-3">
+                                        <p class="job-price mb-0">
+                                            <i class="custom-icon bi-cash me-1"></i>
+                                            $20k
+                                        </p>
+
+                                        <a href="job-details.html" class="custom-btn btn ms-auto">Apply now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-12 recent-jobs-bottom d-flex ms-auto my-4">
+                            <a href="job-listings.html" class="custom-btn btn ms-lg-auto">Browse Job Listings</a>
+                        </div>
+
+                    </div>
+                </div>
+            </section> -->
+
+
+            <section class="reviews-section section-padding">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-12">
+                            <h2 class="text-center mb-5">Transformando barro en obras Maestras desde Nuestro Corazón</h2>
+
+                            <div class="owl-carousel owl-theme reviews-carousel">
+                                <div class="reviews-thumb">
+                                
+                                    <div class="reviews-info d-flex align-items-center">
+                                        <img src="/assets/images/avatar/portrait-charming-middle-aged-attractive-woman-with-blonde-hair.jpg" class="avatar-image img-fluid" alt="">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap w-100 ms-3">
+                                            <p class="mb-0">
+                                                <strong>Susan L</strong>
+                                                <small>Product Manager</small>
+                                            </p>
+
+                                            <div class="reviews-icons">
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="reviews-body">
+                                        <img src="/assets/images/left-quote.png" class="quote-icon img-fluid" alt="">
+
+                                        <h4 class="reviews-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</h4>
+                                    </div>
+                                </div>
+
+                                <div class="reviews-thumb">
+                                    <div class="reviews-info d-flex align-items-center">
+                                        <img src="/assets/images/avatar/medium-shot-smiley-senior-man.jpg" class="avatar-image img-fluid" alt="">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap w-100 ms-3">
+                                            <p class="mb-0">
+                                                <strong>Jack</strong>
+                                                <small>Technical Lead</small>
+                                            </p>
+
+                                            <div class="reviews-icons">
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star"></i>
+                                                <i class="bi-star"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="reviews-body">
+                                        <img src="/assets/images/left-quote.png" class="quote-icon img-fluid" alt="">
+
+                                        <h4 class="reviews-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</h4>
+                                    </div>
+                                </div>
+
+                                <div class="reviews-thumb">
+
+                                    <div class="reviews-info d-flex align-items-center">
+                                        <img src="/assets/images/avatar/portrait-beautiful-young-woman.jpg" class="avatar-image img-fluid" alt="">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap w-100 ms-3">
+                                            <p class="mb-0">
+                                                <strong>Haley</strong>
+                                                <small>Sales & Marketing</small>
+                                            </p>
+
+                                            <div class="reviews-icons">
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="reviews-body">
+                                        <img src="/assets/images/left-quote.png" class="quote-icon img-fluid" alt="">
+
+                                        <h4 class="reviews-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</h4>
+                                    </div>
+                                </div>
+
+                                <div class="reviews-thumb">
+                                    <div class="reviews-info d-flex align-items-center">
+                                        <img src="/assets/images/avatar/blond-man-happy-expression.jpg" class="avatar-image img-fluid" alt="">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap w-100 ms-3">
+                                            <p class="mb-0">
+                                                <strong>Jackson</strong>
+                                                <small>Dev Ops</small>
+                                            </p>
+
+                                            <div class="reviews-icons">
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star"></i>
+                                                <i class="bi-star"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="reviews-body">
+                                        <img src="/assets/images/left-quote.png" class="quote-icon img-fluid" alt="">
+
+                                        <h4 class="reviews-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</h4>
+                                    </div>
+                                </div>
+
+                                <div class="reviews-thumb">
+                                    <div class="reviews-info d-flex align-items-center">
+                                        <img src="/assets/images/avatar/university-study-abroad-lifestyle-concept.jpg" class="avatar-image img-fluid" alt="">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap w-100 ms-3">
+                                            <p class="mb-0">
+                                                <strong>Kevin</strong>
+                                                <small>Internship</small>
+                                            </p>
+
+                                            <div class="reviews-icons">
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                                <i class="bi-star-fill"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="reviews-body">
+                                        <img src="/assets/images/left-quote.png" class="quote-icon img-fluid" alt="">
+
+                                        <h4 class="reviews-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            
+        </main>
+
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-6 col-12 mb-3">
+                        <div class="d-flex align-items-center mb-4">
+                           <img src="/assets/logotipo.png" class="img-fluid logo-image">
+
+                           <div class="d-flex flex-column">
+                               <strong class="logo-text">CLAY TRACK</strong>
+                               <small class="logo-slogan">CERAMICA</small>
+                           </div>
+                        </div>  
+
+                        <p class="mb-2">
+                            <i class="custom-icon bi-globe me-1"></i>
+
+                            <a href="#" class="site-footer-link">
+                                www.claytrack.com
+                            </a>
+                        </p>
+
+                        <p class="mb-2">
+                            <i class="custom-icon bi-telephone me-1"></i>
+
+                            <a href="tel: 305-240-9671" class="site-footer-link">
+                                305-240-9671
+                            </a>
+                        </p>
+
+                        <p>
+                            <i class="custom-icon bi-envelope me-1"></i>
+
+                            <a href="mailto:info@yourgmail.com" class="site-footer-link">
+                                claytrack@hotmail.com
+                            </a>
+                        </p>
+
+                    </div>
+
+                    <div class="col-lg-2 col-md-3 col-6 ms-lg-auto">
+                        <h6 class="site-footer-title">Datos</h6>
+
+                        <ul class="footer-menu">
+                            <li class="footer-menu-item"><a href="#" class="footer-menu-link">ClayTrack_Facebook</a></li>
+
+                            <li class="footer-menu-item"><a href="#" class="footer-menu-link">ClayTrack_Instragram</a></li>
+
+                            <li class="footer-menu-item"><a href="#" class="footer-menu-link">ClayTrack_TikTok</a></li>
+
+                            <li class="footer-menu-item"><a href="#" class="footer-menu-link">ClayTrack_Telegram</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6 ms-lg-auto">
+                     <h6 class="site-footer-title">Informacion</h6>
+
+                     <ul class="footer-menu">
+                         <li class="footer-menu-item"><a href="#" class="footer-menu-link">Av. Torreslanda #1235</a></li>
+
+                         <li class="footer-menu-item"><a href="#" class="footer-menu-link">Colonia: Centro</a></li>
+
+                         <li class="footer-menu-item"><a href="#" class="footer-menu-link"></a></li>
+
+                     </ul>
+                 </div>
+
+                  
+
+                  
+                </div>
+            </div>
+
+           
+        </footer>
+</div><div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class=" flex justify-content-center">
+          <p-toast></p-toast>
+          <div class=" flex justify-content-center">
+            <p-dialog header="INFORMACION CLIENTE" [(visible)]="visible" [style]="{ width: '60vw' }" [maximizable]="true"
+              headerStyleClass="custom-dialog-header">
+              <div class="row">
+                <input type="text" class="form-control" hidden [(ngModel)]="cliente.idCatClient">
+                <div class="col-6">
+                  <label for="Nombre">Nombre:<span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="cliente.person.name" maxlength="80"  minlength="4"  />
+                </div>
+                <div class="col-6">
+                  <label for="apaterno">Apellido Paterno:<span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="cliente.person.lastName" maxlength="80"  minlength="4" />
+                </div>
+                <div class="col-6">
+                  <label for="amaterno">Apellido Materno:</label>
+                  <input type="text" class="form-control" [(ngModel)]="cliente.person.middleName"  maxlength="80"  minlength="4" />
+                </div>
+                <div class="col-6">
+                  <label for="telefono">Telefono:<span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="cliente.person.phone" maxlength="10" />
+                </div>
+                <div class="col-6">
+                  <label for="calle">Calle:<span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="cliente.person.street" maxlength="80"  minlength="4" />
+                </div>
+                <div class="col-6">
+                  <label for="Colonia">Colonia:<span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="cliente.person.neighborhood" maxlength="80"  minlength="4" />
+                </div>
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6">
+                      <label for="numE">Numero Exterior:<span style="color: red;">*</span></label>
+                      <input type="text" class="form-control" [(ngModel)]="cliente.person.streetNumber" maxlength="80"  minlength="4" />
+                    </div>
+                    <div class="col-6">
+                      <label for="numI">Numero Interior:</label>
+                      <input type="text" class="form-control" [(ngModel)]="cliente.person.apartmentNumber" maxlength="80"  minlength="4" />
+                    </div>
+                  </div>
+                </div>
+               
+                <div class="col-6">
+                  <label for="cp">Codigo Postal:<span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="cliente.person.postalCode" maxlength="5"   />
+                </div>
+                <div class="col-6">
+                  <label for="correo">Correo:<span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="cliente.user.email" maxlength="80"  minlength="4" />
+                </div>
+                <div class="col-6">
+                  <label for="contrasenia">Contraseña:<span style="color: red;">*</span></label>
+                  <input type="password" class="form-control" [(ngModel)]="cliente.user.passwordHash" maxlength="80"  minlength="4" />
+                </div>
+              </div>
+              <div class="col-12 text-center mt-4">
+                <p-button label="Guardar" icon="pi pi-save" (click)="agregarCliente()"
+                  styleClass="p-button-outlined p-button-success mx-5"></p-button>
+                <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger"
+                  (click)="cancelar()"></p-button>
+              </div>
+            </p-dialog>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
