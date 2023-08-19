@@ -1,0 +1,150 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<div class="row" class="background-image">
+  <div [@fadeInOut] [hidden]="navBar" class="col-3">
+    <app-menu></app-menu>
+  </div>
+  <div [class]="columna">
+    <div class="row " style="margin-top: 6%; ">
+      <div class="col-6">
+        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"
+          (click)="toggleNavBar()">
+          <i class="fa fa-bars mr-2"></i>
+          <small class="text-uppercase font-weight-bold">MODULOS</small>
+        </button>
+      </div>
+      <div class="col-6 text-end">
+        <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
+
+      </div>
+      <div class="col-12 mt-3">
+        <p-table #dt1 [value]="arrayMateriaPrima" dataKey="idCatSupplier" [rows]="15" [showCurrentPageReport]="true"
+          [rowsPerPageOptions]="[15, 25, 50]" [loading]="loading" [paginator]="true"
+          currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" filterMode="global"
+          styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [style]="{ 'font-size': '15px' }"
+          [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                <div class="flex align-items-center mt-4">
+                  Nombre Materia Prima
+                </div>
+              </th>
+              <th>
+                <div class="flex align-items-center mt-4">
+                  Unidad de Medida
+                </div>
+              </th>
+              <th>
+                <div class="flex align-items-center mt-4">
+                  Creación
+                </div>
+              </th>
+              <th class="flex align-items-center mt-4">Acciones</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-materiaPrima>
+            <tr [hidden]="materiaPrima.status==false">
+              <td>{{ materiaPrima.name }}</td>
+              <td>{{ materiaPrima.fkCatUnitMeasure | rawMaterialName:arrayMateriaPrima}}</td>
+              <td>{{ materiaPrima.creationDate | date}}</td>
+              <td>
+                <button class="btn custom-small-button btn-outline-warning"
+                  (click)="obtenerIdMateriaP(materiaPrima.idCatRawMaterial)">
+                  <i class="pi pi-pencil"></i>
+                </button>&nbsp; &nbsp;
+                <button class="btn custom-small-button btn-outline-danger"
+                  (click)="eliminarMateriaP(materiaPrima.idCatRawMaterial)">
+                  <i class="pi pi-times"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">No hay materia prima disponibles.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class=" flex justify-content-center">
+        <p-toast></p-toast>
+        <div class=" flex justify-content-center">
+          <p-dialog header="INFORMACION MATERIA PRIMA" [(visible)]="visible" [style]="{ width: '60vw' }"
+            [maximizable]="true" headerStyleClass="custom-dialog-header">
+            <div class="row">
+              <input type="text" hidden [(ngModel)]="materiaP.idCatRawMaterial" class="form-control" />
+              <div class="col-6">
+                <label for="NombreMP">Nombre Materia Prima:</label>
+                <input type="text" [(ngModel)]="materiaP.name" class="form-control" />
+              </div>
+              <div class="col-6">
+                <select class="form-select mt-4" [(ngModel)]="materiaP.unitMeasure.description"
+                  aria-label="Default select example">
+                  <option value="" selected>Selecciona la unidad de medida</option>
+
+                  <option value="Metro">Metro</option>
+                  
+                  <option value="Metro cuadrado">Metro cuadrado</option>
+                  
+                  <option value="Gramo">Gramo</option>
+                  
+                  <option value="Pedazo">Pedazo</option>
+                  
+                  <option value="Mililitro">Mililitro</option>
+                  
+                  <option value="Onza">Onza</option>
+                  
+                  <option value="Libra">Libra</option>
+                  
+                  <option value="Pulgada">Pulgada</option>
+                  
+                  <option value="Cuarto de galón">Cuarto de galón</option>
+                  
+                  <option value="Galón">Galón</option>
+                  
+                  <option value="Docena">Docena</option>
+                  
+                  <option value="Docena">Docena</option>
+                  
+                  <option value="Colocar">Colocar</option>
+                  
+                  <option value="Caja">Caja</option>
+                  
+                  <option value="Embalar">Embalar</option>
+                  
+                  <option value="Hoja">Hoja</option>
+                  
+                  <option value="Rollo">Rollo</option>
+                  
+                  <option value="Bolsa">Bolsa</option>
+                  
+                  <option value="Envase">Envase</option>
+                  
+                  <option value="Caja">Caja</option>
+                  
+
+                </select>
+              </div>
+              <div class="col-12 text-center mt-4">
+                <p-button label="Guardar" icon="pi pi-save" (click)="agregarMateroiaP()"
+                  styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger"
+                  (click)="cancelar()"></p-button>
+              </div>
+            </div>
+          </p-dialog>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

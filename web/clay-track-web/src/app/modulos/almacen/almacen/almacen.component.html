@@ -1,0 +1,60 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<div class="row" class="background-image">
+  <div [@fadeInOut] [hidden]="navBar" class="col-3">
+    <app-menu></app-menu>
+  </div>
+  <div [class]="columna">
+    <div class="row " style="margin-top: 6%; ">
+      <div class="col-6">
+        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"
+          (click)="toggleNavBar()">
+          <i class="fa fa-bars mr-2"></i>
+          <small class="text-uppercase font-weight-bold">MODULOS</small>
+        </button>
+      </div>
+        <div class="col-12 mt-3">
+          <p-table #dt1 [value]="arrayAlmacen" dataKey="idCatSupplier" [rows]="15"
+          [showCurrentPageReport]="true" [rowsPerPageOptions]="[15, 25, 50]" [loading]="loading"
+          [paginator]="true"
+          currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+          filterMode="global" styleClass="p-datatable-sm"
+          [tableStyle]="{ 'min-width': '50rem' }" [style]="{ 'font-size': '15px' }"
+          [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                <div class="flex align-items-center mt-4">
+                  Nombre
+                </div>
+              </th>
+              <th>
+                <div class="flex align-items-center mt-4">
+                  Cantidad
+                </div>
+              </th>
+              <th>
+                <div class="flex align-items-center mt-4">
+                  Unidad de Medida
+                </div>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-almacen>
+            <tr [hidden]="almacen.quantityWarehouse==0">
+              <td>{{ almacen.name }}</td>
+              <td>{{ almacen.quantityWarehouse }}</td>
+              <td>{{ almacen.unitMeasure.description }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="3">No hay productos disponibles.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>

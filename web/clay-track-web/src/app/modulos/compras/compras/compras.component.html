@@ -1,0 +1,177 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<div class="row" class="background-image">
+    <div [@fadeInOut] [hidden]="navBar" class="col-3">
+        <app-menu></app-menu>
+    </div>
+    <div [class]="columna">
+        <div class="row " style="margin-top: 6%; ">
+            <div class="col-6">
+                <button id="sidebarCollapse" type="button"
+                    class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4" (click)="toggleNavBar()">
+                    <i class="fa fa-bars mr-2"></i>
+                    <small class="text-uppercase font-weight-bold">MODULOS</small>
+                </button>
+            </div>
+            <div class="col-6 text-end">
+                <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
+
+            </div>
+            <div class="col-12 mt-3">
+                <p-table #dt1 [value]="arrarCompraServicio" dataKey="idCatPurchase" [rows]="15"
+                  [showCurrentPageReport]="true" [rowsPerPageOptions]="[ 15, 50]" [loading]="loading"
+                  [paginator]="true"
+                  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                  filterMode="global"
+                  styleClass="p-datatable-sm"
+                  [tableStyle]="{ 'min-width': '50rem' }"
+                  [style]="{ 'font-size': '15px' }"
+                  [scrollable]="true" scrollHeight="340px" [virtualScrollItemSize]="60">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>
+                        <div class="flex align-items-center mt-4">
+                          Nombre del Proveedor
+                        </div>
+                      </th>
+                      <th>
+                        <div class="flex align-items-center mt-4">
+                          Teléfono del Proveedor
+                        </div>
+                      </th>
+                      <th>
+                        <div class="flex align-items-center mt-4">
+                          Correo Electrónico del Proveedor
+                        </div>
+                      </th>
+                      <!-- <th class="flex align-items-center mt-4">Acciones</th> -->
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-compra>
+                    <tr>
+                      <td>{{ compra.nameSupplier }} {{ compra.lastNameSupplier }} {{ compra.middleNameSupplier }}</td>
+                      <td>{{ compra.phoneSupplier }}</td>
+                      <td>{{ compra.email }}</td>
+                      <!-- <td>
+                        <button class="btn custom-small-button btn-outline-warning" (click)="obtenerIdEmpleado(compra.fkCatEmployee)">
+                          <i class="pi pi-pencil"></i>
+                        </button>&nbsp; &nbsp;
+                        <button class="btn custom-small-button btn-outline-danger" (click)="eliminarEmpleado(compra.fkCatEmployee)">
+                          <i class="pi pi-times"></i>
+                        </button>
+                      </td> -->
+                    </tr>
+                  </ng-template>
+                  
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="4">No hay compras disponibles.</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class=" flex justify-content-center">
+                <p-toast></p-toast>
+                <div class=" flex justify-content-center">
+                    <p-dialog header="INFORMACION COMPRA" [(visible)]="visible" [style]="{ width: '60vw' }"
+                        [maximizable]="true" headerStyleClass="custom-dialog-header">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="proveedor">Proveedor:</label>
+                                        <select class="form-select" [(ngModel)]="provedor"
+                                        aria-label="Default select example">
+                                        <option selected>Selecciona una opcion</option>
+                                        <option *ngFor="let provedor of arrayProveedor; let i =index"
+                                            value="{{provedor.idCatSupplier}}" >{{provedor.person.name}} {{provedor.person.lastName}} {{provedor.person.middleName}}</option>
+                                    </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="empleado">Empleado:</label>
+                                       
+                                        <select class="form-select" [(ngModel)]="empleado"
+                                        aria-label="Default select example">
+                                        <option selected>Selecciona una opcion</option>
+                                        <option *ngFor="let empleado of arrayEmpleados; let i =index"
+                                            value="{{empleado.idCatEmployee}}" >{{empleado.person.name}} {{empleado.person.lastName}} {{empleado.person.middleName}}</option>
+                                    </select>
+                                       <br><br>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="materiap">Materia Prima:</label>
+                                        
+                                        <select class="form-select" [(ngModel)]="materiaP"
+                                        aria-label="Default select example">
+                                        <option selected>Selecciona una opcion</option>
+                                        <option *ngFor="let receta of arrayMateriaPrimaSelector; let i =index" [hidden]="receta.status==false"
+                                            value="{{receta.idCatRawMaterial}}" >{{receta.name}}</option>
+                                    </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="cantidad">Cantidad:</label>
+                                        <input type="text" [(ngModel)]="cantidad" class="form-control" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="precio">Precio:</label>
+                                        <input type="text" [(ngModel)]="precio" class="form-control" />
+                                    </div>
+                                   
+                                    <div class="col-12 text-center mt-4">
+                                        <p-button label="Agregar" icon="pi pi-plus" (click)="agregarCompra()"
+                                            styleClass="p-button-outlined p-button-info p-button-sm  mx-5"></p-button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label>Materia Prima</label>
+                                <p-table [value]="arrayCompra" [tableStyle]="{ 'min-width': '40rem' }">
+                                    <ng-template pTemplate="header">
+                                        <tr style="opacity: 0.8;">
+                                            <th>#</th>
+                                            <th>Materia Prima</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-materiaP let-rowIndex="rowIndex">
+                                        <tr>
+                                            <td>{{rowIndex + 1}}</td>
+                                            <td>{{materiaP.fkCatRawMaterial | rawMaterialName: arrayMateriaPrimaSelector}}</td>
+                                            <td>{{materiaP.quantity}}</td>
+                                            <td>{{materiaP.price}}</td>
+                                         <td> <p-button icon="pi pi-times"
+                                                    styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"
+                                                    (click)="eliminarCompra(rowIndex)"></p-button>
+                                            </td> 
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <p-button label="Guardar" icon="pi pi-save" (click)="guardarCompra()"
+                                    styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                                <p-button label="Cancelar" icon="pi pi-times"
+                                    styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

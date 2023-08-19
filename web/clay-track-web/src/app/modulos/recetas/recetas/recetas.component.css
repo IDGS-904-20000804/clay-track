@@ -1,0 +1,73 @@
+/* Asegúrate de que el contenedor que contiene el div .col-3 no tenga márgenes o padding */
+.container {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Asegúrate de que el div .col-3 no tenga márgenes o padding */
+  .col-3 {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* vertical-nav.component.scss */
+.sidebar-collapse {
+    width: 70px; /* Adjust the width as desired */
+  }
+  
+  .sidebar-collapse .media-body {
+    display: none;
+  }
+  
+  .sidebar-collapse .nav-link .text-primary {
+    display: none;
+  }
+  
+  .sidebar-collapse .nav-link .fa-fw {
+    margin-right: 0;
+  }
+  
+  .image-container:before {
+    background-image: url('/assets/fondoModulos.jpg');
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+  }
+
+  
+  .background-image {
+    background-image: url('/assets/fondoModulos.jpg');
+    background-size: cover; /* Ajusta el tamaño de la imagen para cubrir el contenedor */
+    width: 100%;
+    height: 40vh;
+    display: flex;
+  
+  }
+  
+  .color-option {
+    width: 20px; /* Ancho de la barra de color */
+    height: 100%; /* Altura de la opción completa */
+    display: inline-block; /* Mostrar en línea junto al texto */
+}
+
+.color-label {
+    display: inline-block; /* Mostrar en línea junto a la barra de color */
+    vertical-align: middle; /* Alinear verticalmente con la barra de color */
+    margin-left: 5px; /* Espacio entre la barra de color y el texto */
+}
+
+.custom-multiselect .ui-multiselect-label {
+  width: 800px; /* Ajustar el ancho según tus necesidades */
+}
+
+.color-option {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}

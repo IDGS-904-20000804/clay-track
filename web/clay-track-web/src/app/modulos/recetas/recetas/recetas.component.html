@@ -1,0 +1,273 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<div class="row" class="background-image">
+    <div [@fadeInOut] [hidden]="navBar" class="col-3">
+        <app-menu></app-menu>
+    </div>
+    <div [class]="columna">
+        <div class="row " style="margin-top: 6%; ">
+            <div class="col-6">
+                <button id="sidebarCollapse" type="button"
+                    class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4" (click)="toggleNavBar()">
+                    <i class="fa fa-bars mr-2"></i>
+                    <small class="text-uppercase font-weight-bold">MODULOS</small>
+                </button>
+            </div>
+            <div class="col-6 text-end">
+                <button type="button" class="btn btn-outline-light" (click)="showDialogImagen()">INFORMACION
+                    IMAGEN</button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-outline-light" (click)="showDialog()">AGREGAR</button>
+
+            </div>
+            <div class="col-12 mt-3">
+                <p-table #dt1 [value]="arrayReceta" dataKey="idCatSupplier" [rows]="10" [showCurrentPageReport]="true"
+                    [loading]="loading" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
+                    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                    filterMode="global" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }"
+                    [style]="{ 'font-size': '15px' }" [scrollable]="true" scrollHeight="340px"
+                    [virtualScrollItemSize]="60">
+                    <ng-template pTemplate="caption"></ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>
+                                <div class="flex align-items-center">
+                                    Receta
+                                   
+                                </div>
+                            </th>
+                            <th>
+                                <div class="flex align-items-center">
+                                    Precio
+                                    
+                                </div>
+                            </th>
+                            <th>
+                                <div class="flex align-items-center">
+                                    Cantidad
+                                    
+                                </div>
+                            </th>
+                            <th>Imagen</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-receta >
+                        <tr [hidden]="receta.status==false">
+                            <td>{{ receta.name }}</td>
+                            <td>${{ receta.price }}MXM</td>
+                            <td>{{ receta.fkCatSize }}</td>
+                            <td><img [src]="receta.image.filePath" width="40"></td>
+                            <td>
+                                <button class="btn custom-small-button btn-outline-warning"
+                                    (click)="obtenerIdReceta(receta.idCatRecipe)">
+                                    <i class="pi pi-pencil"></i>
+                                </button>
+                                <button class="btn custom-small-button btn-outline-danger" (click)="eliminarReceta(receta.idCatRecipe)">
+                                    <i class="pi pi-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="5">No hay recetas disponibles.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class=" flex justify-content-center">
+                <p-toast></p-toast>
+                <div class=" flex justify-content-center">
+                    <p-dialog header="INFORMACION RECETA" [(visible)]="visible" [style]="{ width: '60vw' }"
+                        [maximizable]="true" headerStyleClass="custom-dialog-header">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <input class="form-control" hidden [(ngModel)]="idReceta">
+                                    <div class="col-12">
+                                        <label for="Nombre">Nombre:</label>
+                                        <input type="text" class="form-control" [(ngModel)]="nombre" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="precio">Precio:</label>
+                                        <input type="text" class="form-control" [(ngModel)]="precio" />
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label for="colo">Tamaño:</label><br>
+                                        <select class="form-select" [(ngModel)]="idTamanio">
+                                            <option *ngFor="let t of tamanios" [value]="t.valor">{{ t.nombre }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6 ">
+                                        <!-- <label for="colo">Color:</label><br>
+                                        <div class="form-group">
+                                            <select class="form-control" id="colorSelect" [(ngModel)]="coloresObtenidos" >
+                                                <option *ngFor="let color of arrayColores" [value]="color.idCatColor">
+                                                    <div class="color-option" [style.background-color]="color.hexadecimal"></div>
+                                                    {{ color.description }}
+                                                </option>
+                                            </select>
+                                        </div> -->
+
+                                        <label for="colo">Color:</label><br>
+                                        <p-multiSelect [style]="{ width: '26vw', height: '3vw' }"
+                                            [options]="arrayColores" optionLabel="description"
+                                            styleClass="custom-multiselect" (onChange)="obtencionIdColor($event)"
+                                            [(ngModel)]="selectedColors">
+                                            <ng-template let-color pTemplate="item">
+                                                <div class="color-option" [style.background-color]="color.hexadecimal">
+                                                    &nbsp; <!-- Espacio en blanco para ocupar toda la opción -->
+                                                </div>
+                                                <div class="color-label">{{ color.description }}</div>
+                                            </ng-template>
+                                        </p-multiSelect>
+
+
+
+
+
+
+
+
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="colo">Imagen:</label><br>
+                                        <select class="form-select" [(ngModel)]="idFoto">
+                                            <option *ngFor="let fotos of arrayFotos" [value]="fotos.idCatImage">{{
+                                                fotos.fileName }}</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="row">
+                                    <label for="materia" class="mt-4"><b>INFORMACION DE MATERIA PRIMA</b></label>
+                                    <div class="col-6">
+                                        <label for="unidadMedida">Materia Prima:</label>
+                                        <!-- <select (change)="seleccionarMateriaPrima($event)">
+                                            <option *ngFor="let receta of arrayMateriaPrimaSelector; let i = index"
+                                                    [value]="i">{{receta.name}}</option>
+                                          </select>
+                                          
+                                          <div *ngIf="selectedObject">
+                                            <h2>Detalles de la materia prima</h2>
+                                            <pre>{{ selectedObject | json }}</pre>
+                                          </div> -->
+
+
+                                        <select class="form-select" [(ngModel)]="unidadMedida"
+                                            aria-label="Default select example">
+                                            <option selected>Selecciona una opcion</option>
+                                            <option *ngFor="let receta of arrayMateriaPrimaSelector; let i =index" [hidden]="receta.status==false"
+                                                value="{{receta.idCatRawMaterial}}">{{receta.name}}</option>
+                                            <input class="form-control" [(ngModel)]="idMateriaP">
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="cantidad">Cantidad:</label>
+                                        <input type="text" [(ngModel)]="cantidad" class="form-control" /><br>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <p-button label="Agregar" icon="pi pi-plus" (click)="agregarMateria()"
+                                            styleClass="p-button-outlined p-button-info p-button-sm  mx-5"></p-button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label>Materia Prima</label>
+                                <p-table [value]="arrayMateriaPrima" [tableStyle]="{ 'min-width': '40rem' }">
+                                    <ng-template pTemplate="header">
+                                        <tr style="opacity: 0.8;">
+                                            <th>#</th>
+                                            <th>Materia Prima</th>
+                                            <th>Cantidad</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-materiaP let-rowIndex="rowIndex">
+                                        <tr>
+                                            <td>{{rowIndex + 1}}</td>
+                                            <td>{{materiaP.fkCatRawMaterial | rawMaterialName: arrayMateriaPrimaSelector
+                                                }}</td>
+                                            <td>{{materiaP.quantity}}</td>
+                                            <td> <p-button icon="pi pi-times"
+                                                    styleClass="p-button-rounded p-button-danger p-button-outlined p-button-sm"
+                                                    (click)="eliminarMateriaP(rowIndex)"></p-button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table><br>
+                            </div>
+
+                            <div class="col-12 text-center mt-4">
+                                <p-button label="Guardar" icon="pi pi-save" (click)="agregarReceta()"
+                                    styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                                <p-button label="Cancelar" icon="pi pi-times"
+                                    styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class=" flex justify-content-center">
+                <p-toast></p-toast>
+                <div class=" flex justify-content-center">
+                    <p-dialog header="INFORMACION RECETA" [(visible)]="visibleImagen" [style]="{ width: '60vw' }"
+                        [maximizable]="true" headerStyleClass="custom-dialog-header">
+                        <div class="row">
+
+                            <div class="col-12">
+                                <!-- <input type="file" (change)="obtenerFoto($event)" style="display: none;">  -->
+                                <!-- Input nativo oculto -->
+                                <label for="materia" class="mt-4"><b>INFORMACION DE FOTO</b></label>
+                                <p-fileUpload (onSelect)="obtenerFoto($event.files)" [(ngModel)]="datoFoto"
+                                    accept="image/*" [chooseLabel]="'Agregar'" [showUploadButton]="false"
+                                    [showCancelButton]="false">
+                                    <!-- Contenido personalizado -->
+                                    <ng-template pTemplate="content">
+                                        <ul *ngIf="uploadedFiles.length">
+                                            <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }}
+                                                bytes</li>
+                                        </ul>
+                                    </ng-template>
+                                </p-fileUpload>
+
+                                <!-- <input type="file" (change)="obtenerFoto($event)"> -->
+                                <!-- 
+
+                                <button type="button" class="boton-standar-rw icon input form-control">{{idFileJson | slice:-27}}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-file-import"></i></button>
+                                        <input class="form-control input " type="file" [(ngModel)]="idFileJson"  (change)="uploadJsonFile($event)" kendoTooltip title="Ingresa el archivo (.json)"/>
+                                 -->
+
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <p-button label="Guardar" icon="pi pi-save" (click)="guardarFoto()"
+                                    styleClass="p-button-outlined p-button-success  mx-5"></p-button>
+                                <p-button label="Cancelar" icon="pi pi-times"
+                                    styleClass="p-button-outlined p-button-danger" (click)="cancelar()"></p-button>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

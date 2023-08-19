@@ -1,0 +1,183 @@
+<!-- <mat-toolbar class="mat-elevation-z8">
+    <button
+      mat-icon-button
+      *ngIf="sidenav.mode === 'over'"
+      (click)="sidenav.toggle()"
+    >
+      <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
+      <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+    </button>
+    CLAY TRACK
+  </mat-toolbar>
+  
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
+      <img
+        class="avatar mat-elevation-z8"
+        src="/assets/logotipo.png"
+      />
+  
+      <h4 class="name">John Smith</h4>
+      <p class="designation">Software Engineer</p>
+  
+      <mat-divider></mat-divider>
+  
+      <button mat-button class="menu-button" routerLinkActive="active"  routerLink="/home">
+        <mat-icon>home</mat-icon>
+        <span>Inicio</span>
+      </button>
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/Empleados">
+        <mat-icon>person</mat-icon>
+        <span>Empleados</span>
+      </button>
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/Clientes">
+        <mat-icon>supervisor_account</mat-icon>
+        <span>Clientes</span>
+      </button>
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/Almacen">
+        <mat-icon>list_alt</mat-icon>
+        <span>Almacen</span>
+      </button>
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/MateriaPrima">
+        <mat-icon>inventory</mat-icon>
+        <span>Materia Prima</span>
+      </button>
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/Recetas">
+        <mat-icon>book</mat-icon>
+        <span>Recetas</span>
+      </button>
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/Ventas">
+        <mat-icon>shopping_cart</mat-icon>
+        <span>Ventas</span>
+      </button>
+      
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/Proveedores">
+        <mat-icon>supervisor_account</mat-icon>
+        <span>Proveedores</span>
+      </button>
+      
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/Compras">
+        <mat-icon>shopping_bag</mat-icon>
+        <span>Compras</span>
+      </button>
+      
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/Envios">
+        <mat-icon>local_shipping</mat-icon>
+        <span>Envios</span>
+      </button>
+      
+      <mat-divider></mat-divider>
+      <button mat-button class="menu-button" routerLinkActive="active" routerLink="/InicioSesion">
+        <mat-icon>lock</mat-icon>
+        <span >Cerrar sesión</span>
+      </button>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="content mat-elevation-z8"> -->
+        <!-- <router-outlet></router-outlet> 
+      <app-proveedores></app-proveedores>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container> -->
+
+  <div class="vertical-nav bg-white" id="sidebar" [ngClass]="{'sidebar-collapse': isSidebarCollapsed}">
+    <div class="py-4 px-1 mb-2 bg-light">
+      <div class="media d-flex align-items-center"><img src="https://bootstrapious.com/i/snippets/sn-v-nav/avatar.png"
+          alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">
+        <div class="media-body">
+          <span class="m-0 h5">{{usuario}}</span><br>
+          <span class="font-weight-light text-muted mb-0">{{rol}}</span>
+        </div>
+      </div>
+    </div>
+  
+    <!-- <p class="text-gray font-weight-bold text-uppercase px-1 small pb-1 mb-0">MODULOS</p> -->
+    <div class="navbar">
+    <ul class="nav flex-column bg-white ">
+      <!-- <li class="nav-item">
+        <a href="#" class="nav-link text-dark font-italic bg-light" >
+          <i class="fa fa-th-large mr-3 text-primary fa-fw"></i>
+          Inicio
+        </a>
+      </li> -->
+      <li class="nav-item">
+        <a href="#" routerLinkActive="active" routerLink="/Empleados"  class="nav-link text-dark font-italic">
+          <i class="fa fa-user text-primary"></i>
+          Empleados
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/Clientes"  href="#" class="nav-link text-dark font-italic">
+          <i class="fa fa-users text-primary"></i>
+          Clientes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/Almacen"   href="#" class="nav-link text-dark font-italic">
+          <i class="fa fa-list-alt text-primary"></i>
+          Almacen
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/MateriaPrima" href="#"  class="nav-link text-dark font-italic">
+          <i class="fa fa-list text-primary"></i>
+          Materia Prima
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/Recetas" href="#" class="nav-link text-dark font-italic">
+          <i class="fa fa-book text-primary"></i>
+          Recetas
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/Ventas"  href="#"  class="nav-link text-dark font-italic">
+          <i class="fa fa-shopping-cart text-primary"></i>
+          Ventas
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/Proveedores" href="#"  class="nav-link text-dark font-italic">
+          <i class="fa fa-male text-primary"></i>
+          Proveedores
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/Compras"  href="#"  class="nav-link text-dark font-italic">
+          <i class="fa fa-money text-primary"></i>
+          Compras
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/Envios"  href="#" class="nav-link text-dark font-italic">
+          <i class="fa fa-truck text-primary"></i>
+          Envios
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="active" routerLink="/Dashboard"  href="#" class="nav-link text-dark font-italic">
+          <i class="fa fa-list-alt text-primary"></i>
+          Graficas
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" routerLinkActive="active" routerLink="/InicioSesion" class="nav-link text-dark font-italic" (click)="cerrarSesion()">
+          <i class="fa fa-lock text-primary"></i>
+          Cerrar Sesion
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  </div>
+  <!-- End vertical navbar -->
+  
+  
+  <!-- Page content holder -->
+  <!-- <div class="page-content p-5 background-image" id="content">
+    <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"
+      (click)="onToggleSidebar()">
+      <i class="fa fa-bars mr-2"></i>
+      <small class="text-uppercase font-weight-bold">MODULOS</small>
+    </button>
+  </div>  -->
